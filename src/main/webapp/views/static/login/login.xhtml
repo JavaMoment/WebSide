@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      >
+<h:head>
+	<title>Login</title>
+<link href="views/static/login/login.css" rel="stylesheet" type="text/css"/>
+</h:head> 
+<h:body> 
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<h:form id="signUpForm" action="#" >
+			<h1>Registro de usuario</h1>
+			<p></p>
+			<div class="grid ui-fluid">
+			<div class="registro">
+				<p:inputText placeholder="Nombre"> </p:inputText>
+				<p:inputText placeholder="Correo institucional"> </p:inputText>
+				<p:password  placeholder="Contraseña" toggleMask="true" redisplay="true" />
+				<p></p>
+				<p:commandButton value="Registrarme" />
+				</div>
+			</div>
+		</h:form>
+	</div>
+	<div class="form-container sign-in-container" >
+		<h:form id="signInForm" action="#" >
+			<h1>Login</h1>
+			<p></p>
+			<div class="grid ui-fluid">
+				<div class="ui-inputgroup" >
+					<div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
+					<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"> </p:inputText>
+				</div>
+				<div class="ui-inputgroup" >
+					<div class="ui-inputgroup-addon"><i class="pi pi-shield"></i></div>
+					<p:password placeholder="Contraseña" toggleMask="true" redisplay="true" icon="pi pi-shield" ></p:password>
+				</div>
+				<p></p>
+				<p></p>
+				<p:commandButton id="loginButton" type="button" value="Ingresar" icon="pi pi-check" /> 
+			</div>
+		</h:form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>¡Bienvenido!</h1>
+				<p></p>
+				<p>Por favor, para poder ingresar al sistema web de UTEC rellena el formulario con tus datos.</p>
+				<p:commandButton id="loginFormButton" value="Ya estoy registrado :D" onclick="document.getElementById('container').classList.remove('right-panel-active');"/><!-- <button class="ghost" id="signIn">Login</button> -->
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>En tu interior está #UTEC</h1>
+				<p></p>
+				<p>Ingresa con tu correo institucional y contraseña para ingresar al #interior.</p>
+			    <p:commandButton id="signUpFormButton" value="Quiero registrarme :)" onclick="document.getElementById('container').classList.add('right-panel-active');"/>
+			</div>
+		</div>
+	</div>
+</div>
+</h:body> 
+</html>
