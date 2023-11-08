@@ -238,3 +238,8 @@ input {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
+
+ui-datepicker-trigger ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only {
+    position: inherit;
+    height: 2.35rem;
+}
