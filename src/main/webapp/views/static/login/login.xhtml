@@ -4,62 +4,76 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       >
-<h:head>
-	<title>Login</title>
-<link href="views/static/login/login.css" rel="stylesheet" type="text/css"/>
-</h:head> 
-<h:body> 
-<div class="container" id="container">
-	<div class="form-container sign-up-container">
-		<h:form id="signUpForm" action="#" >
-			<h1>Registro de usuario</h1>
-			<p></p>
-			<div class="grid ui-fluid">
-			<div class="registro">
-				<p:inputText placeholder="Nombre"> </p:inputText>
-				<p:inputText placeholder="Correo institucional"> </p:inputText>
-				<p:password  placeholder="Contraseña" toggleMask="true" redisplay="true" />
-				<p></p>
-				<p:commandButton value="Registrarme" />
-				</div>
+	<h:head>
+		<title>Login</title>
+	<link href="views/static/login/login.css" rel="stylesheet" type="text/css"/>
+	</h:head> 
+	<h:body>
+		<h:outputStylesheet name="views/static/login/login.css" />
+		<div class="container" id="container">
+			<div class="form-container sign-up-container">
+				<h:form id="signUpForm" action="#" >
+					<h1>Registro de usuario</h1>
+					<p></p>
+					<div class="grid ui-fluid">
+					<!-- <p:scrollPanel > -->
+						<p:inputText placeholder="Correo personal"> </p:inputText>
+						<p:inputText placeholder="Correo institucional"> </p:inputText>
+						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" />
+						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" />
+						<p:inputText placeholder="Primer nombre"> </p:inputText>
+						<p:inputText placeholder="Segundo nombre"> </p:inputText>
+						<p:inputText placeholder="Primer apellido"> </p:inputText>
+						<p:inputText placeholder="Segundo apellido"> </p:inputText>
+						<p:datePicker id="birthdate" showIcon="true" />
+						<p:inputText placeholder="Cédula de identidad"> </p:inputText>
+						<p:inputText placeholder="Télefono"> </p:inputText>
+						<p:selectOneMenu id="departamento" />
+						<p:selectOneMenu id="ciudad" />
+						<p:selectOneMenu id="genero" />
+						<p:selectOneMenu id="itr" />
+						<p:selectOneMenu id="tipoUsuario" />
+						<p></p>
+						<p:commandButton value="Registrarme" />
+					<!--</p:scrollPanel>  -->
+					</div>
+				</h:form>
 			</div>
-		</h:form>
-	</div>
-	<div class="form-container sign-in-container" >
-		<h:form id="signInForm" action="#" >
-			<h1>Login</h1>
-			<p></p>
-			<div class="grid ui-fluid">
-				<div class="ui-inputgroup" >
-					<div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
-					<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"> </p:inputText>
-				</div>
-				<div class="ui-inputgroup" >
-					<div class="ui-inputgroup-addon"><i class="pi pi-shield"></i></div>
-					<p:password placeholder="Contraseña" toggleMask="true" redisplay="true" icon="pi pi-shield" ></p:password>
-				</div>
-				<p></p>
-				<p></p>
-				<p:commandButton id="loginButton" type="button" value="Ingresar" icon="pi pi-check" /> 
+			<div class="form-container sign-in-container" >
+				<h:form id="signInForm" action="#" >
+					<h1>Login</h1>
+					<p></p>
+					<div class="grid ui-fluid">
+						<div class="ui-inputgroup" >
+							<div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
+							<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"> </p:inputText>
+						</div>
+						<div class="ui-inputgroup" >
+							<div class="ui-inputgroup-addon"><i class="pi pi-shield"></i></div>
+							<p:password placeholder="Contraseña" toggleMask="true" redisplay="true" icon="pi pi-shield" ></p:password>
+						</div>
+						<p></p>
+						<p></p>
+						<p:commandButton id="loginButton" type="button" value="Ingresar" icon="pi pi-check" /> 
+					</div>
+				</h:form>
 			</div>
-		</h:form>
-	</div>
-	<div class="overlay-container">
-		<div class="overlay">
-			<div class="overlay-panel overlay-left">
-				<h1>¡Bienvenido!</h1>
-				<p></p>
-				<p>Por favor, para poder ingresar al sistema web de UTEC rellena el formulario con tus datos.</p>
-				<p:commandButton id="loginFormButton" value="Ya estoy registrado :D" onclick="document.getElementById('container').classList.remove('right-panel-active');"/><!-- <button class="ghost" id="signIn">Login</button> -->
-			</div>
-			<div class="overlay-panel overlay-right">
-				<h1>En tu interior está #UTEC</h1>
-				<p></p>
-				<p>Ingresa con tu correo institucional y contraseña para ingresar al #interior.</p>
-			    <p:commandButton id="signUpFormButton" value="Quiero registrarme :)" onclick="document.getElementById('container').classList.add('right-panel-active');"/>
+			<div class="overlay-container">
+				<div class="overlay">
+					<div class="overlay-panel overlay-left">
+						<h1>¡Bienvenido!</h1>
+						<p></p>
+						<p>Por favor, para poder registrarte al sistema de UTEC rellena el formulario con tus datos.</p>
+						<p:commandButton id="loginFormButton" value="Ya estoy registrado :D" onclick="document.getElementById('container').classList.remove('right-panel-active');"/><!-- <button class="ghost" id="signIn">Login</button> -->
+					</div>
+					<div class="overlay-panel overlay-right">
+						<h1>En tu interior está #UTEC</h1>
+						<p></p>
+						<p>Ingresa con tu correo institucional y contraseña para ingresar al #interior.</p>
+					    <p:commandButton id="signUpFormButton" value="Quiero registrarme :)" onclick="document.getElementById('container').classList.add('right-panel-active');"/>
+					</div>
+				</div>
 			</div>
 		</div>
-	</div>
-</div>
-</h:body> 
+	</h:body> 
 </html>
