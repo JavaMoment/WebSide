@@ -20,7 +20,13 @@ body {
 h1 {
 	font-weight: bold;
 	margin: 0;
+	width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    align-content: center;
 }
+
 
 p {
 	font-size: 14px;
@@ -70,6 +76,17 @@ button#loginFormButton {
 	margin-top: 4.75rem
 }
 
+div#signUpForm\:signUpScrollPane {
+	border: 0px;
+	padding: 0;
+	height: 75%;
+}
+
+button.ui-datepicker-trigger.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only {
+	height: 2.3rem;
+	position: inherit;
+}
+
 .ui-inputgroup {
     margin-bottom: 10px;
 }
@@ -85,6 +102,11 @@ button#loginFormButton {
 .ui-inputgroup {
     display: flex;
     align-items: center;
+}
+
+.ui-fluid .ui-selectonemenu {
+    width: 100%;
+    margin-top: 10px;
 }
 
 form {
