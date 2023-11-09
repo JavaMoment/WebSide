@@ -12,11 +12,10 @@
 		<h:outputStylesheet name="views/static/login/login.css" />
 		<div class="container" id="container">
 			<div class="form-container sign-up-container">
-				<h:form id="signUpForm" action="#" >
 					<h1>Registro de usuario</h1>
-					<p></p>
+				<h:form id="signUpForm" action="#" >
+				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
-					<!-- <p:scrollPanel > -->
 						<p:inputText placeholder="Correo personal"> </p:inputText>
 						<p:inputText placeholder="Correo institucional"> </p:inputText>
 						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" />
@@ -28,15 +27,14 @@
 						<p:datePicker id="birthdate" showIcon="true" />
 						<p:inputText placeholder="Cédula de identidad"> </p:inputText>
 						<p:inputText placeholder="Télefono"> </p:inputText>
-						<p:selectOneMenu id="departamento" />
-						<p:selectOneMenu id="ciudad" />
-						<p:selectOneMenu id="genero" />
-						<p:selectOneMenu id="itr" />
-						<p:selectOneMenu id="tipoUsuario" />
-						<p></p>
-						<p:commandButton value="Registrarme" />
-					<!--</p:scrollPanel>  -->
+						<p:selectOneMenu id="departamento" label="Departamento de residencia" alwaysDisplayLabel="true" />
+						<p:selectOneMenu id="ciudad" label="Ciudad de residencia" alwaysDisplayLabel="true" />
+						<p:selectOneMenu id="genero" label="Género" alwaysDisplayLabel="true" />
+						<p:selectOneMenu id="itr" label="ITR al que pertenece" alwaysDisplayLabel="true" />
+						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" alwaysDisplayLabel="true" />
 					</div>
+					</p:scrollPanel>
+				<p:commandButton value="Registrarme" style="margin-top: 2rem"/>
 				</h:form>
 			</div>
 			<div class="form-container sign-in-container" >
@@ -50,7 +48,16 @@
 						</div>
 						<div class="ui-inputgroup" >
 							<div class="ui-inputgroup-addon"><i class="pi pi-shield"></i></div>
-							<p:password placeholder="Contraseña" toggleMask="true" redisplay="true" icon="pi pi-shield" ></p:password>
+							<p:password placeholder="Contraseña" 
+										toggleMask="true" 
+										redisplay="true"
+										required="true" 
+										inline="true"
+										weakLabel="true"
+										goodLabel="true"
+										strongLabel="true"
+										>
+							</p:password>
 						</div>
 						<p></p>
 						<p></p>
