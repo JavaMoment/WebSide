@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+	<h:head>
+		<link href="home.css" rel="stylesheet" type="text/css"/>
+		<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet' />
+	</h:head>
+	<body>
+	  <div class="sidebar">
+	    <div class="logo-details">
+	      <i class='icon'></i>
+	        <div class="logo_name">UTEC</div>
+	        <i class='bx bx-menu' id="btn" ></i>
+	    </div>
+	    <ul class="nav-list">
+	      <li>
+	        <a href="#">
+	          <i class='bx bx-grid-alt'></i>
+	          <span class="links_name">Dashboard</span>
+	        </a>
+	         <span class="tooltip">Dashboard</span>
+	      </li>
+	      <li>
+	       <a href="#">
+	         <i class='bx bx-user' ></i>
+	         <span class="links_name">Listado de usuarios</span>
+	       </a>
+	       <span class="tooltip">Listado de usuarios</span>
+	     </li>
+	     <li>
+	       <a href="#">
+	         <i class='bx bx-buildings'></i>
+	         <span class="links_name">Listado de ITRs</span>
+	       </a>
+	       <span class="tooltip">Listado de ITRs</span>
+	     </li>
+	     <li>
+	       <a href="#">
+	         <i class='bx bxs-user-account'></i>
+	         <span class="links_name">Mi usuario</span>
+	       </a>
+	       <span class="tooltip">Mi usuario</span>
+	     </li>
+	    </ul>
+	  </div>
+  	  <div id="content">
+  	  <ui:insert name="content">
+  	  	<ui:include src="../commons/commonContent.xhtml" />
+  	  </ui:insert>
+  	  <h2>Hola!</h2>
+  	  </div>
+	  <script>
+	  let sidebar = document.querySelector(".sidebar");
+	  let closeBtn = document.querySelector("#btn");
+	  closeBtn.addEventListener("click", ()=>{
+	    sidebar.classList.toggle("open");
+	    if(sidebar.classList.contains("open")){
+		     closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+	    }else {
+		     closeBtn.classList.replace("bx-menu-alt-right","bx-menu");
+	    }
+	  });
+	  </script>
+	</body>
+</html>
