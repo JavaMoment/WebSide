@@ -1,0 +1,241 @@
+/* Envoltorio de contenido, organiza el layout usando flexbox y lo centra */
+.content-wrapper {
+	display: flex; /* Utiliza flexbox para el layout */
+	flex-direction: column; /* Apila los hijos verticalmente */
+	align-items: center; /* Centra el contenido */
+	padding: 20px; /* Relleno alrededor del contenido */
+}
+
+/* Contenedor para cada fila del formulario */
+.row {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px; /* Espacio entre filas */
+}
+
+/* Clase para las columnas de etiquetas */
+.label-column {
+	flex-basis: 20%; /* Ajusta este valor según sea necesario */
+	text-align: right;
+	padding-right: 10px; /* Espacio entre la etiqueta y la caja de texto */
+	display: flex;
+	align-items: center;
+	/* Alinea verticalmente la etiqueta con la caja de texto */
+}
+
+/* Clase para las columnas de entrada de datos */
+.input-column {
+	flex-basis: 75%; /* Ajusta este valor según sea necesario */
+	display: flex;
+	align-items: center;
+}
+
+/* Clase para las cajas de texto */
+.input-field {
+	width: 100%; /* Usa el 100% del espacio disponible en .input-column */
+	padding: 8px; /* Añade algo de relleno dentro de las cajas de texto */
+	border: 1px solid #ccc; /* Borde sutil para las cajas de texto */
+	border-radius: 4px; /* Bordes redondeados para las cajas de texto */
+}
+
+/* Envoltorio de los detalles del perfil, alinea hijos en fila */
+.profile-details-wrapper {
+	display: flex; /* Alinea hijos (perfil y detalles) en fila */
+	max-width: 1200px; /* Ajusta basado en tu preferencia */
+	width: 100%; /* Ancho al 100% */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	/* Sombra opcional para estética */
+	border-radius: 4px; /* Esquinas redondeadas */
+	background: #FFFFFF; /* Fondo blanco */
+	margin-bottom: 20px;
+	/* Espacio entre esta sección y la información adicional */
+}
+
+/* Contenedor del perfil, define el ancho y alinea el contenido */
+.profile-container {
+	width: 15%; /* Ancho al 15% */
+	flex: 1; /* Asigna 1 parte del espacio para el perfil */
+	padding: 20px; /* Relleno alrededor del contenido */
+	display: flex; /* Usa flexbox para la disposición */
+	flex-direction: column; /* Dirección de columna para los hijos */
+	align-items: center; /* Centra el contenido del perfil */
+}
+
+/* Contenedor de los detalles, con más espacio y sombra */
+.details-container {
+	width: 35%; /* Ancho al 35% */
+	flex: 2;
+	/* Asigna 2 partes del espacio para los detalles, haciéndolo más grande */
+	padding: 20px; /* Relleno alrededor del contenido */
+	background-color: #fff; /* Fondo blanco */
+	border-radius: 6px; /* Esquinas redondeadas */
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para estética */
+	border: 1px solid #ccc; /* Borde sólido */
+	border-top: 5px solid #0056b3;
+	/* Borde superior azul de la Universidad */
+}
+
+/* Estilos para la imagen de perfil, redonda y con tamaño definido */
+.profile-picture {
+	width: 150px; /* Ajusta el tamaño según sea necesario */
+	height: 150px; /* Altura de la imagen */
+	border-radius: 50%; /* Imagen circular */
+	margin-bottom: 10px; /* Margen inferior */
+}
+
+/* Botones de seguir y email, con margen superior y color azul */
+.ui-button-follow, .ui-button-email {
+	margin-top: 10px; /* Margen superior */
+	background-color: #0056b3; /* Azul de la Universidad */
+	color: white; /* Color de texto blanco */
+	border: none; /* Sin borde por defecto */
+	margin-right: 5px; /* Espacio adicional entre los botones */
+}
+
+/* Columnas de etiquetas y campos de entrada, con alineación y bordes azules */
+.details-grid .label-column, .additional-info-grid .label-column {
+	text-align: right; /* Alinea el texto a la derecha */
+	padding-right: 10px; /* Relleno a la derecha */
+	border: 1px solid #0056b3; /* Borde azul para los campos de entrada */
+}
+
+/* Columnas de entrada para los detalles y la información adicional */
+.details-grid .input-column, .additional-info-grid .input-column {
+	padding-left: 10px; /* Relleno a la izquierda */
+	color: #0056b3; /* Azul de la Universidad para las etiquetas */
+}
+
+/* Campos de entrada y menús de selección, con ancho completo y márgenes */
+.ui-inputfield, .ui-selectonemenu {
+	width: 100%; /* Ancho completo */
+	margin-bottom: 10px; /* Margen inferior */
+}
+
+/* Botón de actualización, con estilo de botón de Bootstrap primario */
+.ui-button-update {
+	width: 100%; /* Ancho completo */
+	background-color: #007bff; /* Color primario de Bootstrap */
+	color: white; /* Color de texto blanco */
+	border-radius: 4px; /* Esquinas redondeadas */
+	padding: 10px 0; /* Relleno para un área de clic más grande */
+	border: none; /* Sin borde */
+}
+
+/* Estado de hover para los botones, con un azul más oscuro al pasar el ratón */
+.ui-button-follow:hover, .ui-button-email:hover, .ui-button-update:hover
+	{
+	background-color: #003f7f;
+	/* Un tono de azul más oscuro para el estado hover */
+}
+
+/* Contenedor de botones, para distribuirlos uniformemente */
+.button-container {
+	display: flex; /* Usa flexbox para el layout de los botones */
+	justify-content: center; /* Centra los botones horizontalmente */
+	gap: 10px; /* Espacio entre botones */
+}
+
+/* Estilos responsivos para pantallas pequeñas */
+@media ( max-width : 768px) {
+	/* Ajusta el punto de quiebre según sea necesario */
+	.profile-details-wrapper {
+		flex-direction: column;
+		/* Apila perfil y detalles verticalmente en pantallas pequeñas */
+		align-items: center; /* Centra los ítems cuando están apilados */
+	}
+	.profile-container, .details-container, .additional-info-container {
+		width: 100%; /* Ancho completo en pantallas pequeñas */
+		flex: none; /* Deshabilita el crecimiento/reducción flex */
+		padding: 10px; /* Reduce el relleno en pantallas pequeñas */
+		align-items: center; /* Centra el contenido */
+		box-shadow: none;
+		/* Opcional: quita la sombra en pantallas pequeñas */
+	}
+	.profile-picture {
+		width: 120px; /* Ajusta el tamaño según sea necesario */
+		height: 120px; /* Altura de la imagen */
+	}
+	.button-container {
+		justify-content: space-around;
+		/* Distribuye los botones uniformemente */
+	}
+	.details-grid .label-column, .additional-info-grid .label-column,
+		.details-grid .input-column, .additional-info-grid .input-column {
+		text-align: left;
+		/* Alinea el texto a la izquierda en pantallas pequeñas */
+		padding-right: 0; /* Quita el relleno derecho */
+		padding-left: 0; /* Quita el relleno izquierdo */
+	}
+	.ui-button-follow, .ui-button-email {
+		margin-top: 0; /* Quita el margen superior */
+		margin-right: 0; /* Quita el margen derecho */
+	}
+}
+
+/* Estado de foco para los campos de entrada, para resaltar el elemento activo */
+.ui-inputfield:focus, .ui-selectonemenu:focus {
+	border: 2px solid #003f7f;
+	/* Un tono de azul más oscuro para el estado de foco */
+	outline: none; /* Quita el contorno de foco por defecto */
+}
+/* Estilos para la etiqueta/columna de label */
+.label-column-v2 {
+	flex: 0 0 20%; /* Ocupa un 20% del contenedor */
+	text-align: right;
+	padding-right: 10px;
+}
+
+/* Estilos para la columna de input */
+.input-column-v2 {
+	flex: 0 0 40%;
+	/* Ocupa un 40% del contenedor para que dos columnas de entrada llenen el 80% restante */
+	display: flex;
+	justify-content: flex-start;
+	/* Alinea los elementos de la columna al inicio (a la izquierda) */
+}
+/* Contenedor de Información Adicional */
+.additional-info-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	background-color: #fff;
+	border-radius: 6px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	border: 1px solid #ccc;
+}
+
+/* Grid de Información Adicional */
+.additional-info-grid {
+	width: 100%;
+}
+
+/* Filas dentro del Grid */
+.additional-info-grid .p-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+}
+
+/* Columnas de Etiqueta */
+.label-column-v2 {
+	flex: 1; /* Tomará 1 parte del espacio */
+	text-align: right;
+	padding-right: 10px;
+	min-width: 120px; /* Ancho mínimo */
+}
+
+/* Columnas de Entrada */
+.input-column-v2 {
+	flex: 2; /* Tomará 2 partes del espacio, haciéndola más ancha */
+	max-width: 300px; /* Ancho máximo para controlar el tamaño */
+}
+
+/* Campos de Entrada */
+.input-field-v2 {
+	width: 100%;
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+}
