@@ -6,10 +6,9 @@
       >
 	<h:head>
 		<title>Login</title>
-	<link href="views/static/login/login.css" rel="stylesheet" type="text/css"/>
+	<link href="/WebSide/views/static/login/login.css" rel="stylesheet" type="text/css"/>
 	</h:head> 
 	<h:body>
-		<h:outputStylesheet name="views/static/login/login.css" />
 		<div class="container" id="container">
 			<div class="form-container sign-up-container">
 					<h1>Registro de usuario</h1>
@@ -44,7 +43,9 @@
 					<div class="grid ui-fluid">
 						<div class="ui-inputgroup" >
 							<div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
-							<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"> </p:inputText>
+							<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"
+										 required="true" value="#{login.emailUtec}"
+							> </p:inputText>
 						</div>
 						<div class="ui-inputgroup" >
 							<div class="ui-inputgroup-addon"><i class="pi pi-shield"></i></div>
@@ -56,12 +57,13 @@
 										weakLabel="true"
 										goodLabel="true"
 										strongLabel="true"
+										value="#{login.password}"
 										>
 							</p:password>
 						</div>
 						<p></p>
 						<p></p>
-						<p:commandButton id="loginButton" type="button" value="Ingresar" icon="pi pi-check" /> 
+						<p:commandButton id="loginButton" value="Ingresar" icon="pi pi-check" action="#{login.doLogin()}"/> 
 					</div>
 				</h:form>
 			</div>
