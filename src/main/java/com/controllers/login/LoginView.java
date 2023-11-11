@@ -50,7 +50,7 @@ public class LoginView implements Serializable {
 		user = userBeanRemote.selectUserBy(emailUtec);
 		if(user.isValidUser(password)) {
 			try {
-				FacesContext.getCurrentInstance().getExternalContext().redirect("../templates/home.xhtml");
+				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/templates/home.xhtml");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
