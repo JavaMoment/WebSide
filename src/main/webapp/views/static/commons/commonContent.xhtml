@@ -5,10 +5,11 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       >
     <body>
-	    <ui:composition>
-	
-		<h1>Tu no deberias estar aquí niño, ésta no es tu casa</h1>
-				
+	    <ui:composition template="../templates/home.xhtml">
+		<ui:define name="content">
+		<h1>Tu no deberias estar aquí niño, ésta no es tu casa.</h1>
+		<h2>Sitio en construcción, disculpe las molestias.</h2>
+		</ui:define>
 	    </ui:composition>
     </body>
 </html>
