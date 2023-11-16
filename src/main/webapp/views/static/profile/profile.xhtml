@@ -4,193 +4,191 @@
 	xmlns:h="http://xmlns.jcp.org/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	>
-<h:head>
-	<title>Mi perfil</title>
-	<!-- Título de la página -->
-	<link href="profile.css" rel="stylesheet" type="text/css" />
-	<!-- Enlaza con la hoja de estilos CSS -->
-</h:head>
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<!-- Contenedor principal del perfil -->
-	<h:outputStylesheet name="css/profile/profile.css" />
-	<ui:composition template="../templates/home.xhtml">
-	<ui:define name="content">
-		<div class="main-profile-container">
-			<div class="content-wrapper">
-				<!-- Sección de perfil y detalles -->
-				<div class="profile-details-wrapper">
-					<!-- Contenedor de la imagen de perfil -->
-					<div class="profile-container">
-						<p:graphicImage value="/resources/images/perfil.png"
-							styleClass="profile-picture" alt="Profile Picture" />
-						<!-- Imagen de perfil -->
-	
-						<!-- Contenedor de botones -->
-						<div class="button-container">
-							<p:commandButton value="Follow" styleClass="ui-button-follow"
-								icon="ui-icon-person-add" />
-							<!-- Botón seguir -->
-							<p:commandButton value="Email" styleClass="ui-button-email"
-								icon="ui-icon-mail" />
-							<!-- Botón de email -->
+	<!-- Enlaza con la hoja de estilos CSS -->
+	<ui:composition template="../templates/home.xhtml"> 
+		<ui:define name="content">
+			<h:outputStylesheet library = "css" name = "profile/profile.css" /> 
+			<div class="main-profile-container">
+				<div class="content-wrapper">
+					<!-- Sección de perfil y detalles -->
+					<div class="profile-details-wrapper">
+						<!-- Contenedor de la imagen de perfil -->
+						<div class="profile-container">
+							<p:graphicImage value="/resources/images/perfil.png"
+								styleClass="profile-picture" alt="Profile Picture"
+								style="width: 150px; height: 150px;" />
+
+							<!-- Imagen de perfil -->
+
+							<!-- Contenedor de botones -->
+							<div class="button-container">
+								<p:commandButton value="Follow" styleClass="ui-button-follow"
+									icon="ui-icon-person-add" />
+								<!-- Botón seguir -->
+								<p:commandButton value="Email" styleClass="ui-button-email"
+									icon="ui-icon-mail" />
+								<!-- Botón de email -->
+							</div>
+
 						</div>
-	
+
+						<!-- Sección de detalles -->
+						<div class="details-container">
+							<p:panel header="Información Personal" styleClass="details-panel">
+								<p:panelGrid columns="2" styleClass="details-grid">
+									<!-- Campos de detalles del usuario -->
+
+									<!-- Campo de primer nombre -->
+									<p:row>
+										<p:column styleClass="label-column">
+											<p:outputLabel for="firstName" value="Primer Nombre:" />
+										</p:column>
+										<p:column styleClass="input-column">
+											<p:inputText id="firstName" value="#{UsuarioBean.firstName}"
+												styleClass="ui-inputfield" />
+										</p:column>
+									</p:row>
+									<!-- Campo de segundo nombre -->
+									<p:row>
+										<p:column styleClass="label-column">
+											<p:outputLabel for="secondName" value="Segundo Nombre:" />
+										</p:column>
+										<p:column styleClass="input-column">
+											<p:inputText id="secondName"
+												value="#{UsuarioBean.secondName}" styleClass="ui-inputfield" />
+										</p:column>
+									</p:row>
+									<!-- Campo de primer apellido -->
+									<p:row>
+										<p:column styleClass="label-column">
+											<p:outputLabel for="firstSurname" value="Primer Apellido:" />
+										</p:column>
+										<p:column styleClass="input-column">
+											<p:inputText id="firstSurname"
+												value="#{UsuarioBean.firstSurname}"
+												styleClass="ui-inputfield" />
+										</p:column>
+									</p:row>
+									<!-- Campo de segundo apellido -->
+									<p:row>
+										<p:column styleClass="label-column">
+											<p:outputLabel for="secondSurname" value="Segundo Apellido:" />
+										</p:column>
+										<p:column styleClass="input-column">
+											<p:inputText id="secondSurname"
+												value="#{UsuarioBean.secondSurname}"
+												styleClass="ui-inputfield" />
+										</p:column>
+									</p:row>
+
+									<!-- Campo de cédula -->
+									<p:row>
+										<p:column styleClass="label-column">
+											<p:outputLabel for="cedula" value="Cédula de Identidad:" />
+										</p:column>
+										<p:column styleClass="input-column">
+											<p:inputText id="cedula" value="#{UsuarioBean.cedula}"
+												styleClass="ui-inputfield" />
+										</p:column>
+									</p:row>
+									<!-- Campo de género -->
+									<p:row>
+										<p:column styleClass="label-column">
+											<p:outputLabel for="gender" value="Género:" />
+										</p:column>
+										<p:column styleClass="input-column">
+											<p:selectOneMenu id="gender" value="#{UsuarioBean.gender}"
+												styleClass="ui-selectonemenu">
+												<f:selectItem itemLabel="Mujer" itemValue="Mujer" />
+												<f:selectItem itemLabel="Hombre" itemValue="Hombre" />
+												<f:selectItem itemLabel="Otros" itemValue="Otros" />
+											</p:selectOneMenu>
+										</p:column>
+									</p:row>
+
+								</p:panelGrid>
+								<p:commandButton value="Update Information"
+									action="#{UsuarioBean.updateInformation}"
+									styleClass="ui-button-update" />
+							</p:panel>
+						</div>
 					</div>
-	
-					<!-- Sección de detalles -->
-					<div class="details-container">
-						<p:panel header="Información Personal"
-							styleClass="details-panel">
-							<p:panelGrid columns="2" styleClass="details-grid">
-								<!-- Campos de detalles del usuario -->
-	
-								<!-- Campo de primer nombre -->
-								<p:row>
-									<p:column styleClass="label-column">
-										<p:outputLabel for="firstName" value="Primer Nombre:" />
-									</p:column>
-									<p:column styleClass="input-column">
-										<p:inputText id="firstName" value="#{UsuarioBean.firstName}"
-											styleClass="ui-inputfield" />
-									</p:column>
-								</p:row>
-								<!-- Campo de segundo nombre -->
-								<p:row>
-									<p:column styleClass="label-column">
-										<p:outputLabel for="secondName" value="Segundo Nombre:" />
-									</p:column>
-									<p:column styleClass="input-column">
-										<p:inputText id="secondName" value="#{UsuarioBean.secondName}"
-											styleClass="ui-inputfield" />
-									</p:column>
-								</p:row>
-								<!-- Campo de primer apellido -->
-								<p:row>
-									<p:column styleClass="label-column">
-										<p:outputLabel for="firstSurname" value="Primer Apellido:" />
-									</p:column>
-									<p:column styleClass="input-column">
-										<p:inputText id="firstSurname"
-											value="#{UsuarioBean.firstSurname}" styleClass="ui-inputfield" />
-									</p:column>
-								</p:row>
-								<!-- Campo de segundo apellido -->
-								<p:row>
-									<p:column styleClass="label-column">
-										<p:outputLabel for="secondSurname" value="Segundo Apellido:" />
-									</p:column>
-									<p:column styleClass="input-column">
-										<p:inputText id="secondSurname"
-											value="#{UsuarioBean.secondSurname}"
-											styleClass="ui-inputfield" />
-									</p:column>
-								</p:row>
-	
-								<!-- Campo de cédula -->
-								<p:row>
-									<p:column styleClass="label-column">
-										<p:outputLabel for="cedula" value="Cédula de Identidad:" />
-									</p:column>
-									<p:column styleClass="input-column">
-										<p:inputText id="cedula" value="#{UsuarioBean.cedula}"
-											styleClass="ui-inputfield" />
-									</p:column>
-								</p:row>
-								<!-- Campo de género -->
-								<p:row>
-									<p:column styleClass="label-column">
-										<p:outputLabel for="gender" value="Género:" />
-									</p:column>
-									<p:column styleClass="input-column">
-										<p:selectOneMenu id="gender" value="#{UsuarioBean.gender}"
-											styleClass="ui-selectonemenu">
-											<f:selectItem itemLabel="Mujer" itemValue="Mujer" />
-											<f:selectItem itemLabel="Hombre" itemValue="Hombre" />
-											<f:selectItem itemLabel="Otros" itemValue="Otros" />
-										</p:selectOneMenu>
-									</p:column>
-								</p:row>
-	
-							</p:panelGrid>
-							<p:commandButton value="Update Information"
-								action="#{UsuarioBean.updateInformation}"
-								styleClass="ui-button-update" />
-						</p:panel>
-					</div>
+					<p:fieldset legend="Información Adicional"
+						styleClass="additional-info-container">
+						<p:panelGrid columns="6" styleClass="additional-info-grid">
+							<!-- Asegúrate de que el total de columnas cuente todas las celdas que quieres por fila -->
+							<!-- Fila para Correo UTEC y Departamento -->
+							<p:row>
+								<!-- Correo UTEC -->
+								<p:column styleClass="label-column-v2">
+									<p:outputLabel for="utecMail" value="Correo UTEC:" />
+								</p:column>
+								<p:column styleClass="input-column-v2">
+									<p:inputText id="utecMail" value="#{UsuarioBean.utecMail}"
+										styleClass="input-field-v2" />
+								</p:column>
+
+								<!-- Departamento -->
+								<p:column styleClass="label-column-v2">
+									<p:outputLabel for="departamento" value="Departamento:" />
+								</p:column>
+								<p:column styleClass="input-column-v2">
+									<p:inputText id="departamento"
+										value="#{UsuarioBean.departamento}"
+										styleClass="input-field-v2" />
+								</p:column>
+							</p:row>
+							<p:row>
+								<!-- Correo Personal -->
+								<p:column styleClass="label-column-v2">
+									<p:outputLabel for="personalMail" value="Correo Personal:" />
+								</p:column>
+								<p:column styleClass="input-column-v2">
+									<p:inputText id="personalMail"
+										value="#{UsuarioBean.personalMail}"
+										styleClass="input-field-v2" />
+								</p:column>
+
+								<!-- Localidad -->
+								<p:column styleClass="label-column-v2">
+									<p:outputLabel for="localidad" value="Localidad:" />
+								</p:column>
+								<p:column styleClass="input-column-v2">
+									<p:inputText id="localidad" value="#{UsuarioBean.localidad}"
+										styleClass="input-field-v2" />
+								</p:column>
+
+							</p:row>
+							<p:row>
+
+								<!-- Teléfono -->
+								<p:column styleClass="label-column-v2">
+									<p:outputLabel for="telefono" value="Teléfono:" />
+								</p:column>
+								<p:column styleClass="input-column-v2">
+									<p:inputText id="telefono" value="#{UsuarioBean.telefono}"
+										styleClass="input-field-v2" />
+								</p:column>
+								<!-- ITR -->
+								<p:column styleClass="label-column-v2">
+									<p:outputLabel for="itr" value="ITR:" />
+								</p:column>
+								<p:column styleClass="input-column-v2">
+									<p:inputText id="itr" value="#{UsuarioBean.itr}"
+										styleClass="input-field-v2" />
+								</p:column>
+
+							</p:row>
+						</p:panelGrid>
+					</p:fieldset>
+
+
 				</div>
-				<p:fieldset legend="Información Adicional"
-					styleClass="additional-info-container">
-					<p:panelGrid columns="6" styleClass="additional-info-grid">
-						<!-- Asegúrate de que el total de columnas cuente todas las celdas que quieres por fila -->
-						<!-- Fila para Correo UTEC y Departamento -->
-						<p:row>
-							<!-- Correo UTEC -->
-							<p:column styleClass="label-column-v2">
-								<p:outputLabel for="utecMail" value="Correo UTEC:" />
-							</p:column>
-							<p:column styleClass="input-column-v2">
-								<p:inputText id="utecMail" value="#{UsuarioBean.utecMail}"
-									styleClass="input-field-v2" />
-							</p:column>
-	
-							<!-- Departamento -->
-							<p:column styleClass="label-column-v2">
-								<p:outputLabel for="departamento" value="Departamento:" />
-							</p:column>
-							<p:column styleClass="input-column-v2">
-								<p:inputText id="departamento"
-									value="#{UsuarioBean.departamento}" styleClass="input-field-v2" />
-							</p:column>
-						</p:row>
-						<p:row>
-							<!-- Correo Personal -->
-							<p:column styleClass="label-column-v2">
-								<p:outputLabel for="personalMail" value="Correo Personal:" />
-							</p:column>
-							<p:column styleClass="input-column-v2">
-								<p:inputText id="personalMail"
-									value="#{UsuarioBean.personalMail}" styleClass="input-field-v2" />
-							</p:column>
-	
-							<!-- Localidad -->
-							<p:column styleClass="label-column-v2">
-								<p:outputLabel for="localidad" value="Localidad:" />
-							</p:column>
-							<p:column styleClass="input-column-v2">
-								<p:inputText id="localidad" value="#{UsuarioBean.localidad}"
-									styleClass="input-field-v2" />
-							</p:column>
-	
-						</p:row>
-						<p:row>
-	
-							<!-- Teléfono -->
-							<p:column styleClass="label-column-v2">
-								<p:outputLabel for="telefono" value="Teléfono:" />
-							</p:column>
-							<p:column styleClass="input-column-v2">
-								<p:inputText id="telefono" value="#{UsuarioBean.telefono}"
-									styleClass="input-field-v2" />
-							</p:column>
-							<!-- ITR -->
-							<p:column styleClass="label-column-v2">
-								<p:outputLabel for="itr" value="ITR:" />
-							</p:column>
-							<p:column styleClass="input-column-v2">
-								<p:inputText id="itr" value="#{UsuarioBean.itr}"
-									styleClass="input-field-v2" />
-							</p:column>
-	
-						</p:row>
-					</p:panelGrid>
-				</p:fieldset>
-	
-	
 			</div>
-		</div>
-	</ui:define>
+		</ui:define>
 	</ui:composition>
 </h:body>
 </html>

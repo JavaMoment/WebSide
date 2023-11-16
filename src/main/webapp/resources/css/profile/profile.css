@@ -1,3 +1,5 @@
+
+ 
 /* Envoltorio de contenido, organiza el layout usando flexbox y lo centra */
 .content-wrapper {
 	display: flex; /* Utiliza flexbox para el layout */
@@ -38,49 +40,39 @@
 	border-radius: 4px; /* Bordes redondeados para las cajas de texto */
 }
 
-/* Envoltorio de los detalles del perfil, alinea hijos en fila */
-.profile-details-wrapper {
-	display: flex; /* Alinea hijos (perfil y detalles) en fila */
-	max-width: 1200px; /* Ajusta basado en tu preferencia */
-	width: 100%; /* Ancho al 100% */
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	/* Sombra opcional para estética */
-	border-radius: 4px; /* Esquinas redondeadas */
-	background: #FFFFFF; /* Fondo blanco */
-	margin-bottom: 20px;
-	/* Espacio entre esta sección y la información adicional */
-}
-
-/* Contenedor del perfil, define el ancho y alinea el contenido */
 .profile-container {
-	width: 15%; /* Ancho al 15% */
-	flex: 1; /* Asigna 1 parte del espacio para el perfil */
-	padding: 20px; /* Relleno alrededor del contenido */
-	display: flex; /* Usa flexbox para la disposición */
-	flex-direction: column; /* Dirección de columna para los hijos */
-	align-items: center; /* Centra el contenido del perfil */
+  flex: 0 0 auto !important;
+  padding: 20px;
+  align-items: center;
+  display: flex !important;
+  flex-direction: column;
 }
 
-/* Contenedor de los detalles, con más espacio y sombra */
 .details-container {
-	width: 35%; /* Ancho al 35% */
-	flex: 2;
-	/* Asigna 2 partes del espacio para los detalles, haciéndolo más grande */
-	padding: 20px; /* Relleno alrededor del contenido */
-	background-color: #fff; /* Fondo blanco */
-	border-radius: 6px; /* Esquinas redondeadas */
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para estética */
-	border: 1px solid #ccc; /* Borde sólido */
-	border-top: 5px solid #0056b3;
-	/* Borde superior azul de la Universidad */
+  flex-grow: 1 !important;
+  padding: 20px;
+  display: flex !important;
+  flex-direction: column;
+}
+
+.profile-details-wrapper {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start !important;
+  width: 100%;
 }
 
 /* Estilos para la imagen de perfil, redonda y con tamaño definido */
 .profile-picture {
-	width: 150px; /* Ajusta el tamaño según sea necesario */
-	height: 150px; /* Altura de la imagen */
+	width: 30px; /* Ajusta el tamaño según sea necesario */
+	height: 30px; /* Altura de la imagen */
 	border-radius: 50%; /* Imagen circular */
 	margin-bottom: 10px; /* Margen inferior */
+}
+
+/* Asegúrate de que los botones y la imagen de perfil no sean demasiado grandes */
+.profile-picture, .ui-button-follow, .ui-button-email {
+	max-width: 100%; /* Limita el ancho máximo al 100% de su contenedor */
 }
 
 /* Botones de seguir y email, con margen superior y color azul */
