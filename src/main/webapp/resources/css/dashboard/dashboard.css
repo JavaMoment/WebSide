@@ -110,3 +110,31 @@ h6 {
     margin: 0;
     color: rgba(41, 50, 65, 0.8);
 }
+
+.xl\:col-8 {
+        flex: 0 0 auto;
+        padding: .5rem;
+        width: 66.6667%;
+}
+
+.layout-dashboard .usersTypeChart .activeInactiveChart {
+    overflow: auto;
+    position: relative;
+}
+
+.card {
+    background: #ffffff;
+    padding: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 10px 40px rgba(41, 50, 65, 0.06);
+    -moz-border-radius: 24px;
+    -webkit-border-radius: 24px;
+    border-radius: 24px;
+    margin-bottom: 2rem;
+}
+
+.xl\:col-4 {
+    flex: 0 0 auto;
+    padding: .5rem;
+    width: 33.3333%;
+}
