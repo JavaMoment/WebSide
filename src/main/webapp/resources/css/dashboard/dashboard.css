@@ -11,7 +11,7 @@
 .col-12 {
     flex: 0 0 auto;
     padding: .5rem;
-    width: 100%;
+    width: 95%;
 }
 
 .col {
@@ -81,10 +81,6 @@ h1 {
     margin-bottom: 2rem;
 }
 
-.grid>.col, .grid>[class*=col] {
-    box-sizing: border-box;
-}
-
 h1, h2, h3, h4, h5, h6 {
     margin: 1.5rem 0 1rem 0;
     font-family: inherit;
@@ -111,10 +107,12 @@ h6 {
     color: rgba(41, 50, 65, 0.8);
 }
 
-.xl\:col-8 {
-        flex: 0 0 auto;
-        padding: .5rem;
-        width: 66.6667%;
+@media screen and (min-width: 1200px){
+	.xl\:col-8 {
+	        flex: 0 0 auto;
+	        padding: .5rem;
+	        width: 66.6667%;
+	}
 }
 
 .layout-dashboard .usersTypeChart .activeInactiveChart {
@@ -122,19 +120,10 @@ h6 {
     position: relative;
 }
 
-.card {
-    background: #ffffff;
-    padding: 20px;
-    box-sizing: border-box;
-    box-shadow: 0 10px 40px rgba(41, 50, 65, 0.06);
-    -moz-border-radius: 24px;
-    -webkit-border-radius: 24px;
-    border-radius: 24px;
-    margin-bottom: 2rem;
-}
-
-.xl\:col-4 {
-    flex: 0 0 auto;
-    padding: .5rem;
-    width: 33.3333%;
+@media screen and (min-width: 768px) {
+	.xl\:col-4 {
+	    flex: 0 0 auto;
+	    padding: .5rem;
+	    width: 50%;
+	}
 }
