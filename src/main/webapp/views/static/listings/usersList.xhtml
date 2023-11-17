@@ -37,7 +37,7 @@
 	                                oncomplete="PF('deleteProductDialog').show()">
 	                   <f:setPropertyActionListener value="#{user}" target="#{dtUsersView.selectedUser}" />
 	               </p:commandButton>
-	               <p:toggleSwitch value="#{user.activo == 'Activo'}" onIcon="pi pi-check" offIcon="pi pi-times" />
+	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" />
 	           </p:column>
 	           <p:column headerText="Activo" sortBy="#{user.activo}" filterBy="#{user.activo}">
 	               <h:outputText value="#{user.activo}" />
