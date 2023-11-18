@@ -3,6 +3,7 @@ package com.controllers.login;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 @Named("login")
-@ViewScoped
+@SessionScoped
 public class LoginView implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -30,6 +31,29 @@ public class LoginView implements Serializable {
 		
 	}
 	
+	public void doLogin() {
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Oh no! Oh no no no", "El usuario o contraseña no es correcto");;
+		user = userBeanRemote.selectUserBy(emailUtec);
+		if(user != null && user.isValidUser(password)) {
+			try {
+				msg = new FacesMessage("¡Bienvenido!");
+				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		FacesContext.getCurrentInstance().addMessage(null, msg);
+	}
+	
+	public Usuario getUser() {
+		return user;
+	}
+
+	public void setUser(Usuario user) {
+		this.user = user;
+	}
+
 	public String getEmailUtec() {
 		return emailUtec;
 	}
@@ -44,18 +68,6 @@ public class LoginView implements Serializable {
 	
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public void doLogin() {
-		user = userBeanRemote.selectUserBy(emailUtec);
-		if(user.isValidUser(password)) {
-			try {
-				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/templates/home.xhtml");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
 
 }
