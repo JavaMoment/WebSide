@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  >
+<h:head>
+	<title>Administración de usuarios</title>
+</h:head>
+<ui:composition template="../templates/home.xhtml">
+<ui:define name="content">
+<h:body>
+  <h:outputStylesheet name="css/listings/usersList.css" />
+  <div class = "layout-main">
+    <div class = "layout-content">
+      <div class = "card users-list">
+	     <h:form id="form">
+	        <p:growl id="messages" showDetail="true" />
+	        <p:dataTable id="dt-users" widgetVar="dtUsers" var="user" value="#{dtUsersView.users}"
+	           reflow="true" selection="#{dtUsersView.selectedUsers}" tableStyle="width:auto"
+	           rowKey="#{user.nombreUsuario}" paginator="true" rows="15" rowSelectMode="add" paginatorPosition="bottom"
+	           resizableColumns="true" showGridlines="true" resizeMode="expand" >
+	           <f:facet name="header">
+	               <div class="users-table-header">
+	                   <span style="font-weight: bold">Listado de usuarios</span>
+	                   <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+	                       <p:inputText id="globalFilter" onkeyup="PF('dtUsers').filter()" placeholder="Buscar..." />
+	                   </span>
+	               </div>
+	           </f:facet>
+	           <p:column exportable="false">
+	               <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-user-edit"
+	                                process="@this"
+	                                oncomplete="PF('deleteProductDialog').show()">
+	                   <f:setPropertyActionListener value="#{user}" target="#{dtUsersView.selectedUser}" />
+	               </p:commandButton>
+	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" />
+	           </p:column>
+	           <p:column headerText="Activo" sortBy="#{user.activo}" filterBy="#{user.activo}">
+	               <h:outputText value="#{user.activo}" />
+	           </p:column>
+	           <p:column headerText="Tipo de usuario" sortBy="#{user.tipoUsuario}" 
+	               filterMatchMode="exact" filterBy="#{user.tipoUsuario}">
+	               <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtUsersView.userTypes}" />
+                    </p:selectOneMenu>
+                   </f:facet>
+	               <h:outputText value="#{user.tipoUsuario}" />
+	           </p:column>
+	           <p:column headerText="Nombre de usuario" sortBy="#{user.nombreUsuario}" filterBy="#{user.nombreUsuario}">
+	               <h:outputText value="#{user.nombreUsuario}" />
+	           </p:column>
+	           <p:column headerText="Correo institucional" sortBy="#{user.mailInstitucional}"
+	               filterBy="#{user.mailInstitucional}">
+	               <h:outputText value="#{user.mailInstitucional}" />
+	           </p:column>
+	           <p:column headerText="Primer nombre" sortBy="#{user.nombre1}" filterBy="#{user.nombre2}">
+	               <h:outputText value="#{user.nombre1}" />
+	           </p:column>
+	           <p:column headerText="Segundo nombre" sortBy="#{user.nombre2}" filterBy="#{user.nombre2}">
+	               <h:outputText value="#{user.nombre2}" />
+	           </p:column>
+	           <p:column headerText="Primer apellido" sortBy="#{user.apellido1}" filterBy="#{user.nombre2}">
+	               <h:outputText value="#{user.apellido1}" />
+	           </p:column>
+	           <p:column headerText="Segundo apellido" sortBy="#{user.apellido2}"
+	               filterBy="#{user.apellido2}">
+	               <h:outputText value="#{user.apellido2}" />
+	           </p:column>
+	           <p:column headerText="CI" sortBy="#{user.documento}"
+	               filterBy="#{user.documento}">
+	               <h:outputText value="#{user.documento}" />
+	           </p:column>
+	           <p:column headerText="Fecha de nacimiento" sortBy="#{user.fechaNacimiento}"
+	               filterBy="#{user.fechaNacimiento}">
+	               <h:outputText value="#{user.fechaNacimiento.toString()}" />
+	           </p:column>
+	           <p:column headerText="Genero" sortBy="#{user.genero}"
+	               filterBy="#{user.genero}">
+	               <h:outputText value="#{user.genero}" />
+	           </p:column>
+	           <p:column headerText="Correo personal" sortBy="#{user.mailPersonal}"
+	               filterBy="#{user.mailPersonal}">
+	               <h:outputText value="#{user.mailInstitucional}" />
+	           </p:column>
+	           <p:column headerText="Telefono" sortBy="#{user.telefono}"
+	               filterBy="#{user.telefono}">
+	               <h:outputText value="#{user.telefono}" />
+	           </p:column>
+	           <p:column headerText="Departamento de residencia" sortBy="#{user.departamento.nombre}"
+	               filterBy="#{user.departamento.nombre}">
+	               <h:outputText value="#{user.departamento.nombre}" />
+	           </p:column>
+	           <p:column headerText="Ciudad de residencia" sortBy="#{user.localidad.nombre}"
+	               filterBy="#{user.localidad.nombre}">
+	               <h:outputText value="#{user.localidad.nombre}" />
+	           </p:column>
+	           <!-- <p:column headerText="Image" exportable="false">
+	               <p:graphicImage name="images/user/#{user.image}" library="demo" styleCluseroduct-image" />
+	           </p:column> -->
+	       </p:dataTable>
+	     </h:form>
+      </div>
+    </div>
+  </div>
+</h:body>
+</ui:define>
+</ui:composition>
+</html>
