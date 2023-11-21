@@ -25,7 +25,7 @@
 						<p:inputText placeholder="Segundo nombre"> </p:inputText>
 						<p:inputText placeholder="Primer apellido" validator="lastnameValidator"> </p:inputText>
 						<p:inputText placeholder="Segundo apellido" validator="lastnameValidator"> </p:inputText>
-						<p:datePicker id="birthdate" value="#{signup.birthdate}" showIcon="true" validator="birthdateValidator" />
+						<p:datePicker id="birthdate" value="#{signup.birthdate}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" />
 						<p:inputText placeholder="Cédula de identidad" validator="ciValidator"> </p:inputText>
 						<p:inputText placeholder="Télefono" validator="phoneValidator"> </p:inputText>
 						<p:selectOneMenu id="departamento" label="Departamento de residencia" alwaysDisplayLabel="true" />

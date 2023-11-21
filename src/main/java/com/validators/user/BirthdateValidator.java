@@ -3,6 +3,7 @@ package com.validators.user;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -38,6 +39,9 @@ public class BirthdateValidator implements Validator {
 		int comparison = now.compareTo(date);
 		if(comparison <= 0) {
 			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Hey!", "Por favor, ingrese una fecha de nacimiento anterior a la fecha actual."));
+		}
+		if(Period.between(date, now).getYears() < 16) {
+			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Hey!", "Usted debe ser mayor de 16 años para poder registrarse en nuestro sistema."));
 		}
 	}
 
