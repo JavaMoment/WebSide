@@ -17,10 +17,10 @@
 				<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
 				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
-						<p:inputText placeholder="Correo personal"> </p:inputText>
-						<p:inputText placeholder="Correo institucional"> </p:inputText>
-						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" />
-						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" />
+						<p:inputText placeholder="Correo personal" validator="personalEmailValidator"> </p:inputText>
+						<p:inputText placeholder="Correo institucional" validator="emailValidator"> </p:inputText>
+						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" validator="passwordValidator"/>
+						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" validator="passwordValidator"/>
 						<p:inputText placeholder="Primer nombre" validator="nameValidator"> </p:inputText>
 						<p:inputText placeholder="Segundo nombre"> </p:inputText>
 						<p:inputText placeholder="Primer apellido" validator="lastnameValidator"> </p:inputText>

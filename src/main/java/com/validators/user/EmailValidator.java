@@ -21,12 +21,12 @@ public class EmailValidator implements Validator {
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) {
         if(value.toString().trim().isEmpty() || value == null) {
-        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, "Login error","Por favor ingrese una dirección de correo electrónico."));
+        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, "Cuidadiiiitooo","Por favor ingrese una dirección de correo electrónico institucional."));
         }
         if(value.toString().contains("@") && !pattern.matcher(value.toString()).matches()) {
-        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cuidadiiiitooo", "Por favor ingrese una dirección de correo electrónico válida."));
+        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cuidadiiiitooo", "Por favor ingrese una dirección de correo electrónico institucional válida."));
         }
-        if(!value.toString().endsWith("utec.edu.uy")) {
+        if(value.toString().contains("@") && !value.toString().endsWith(".utec.edu.uy")) {
         	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cuidadiiiitooo", "Por favor ingrese una dirección de correo electrónico institucional válida."));
         }
     }
