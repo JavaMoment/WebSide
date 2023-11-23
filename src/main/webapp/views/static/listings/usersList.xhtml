@@ -36,9 +36,17 @@
 	                                oncomplete="PF('deleteProductDialog').show()">
 	                   <f:setPropertyActionListener value="#{user}" target="#{dtUsersView.selectedUser}" />
 	               </p:commandButton>
-	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" />
+	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" >
+	                <p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
+	               </p:toggleSwitch>
 	           </p:column>
 	           <p:column headerText="Activo" sortBy="#{user.activo}" filterBy="#{user.activo}">
+	               <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtUsersView.usersStatus}" />
+                    </p:selectOneMenu>
+                   </f:facet>
 	               <h:outputText value="#{user.activo}" />
 	           </p:column>
 	           <p:column headerText="Tipo de usuario" sortBy="#{user.tipoUsuario}" 
