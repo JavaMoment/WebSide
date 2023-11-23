@@ -51,7 +51,7 @@
 											</p:column>
 											<p:column styleClass="input-column">
 												<p:inputText id="firstName" value="#{profile.nombre1}"
-												 	styleClass="ui-inputfield" validator="nameValidator" />
+													styleClass="ui-inputfield" validator="nameValidator" />
 											</p:column>
 										</p:row>
 										<!-- Campo de segundo nombre -->
@@ -60,7 +60,7 @@
 												<p:outputLabel for="secondName" value="Segundo Nombre:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:inputText id="secondName" value="#{profile.nombre2}" 
+												<p:inputText id="secondName" value="#{profile.nombre2}"
 													styleClass="ui-inputfield" />
 											</p:column>
 										</p:row>
@@ -71,7 +71,7 @@
 											</p:column>
 											<p:column styleClass="input-column">
 												<p:inputText id="firstSurname" value="#{profile.apellido1}"
-													styleClass="ui-inputfield" validator="lastnameValidator"/>
+													styleClass="ui-inputfield" validator="lastnameValidator" />
 											</p:column>
 										</p:row>
 										<!-- Campo de segundo apellido -->
@@ -80,8 +80,8 @@
 												<p:outputLabel for="secondSurname" value="Segundo Apellido:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:inputText id="secondSurname" value="#{profile.apellido2}" 
-													styleClass="ui-inputfield" validator="lastnameValidator"/>
+												<p:inputText id="secondSurname" value="#{profile.apellido2}"
+													styleClass="ui-inputfield" validator="lastnameValidator" />
 											</p:column>
 										</p:row>
 
@@ -91,7 +91,7 @@
 												<p:outputLabel for="cedula" value="Cédula de Identidad:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:inputText id="cedula" value="#{profile.documento}" 
+												<p:inputText id="cedula" value="#{profile.documento}"
 													styleClass="ui-inputfield">
 													<f:validator
 														validatorId="com.resources.validations.Document" />
@@ -112,6 +112,20 @@
 												</p:selectOneMenu>
 											</p:column>
 										</p:row>
+
+										<!-- Campo de edad -->
+										<p:row>
+											<p:column styleClass="label-column">
+												<p:outputLabel for="fechaNacimiento" value="Fecha Nacimiento:" />
+											</p:column>
+											<p:column styleClass="input-column">
+												<p:datePicker id="fechaNacimiento" value="#{profile.birthdayDate}"
+													showIcon="true" validator="birthdateValidator"
+													yearNavigator="true" monthNavigator="true"
+													yearRange="1900:2100" />
+
+											</p:column>
+										</p:row>
 									</p:panelGrid>
 
 
@@ -130,8 +144,7 @@
 									<p:column styleClass="input-column-v2">
 										<p:inputText id="utecMail"
 											value="#{profile.mailInstitucional}"
-											styleClass="input-field-v2" validator="emailValidator"
-											/>
+											styleClass="input-field-v2" validator="emailValidator" />
 									</p:column>
 
 									<!-- Departamento -->
@@ -154,7 +167,8 @@
 									</p:column>
 									<p:column styleClass="input-column-v2">
 										<p:inputText id="personalMail" value="#{profile.mailPersonal}"
-											styleClass="input-field-v2" validator="personalEmailValidator"/>
+											styleClass="input-field-v2"
+											validator="personalEmailValidator" />
 									</p:column>
 
 									<!-- Localidad -->
@@ -177,7 +191,7 @@
 									</p:column>
 									<p:column styleClass="input-column-v2">
 										<p:inputText id="telefono" value="#{profile.telefono}"
-											styleClass="input-field-v2" validator="phoneValidator"/>
+											styleClass="input-field-v2" validator="phoneValidator" />
 									</p:column>
 
 									<!-- ITR -->

@@ -23,6 +23,7 @@ import com.services.ItrBean;
 import java.io.Serializable;
 import java.lang.annotation.Documented;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Named("profile")
@@ -46,6 +47,8 @@ public class ProfileView implements Serializable {
 	private String contrasenia;
 	private String documento;
 	private String genero;
+	private Date fechaNacimiento;
+
 	private long departmentId;
 	private long locationId;
 	private long itrId;
@@ -187,6 +190,13 @@ public class ProfileView implements Serializable {
 		return this.listaItr;
 	}
 
+	public Date getBirthdayDate() {
+		return fechaNacimiento;
+	}
+
+	public void setBirthdayDate(Date fechaNacimiento) {
+		this.fechaNacimiento = fechaNacimiento;
+	}
 
 
 	@PostConstruct
@@ -195,6 +205,7 @@ public class ProfileView implements Serializable {
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession  session = (HttpSession) context.getExternalContext().getSession(false); 
 			usuario = (Usuario) session.getAttribute("userLogged");
+			if (usuario == null)FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/login/login.xhtml");
 					
 			System.out.println("entra al try");
 			LocalidadBean lbean = new LocalidadBean();
@@ -227,6 +238,7 @@ public class ProfileView implements Serializable {
 				this.departmentId = usuario.getDepartamento().getIdDepartamento();
 				this.itrId = usuario.getItr().getIdItr();
 				this.locationId = usuario.getLocalidad().getIdLocalidad();
+				this.fechaNacimiento = usuario.getFechaNacimiento();
 
 			} else {
 				System.out.println("no agarra los datos rey");
@@ -251,16 +263,19 @@ public class ProfileView implements Serializable {
 	public void actualizar() {
 		try {
 			// Establecer el mailInstitucional mientras no sea global
-			String mailInstitucional = "gon.ruiz@tutores.utec.edu.uy";
+			//String mailInstitucional = "gon.ruiz@tutores.utec.edu.uy";
 
-			usuario = userBeanRemote.selectUserBy(mailInstitucional);
-			System.out.println(usuario);
+			//usuario = userBeanRemote.selectUserBy(mailInstitucional);
+			//System.out.println(usuario);
 			
 			LocalidadBean lbean = new LocalidadBean();
 			ItrBean itrbean = new ItrBean();
 			DepartamentoBean depabean = new DepartamentoBean();
 			
-			
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpSession  session = (HttpSession) context.getExternalContext().getSession(false); 
+			usuario = (Usuario) session.getAttribute("userLogged");
+					
 			// Verifica si se encontró el usuario
 			if (usuario != null) {
 				// Actualiza los campos del usuario
@@ -269,13 +284,15 @@ public class ProfileView implements Serializable {
 				usuario.setApellido1(this.apellido1);
 				usuario.setApellido2(this.apellido2);
 				usuario.setDocumento(this.documento);
-				// usuario.setGenero(this.genero);
+				usuario.setGenero(this.genero.charAt(0));
 				usuario.setMailInstitucional(this.mailInstitucional);
 				usuario.setMailPersonal(this.mailPersonal);
 				usuario.setTelefono(this.telefono);
 				usuario.setDepartamento(depabean.selectById(this.departmentId));
 				usuario.setLocalidad(lbean.selectById(this.locationId));
 				usuario.setItr(itrbean.selectById(this.itrId));
+				usuario.setFechaNacimiento(fechaNacimiento);
+				
 
 				// Intenta guardar los cambios
 				int resultado = userBeanRemote.update(usuario);
@@ -309,5 +326,7 @@ public class ProfileView implements Serializable {
 		}
 
 	}
+
+
 
 }
