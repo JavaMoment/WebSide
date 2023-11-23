@@ -14,7 +14,6 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import com.entities.Usuario;
-import com.enums.TipoUsuario;
 import com.services.UsuarioBeanRemote;
 
 /**
