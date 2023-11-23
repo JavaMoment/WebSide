@@ -35,11 +35,34 @@ public class UsersListView implements Serializable {
 	private List<Usuario> selectedUsers;
 	private List<Itr> itrs;
 	private List<String> userTypes;
+	private String[] usersStatus = {"Activo", "Inactivo"}; 
 	
 	@PostConstruct
 	public void init() {
 		users = usuarioBeanRemote.selectAll();
 		itrs = itrBeanRemote.selectAll();
+		userTypes = new ArrayList<>();
+		userTypes.add("Analista");
+		userTypes.add("Estudiante");
+		userTypes.add("Tutor");
+	}
+	
+	public void onToggleSwitchChangeActive(Usuario user) {
+		int exitCode;
+		String username = user.getNombreUsuario();
+		if(user.isActive()) {
+			user.setActivo((byte) 0);
+			exitCode = usuarioBeanRemote.logicalDeleteByUsername(username);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El usuario " + username + " ha sido correctamente dado de baja."));
+		} else {
+			user.setActivo((byte) 1);
+			exitCode = usuarioBeanRemote.activeUserBy(username);
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El usuario " + username + " ha sido correctamente activado."));
+		}
+		if(exitCode != 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el estado del usuario no ha podido ser modificado."));
+		}
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
 	}
 	
 	public List<Usuario> getUsers() {
@@ -60,10 +83,6 @@ public class UsersListView implements Serializable {
 
     public void setselectedUsers(List<Usuario> selectedUsers) {
         this.selectedUsers = selectedUsers;
-    }
-
-    public void openNew() {
-        this.selectedUser = new Usuario();
     }
 
     public void deleteProduct() {
@@ -92,10 +111,6 @@ public class UsersListView implements Serializable {
     }
 
 	public List<String> getUserTypes() {
-		userTypes = new ArrayList<>();
-		userTypes.add("Analista");
-		userTypes.add("Estudiante");
-		userTypes.add("Tutor");
 		return userTypes;
 	}
 
@@ -105,5 +120,13 @@ public class UsersListView implements Serializable {
 
 	public void setItrs(List<Itr> itrs) {
 		this.itrs = itrs;
+	}
+
+	public String[] getUsersStatus() {
+		return usersStatus;
+	}
+
+	public void setUsersStatus(String[] usersStatus) {
+		this.usersStatus = usersStatus;
 	}
 }
