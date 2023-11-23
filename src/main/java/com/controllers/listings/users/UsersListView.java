@@ -13,8 +13,10 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
+import com.entities.Itr;
 import com.entities.Usuario;
 import com.enums.TipoUsuario;
+import com.services.ItrBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 /**
@@ -26,14 +28,18 @@ public class UsersListView implements Serializable {
 
 	@EJB
 	private UsuarioBeanRemote usuarioBeanRemote;
+	@EJB
+	private ItrBeanRemote itrBeanRemote;
 	private Usuario selectedUser;
 	private List<Usuario> users;
 	private List<Usuario> selectedUsers;
+	private List<Itr> itrs;
 	private List<String> userTypes;
 	
 	@PostConstruct
 	public void init() {
 		users = usuarioBeanRemote.selectAll();
+		itrs = itrBeanRemote.selectAll();
 	}
 	
 	public List<Usuario> getUsers() {
@@ -91,5 +97,13 @@ public class UsersListView implements Serializable {
 		userTypes.add("Estudiante");
 		userTypes.add("Tutor");
 		return userTypes;
+	}
+
+	public List<Itr> getItrs() {
+		return itrs;
+	}
+
+	public void setItrs(List<Itr> itrs) {
+		this.itrs = itrs;
 	}
 }

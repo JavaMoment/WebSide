@@ -99,6 +99,16 @@
 	               filterBy="#{user.localidad.nombre}">
 	               <h:outputText value="#{user.localidad.nombre}" />
 	           </p:column>
+	           <p:column headerText="ITR al que pertenece" sortBy="#{user.itr.nombre}"
+	               filterBy="#{user.itr.nombre}" filterMatchMode="exact">
+	               <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="All" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtUsersView.itrs}" />
+                    </p:selectOneMenu>
+                   </f:facet>
+	               <h:outputText value="#{user.itr.nombre}" />
+	           </p:column>
 	           <!-- <p:column headerText="Image" exportable="false">
 	               <p:graphicImage name="images/user/#{user.image}" library="demo" styleCluseroduct-image" />
 	           </p:column> -->
