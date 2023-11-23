@@ -3,7 +3,7 @@ package com.controllers.profile;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext; 
+import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
@@ -18,7 +18,6 @@ import com.services.DepartamentoBean;
 import com.services.LocalidadBean;
 import com.services.UsuarioBeanRemote;
 import com.services.ItrBean;
-
 
 import java.io.Serializable;
 import java.lang.annotation.Documented;
@@ -40,7 +39,7 @@ public class ProfileView implements Serializable {
 	private String nombre1;
 	private String nombre2;
 	private String telefono;
-	private String password;
+	private String passwordNueva;
 	private Usuario usuario;
 	private String apellido1;
 	private String apellido2;
@@ -48,6 +47,7 @@ public class ProfileView implements Serializable {
 	private String documento;
 	private String genero;
 	private Date fechaNacimiento;
+	private String passwordActual;
 
 	private long departmentId;
 	private long locationId;
@@ -55,8 +55,6 @@ public class ProfileView implements Serializable {
 	private List<Localidad> listaLocalidad = new ArrayList<>();
 	private List<Departamento> listaDepartamento = new ArrayList<>();
 	private List<Itr> listaItr = new ArrayList<>();
-
-	
 
 	public Usuario getUser() {
 		return usuario;
@@ -102,12 +100,12 @@ public class ProfileView implements Serializable {
 		this.telefono = telefono;
 	}
 
-	public String getPassword() {
-		return password;
+	public String getPasswordNueva() {
+		return passwordNueva;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setPasswordNueva(String passwordNueva) {
+		this.passwordNueva = passwordNueva;
 	}
 
 	public String getApellido1() {
@@ -133,8 +131,8 @@ public class ProfileView implements Serializable {
 	public void setContrasenia(String contrasenia) {
 		this.contrasenia = contrasenia;
 	}
-	
-	@Size(min=8,max=8,message = "Ingresar 8 caracteres.")
+
+	@Size(min = 8, max = 8, message = "Ingresar 8 caracteres.")
 	public String getDocumento() {
 		return documento;
 	}
@@ -155,22 +153,19 @@ public class ProfileView implements Serializable {
 		return departmentId;
 	}
 
-
 	public long getItrId() {
 		return itrId;
 	}
 
-	
-
 	public void setLocationId(long localidad) {
 		this.locationId = localidad;
 	}
-	
+
 	public void setItrId(long itr) {
 		this.itrId = itr;
 	}
-	
-	public void setDepartmentId(long departamento) { //le cambio a long
+
+	public void setDepartmentId(long departamento) { // le cambio a long
 		this.departmentId = departamento;
 	}
 
@@ -181,11 +176,11 @@ public class ProfileView implements Serializable {
 	public List<Localidad> getListaLocalidad() {
 		return this.listaLocalidad;
 	}
-	
+
 	public List<Departamento> getListaDepartamento() {
 		return this.listaDepartamento;
 	}
-	
+
 	public List<Itr> getListaItr() {
 		return this.listaItr;
 	}
@@ -198,31 +193,37 @@ public class ProfileView implements Serializable {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
+	public String getPasswordActual() {
+		return passwordActual;
+	}
+
+	public void setPasswordActual(String passwordActual) {
+		this.passwordActual = passwordActual;
+	}
 
 	@PostConstruct
 	public void init() {
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
-			HttpSession  session = (HttpSession) context.getExternalContext().getSession(false); 
+			HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 			usuario = (Usuario) session.getAttribute("userLogged");
-			if (usuario == null)FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/login/login.xhtml");
-					
+			if (usuario == null)
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("/WebSide/views/static/login/login.xhtml");
+
 			System.out.println("entra al try");
 			LocalidadBean lbean = new LocalidadBean();
 			ItrBean itrbean = new ItrBean();
 			DepartamentoBean depabean = new DepartamentoBean();
 			this.listaLocalidad = lbean.selectAll();
-			
+
 			this.listaItr = itrbean.selectAll();
-			
+
 			this.listaDepartamento = depabean.selectAll();
-			
+
 			System.out.println(depabean);
 			System.out.println(itrbean);
 			System.out.println(lbean);
-
-			
-			
 
 			// Asignar los datos a las propiedades del bean
 			if (usuario != null) {
@@ -263,19 +264,19 @@ public class ProfileView implements Serializable {
 	public void actualizar() {
 		try {
 			// Establecer el mailInstitucional mientras no sea global
-			//String mailInstitucional = "gon.ruiz@tutores.utec.edu.uy";
+			// String mailInstitucional = "gon.ruiz@tutores.utec.edu.uy";
 
-			//usuario = userBeanRemote.selectUserBy(mailInstitucional);
-			//System.out.println(usuario);
-			
+			// usuario = userBeanRemote.selectUserBy(mailInstitucional);
+			// System.out.println(usuario);
+
 			LocalidadBean lbean = new LocalidadBean();
 			ItrBean itrbean = new ItrBean();
 			DepartamentoBean depabean = new DepartamentoBean();
-			
+
 			FacesContext context = FacesContext.getCurrentInstance();
-			HttpSession  session = (HttpSession) context.getExternalContext().getSession(false); 
+			HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
 			usuario = (Usuario) session.getAttribute("userLogged");
-					
+
 			// Verifica si se encontró el usuario
 			if (usuario != null) {
 				// Actualiza los campos del usuario
@@ -292,23 +293,37 @@ public class ProfileView implements Serializable {
 				usuario.setLocalidad(lbean.selectById(this.locationId));
 				usuario.setItr(itrbean.selectById(this.itrId));
 				usuario.setFechaNacimiento(fechaNacimiento);
-				
 
-				// Intenta guardar los cambios
-				int resultado = userBeanRemote.update(usuario);
-				System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + resultado);
-				if (resultado == 0) {
-					System.out.println("se actualiza todo bien");
+				Boolean isValid = true;
 
-					// Mensaje de éxito
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Usuario actualizado con éxito."));
-				} else {
-					System.out.println("error");
+				if (this.passwordActual != null && this.passwordActual != "") {
+					if (!this.passwordActual.equals(this.passwordNueva)) {
+						// Mensaje de error
+						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Error", "Error, las contraseñas no coinciden."));
+						isValid = false;
+					} else {
+						usuario.setContrasenia(passwordNueva);
+					}
+				}
+				if (isValid) {
+					// Intenta guardar los cambios
+					int resultado = userBeanRemote.update(usuario);
+					System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + resultado);
+					if (resultado == 0) {
+						System.out.println("se actualiza todo bien");
 
-					// Mensaje de error
-					FacesContext.getCurrentInstance().addMessage(null,
-							new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Error al actualizar el usuario."));
+						// Mensaje de éxito
+						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
+								"Éxito", "Usuario actualizado con éxito."));
+					} else {
+						System.out.println("error");
+
+						// Mensaje de error
+						FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+								"Error", "Error al actualizar el usuario."));
+
+					}
 
 				}
 			} else {
@@ -326,7 +341,5 @@ public class ProfileView implements Serializable {
 		}
 
 	}
-
-
 
 }
