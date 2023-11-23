@@ -194,7 +194,7 @@ public class ProfileView implements Serializable {
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
 			HttpSession  session = (HttpSession) context.getExternalContext().getSession(false); 
-			usuario = (Usuario) session.getAttribute("user");
+			usuario = (Usuario) session.getAttribute("userLogged");
 					
 			System.out.println("entra al try");
 			LocalidadBean lbean = new LocalidadBean();

@@ -39,7 +39,7 @@ public class LoginView implements Serializable {
 			try {
 				FacesContext context = FacesContext.getCurrentInstance();
 				HttpSession  session = (HttpSession) context.getExternalContext().getSession(true);
-				session.setAttribute("user", user);
+				session.setAttribute("userLogged", user);
 				msg = new FacesMessage("¡Bienvenido!"); 
 				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
 			} catch (Exception e) {
