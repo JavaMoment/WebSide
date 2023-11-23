@@ -6,6 +6,8 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext; 
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Size;
 
 import com.entities.Departamento;
@@ -190,9 +192,11 @@ public class ProfileView implements Serializable {
 	@PostConstruct
 	public void init() {
 		try {
-
+			FacesContext context = FacesContext.getCurrentInstance();
+			HttpSession  session = (HttpSession) context.getExternalContext().getSession(false); 
+			usuario = (Usuario) session.getAttribute("user");
+					
 			System.out.println("entra al try");
-			
 			LocalidadBean lbean = new LocalidadBean();
 			ItrBean itrbean = new ItrBean();
 			DepartamentoBean depabean = new DepartamentoBean();
@@ -208,11 +212,6 @@ public class ProfileView implements Serializable {
 
 			
 			
-			// Establecer el mailInstitucional mientras no sea global
-			mailInstitucional = "gon.ruiz@tutores.utec.edu.uy";
-
-			usuario = userBeanRemote.selectUserBy(mailInstitucional);
-			// System.out.println(usuario);
 
 			// Asignar los datos a las propiedades del bean
 			if (usuario != null) {

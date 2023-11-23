@@ -7,6 +7,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
 import com.entities.Usuario;
 import com.services.UsuarioBeanRemote;
@@ -36,9 +37,12 @@ public class LoginView implements Serializable {
 		user = userBeanRemote.selectUserBy(emailUtec);
 		if(user != null && user.isValidUser(password)) {
 			try {
-				msg = new FacesMessage("¡Bienvenido!");
+				FacesContext context = FacesContext.getCurrentInstance();
+				HttpSession  session = (HttpSession) context.getExternalContext().getSession(true);
+				session.setAttribute("user", user);
+				msg = new FacesMessage("¡Bienvenido!"); 
 				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
-			} catch (IOException e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
