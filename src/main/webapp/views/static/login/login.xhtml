@@ -3,6 +3,7 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
       >
 	<h:head>
 		<title>Login</title>
@@ -13,19 +14,20 @@
 			<div class="form-container sign-up-container">
 					<h1>Registro de usuario</h1>
 				<h:form id="signUpForm" action="#" >
+				<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
 				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
-						<p:inputText placeholder="Correo personal"> </p:inputText>
-						<p:inputText placeholder="Correo institucional"> </p:inputText>
-						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" />
-						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" />
-						<p:inputText placeholder="Primer nombre"> </p:inputText>
+						<p:inputText placeholder="Correo personal" validator="personalEmailValidator"> </p:inputText>
+						<p:inputText placeholder="Correo institucional" validator="emailValidator"> </p:inputText>
+						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" validator="passwordValidator"/>
+						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" validator="passwordValidator"/>
+						<p:inputText placeholder="Primer nombre" validator="nameValidator"> </p:inputText>
 						<p:inputText placeholder="Segundo nombre"> </p:inputText>
-						<p:inputText placeholder="Primer apellido"> </p:inputText>
-						<p:inputText placeholder="Segundo apellido"> </p:inputText>
-						<p:datePicker id="birthdate" showIcon="true" />
-						<p:inputText placeholder="Cédula de identidad"> </p:inputText>
-						<p:inputText placeholder="Télefono"> </p:inputText>
+						<p:inputText placeholder="Primer apellido" validator="lastnameValidator"> </p:inputText>
+						<p:inputText placeholder="Segundo apellido" validator="lastnameValidator"> </p:inputText>
+						<p:datePicker id="birthdate" value="#{signup.birthdate}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" />
+						<p:inputText placeholder="Cédula de identidad" validator="ciValidator"> </p:inputText>
+						<p:inputText placeholder="Télefono" validator="phoneValidator"> </p:inputText>
 						<p:selectOneMenu id="departamento" label="Departamento de residencia" alwaysDisplayLabel="true" />
 						<p:selectOneMenu id="ciudad" label="Ciudad de residencia" alwaysDisplayLabel="true" />
 						<p:selectOneMenu id="genero" label="Género" alwaysDisplayLabel="true" />
@@ -33,18 +35,19 @@
 						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" alwaysDisplayLabel="true" />
 					</div>
 					</p:scrollPanel>
-				<p:commandButton value="Registrarme" style="margin-top: 2rem"/>
+				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem"/>
 				</h:form>
 			</div>
 			<div class="form-container sign-in-container" >
 				<h:form id="signInForm" action="#" >
+				<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
 					<h1>Login</h1>
 					<p></p>
 					<div class="grid ui-fluid">
 						<div class="ui-inputgroup" >
 							<div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
 							<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"
-										 required="true" value="#{login.emailUtec}"
+										 required="true" value="#{login.emailUtec}" validator="emailValidator"
 							> </p:inputText>
 						</div>
 						<div class="ui-inputgroup" >
@@ -58,12 +61,13 @@
 										goodLabel="true"
 										strongLabel="true"
 										value="#{login.password}"
+										validator="passwordValidator"
 										>
 							</p:password>
 						</div>
 						<p></p>
 						<p></p>
-						<p:commandButton id="loginButton" value="Ingresar" icon="pi pi-check" action="#{login.doLogin()}"/> 
+						<p:commandButton id="loginButton" update="msgs" value="Ingresar" icon="pi pi-check" action="#{login.doLogin()}"/> 
 					</div>
 				</h:form>
 			</div>

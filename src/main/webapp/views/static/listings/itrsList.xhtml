@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  >
+<h:head>
+	<title>Administración de ITRs</title>
+</h:head>
+<ui:composition template="../templates/home.xhtml">
+<ui:define name="content">
+<h:body>
+  <h:outputStylesheet name="css/listings/itrsList.css" />
+  <div class = "layout-main">
+    <div class = "layout-content">
+      <div class = "card itrs-list">
+	     <h:form id="form">
+	        <p:growl id="messages" showDetail="true" />
+	        <p:dataTable id="dt-itrs" widgetVar="dtItrs" var="itr" value="#{dtItrsView.itrs}"
+	           reflow="true" selection="#{dtItrsView.selectedItrs}" tableStyle="width:auto"
+	           rowKey="#{itr.nombre}" paginator="true" rows="15" paginatorPosition="bottom"
+	           resizableColumns="true" showGridlines="true" resizeMode="expand" >
+	           <f:facet name="header">
+	               <div class="itrs-table-header">
+	                   <span style="font-weight: bold">Listado de ITRs</span>
+	                   <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+	                       <p:inputText id="globalFilter" onkeyup="PF('dtItrs').filter()" placeholder="Buscar..." />
+	                   </span>
+	               </div>
+	           </f:facet>
+	           <p:column exportable="false">
+	               <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-user-edit"
+	                                process="@this"
+	                                oncomplete="PF('deleteProductDialog').show()">
+	                   <f:setPropertyActionListener value="#{itr}" target="#{dtItrsiew.selectedItrs}" />
+	               </p:commandButton>
+	               <p:toggleSwitch value="#{itr.active}" onIcon="pi pi-check" offIcon="pi pi-times" />
+	           </p:column>
+	           <p:column headerText="Activo" sortBy="#{itr.activo}" >
+	               <h:outputText value="#{itr.activo}" />
+	           </p:column>
+	           <p:column headerText="ID" sortBy="#{itr.idItr}" >
+	               <h:outputText value="#{itr.idItr }" />
+	           </p:column>
+	           <p:column headerText="Nombre" sortBy="#{itr.nombre}" filterBy="#{itr.nombre}" >
+	               <h:outputText value="#{itr.nombre}" />
+	           </p:column>
+	           <p:column headerText="Departamentos asociados" >
+	               <h:outputText value="#{itr.departamentos}" />
+	           </p:column>
+	       </p:dataTable>
+	     </h:form>
+      </div>
+    </div>
+  </div>
+</h:body>
+</ui:define>
+</ui:composition>
+</html>

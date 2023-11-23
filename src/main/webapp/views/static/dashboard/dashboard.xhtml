@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+      >
+  <h:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Dashboard</title>
+  </h:head>
+  <ui:composition template="../templates/home.xhtml">
+    <ui:define name="content">
+      <h:body>
+          <h:outputStylesheet name="css/dashboard/dashboard.css" />
+            <div class="grid">
+              <div class="col-12">
+                <div class="notification">
+                  <h6> &#128075; <h:outputText value = "#{login.user.nombre1}" />, ¡bienvenido de vuelta! </h6> 
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="col-12">
+                  <div class="grid" style="margin: -1rem;">
+                    <div class="col">
+                      <div class="card overview-box white">
+                        <div class="overview-info">
+                          <h6>Coso</h6>
+                          <h1>si</h1>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                      <div class="card overview-box blue">
+                          <div class="overview-info">
+                              <h6>New users (Today)</h6>
+                              <h1>32</h1>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col">
+                       <div class="card overview-box gray">
+                           <div class="overview-info">
+                               <h6>Uptime</h6>
+                               <h1>5h12m</h1>
+                           </div>
+                       </div>
+                    </div>
+                    <div class="col">
+                       <div class="card overview-box darkgray">
+                           <div class="overview-info">
+                               <h6>Text coverage</h6>
+                               <h1>96%</h1>
+                           </div>
+                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 xl:col-4">
+                <div class="card usersTypeChart">
+                  <p:barChart model="#{chartJsView.hbarModel}" style="width: 100%; height: 600px;"/>
+                </div>
+              </div>
+              <div class="col-12 xl:col-4">
+                <div class="card activeInactiveChart">
+                  <p:barChart model="#{chartJsView.hbarModel}" style="width: 100%; height: 600px;"/>
+                </div>
+              </div>
+            </div>
+      </h:body>
+    </ui:define>
+  </ui:composition>
+</html>
