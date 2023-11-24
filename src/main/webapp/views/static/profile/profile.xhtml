@@ -136,7 +136,7 @@
 												<p:outputLabel   value="Contraseña actual:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:password	value="#{profile.passwordActual}">
+												<p:password	value="#{profile.passwordActual}" validator="passwordValidator">
 												</p:password >
 											</p:column>
 										</p:row>
@@ -146,7 +146,7 @@
 												<p:outputLabel   value="Contraseña nueva:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:password value="#{profile.passwordNueva}" >
+												<p:password value="#{profile.passwordNueva}" validator="passwordValidator">
 												</p:password>
 											</p:column>
 										</p:row>

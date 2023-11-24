@@ -14,6 +14,7 @@ import com.entities.Departamento;
 import com.entities.Itr;
 import com.entities.Localidad;
 import com.entities.Usuario;
+import com.resources.utils.Utils;
 import com.services.DepartamentoBean;
 import com.services.LocalidadBean;
 import com.services.UsuarioBeanRemote;
@@ -203,14 +204,8 @@ public class ProfileView implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		try {
-			FacesContext context = FacesContext.getCurrentInstance();
-			HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-			usuario = (Usuario) session.getAttribute("userLogged");
-			if (usuario == null)
-				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect("/WebSide/views/static/login/login.xhtml");
-
+		try { 
+			usuario =  Utils.checkUser();
 			System.out.println("entra al try");
 			LocalidadBean lbean = new LocalidadBean();
 			ItrBean itrbean = new ItrBean();
