@@ -12,6 +12,9 @@
 	<!-- Contenedor principal del perfil -->
 	<!-- Enlaza con la hoja de estilos CSS -->
 	<ui:composition template="../templates/home.xhtml">
+		<ui:define name="header">
+			<title>Perfil</title>
+		</ui:define>
 		<ui:define name="content">
 			<h:outputStylesheet library="css" name="profile/profile.css" />
 			<div class="main-profile-container">
