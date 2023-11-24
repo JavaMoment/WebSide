@@ -13,10 +13,12 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
+import com.entities.Departamento;
 import com.entities.Itr;
 import com.entities.Usuario;
-import com.enums.TipoUsuario;
+import com.services.DepartamentoBeanRemote;
 import com.services.ItrBeanRemote;
+import com.services.LocalidadBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 /**
@@ -30,17 +32,24 @@ public class UsersListView implements Serializable {
 	private UsuarioBeanRemote usuarioBeanRemote;
 	@EJB
 	private ItrBeanRemote itrBeanRemote;
+	@EJB
+	private DepartamentoBeanRemote depaBeanRemote;
+	@EJB
+	private LocalidadBeanRemote cityBeanRemote;
 	private Usuario selectedUser;
 	private List<Usuario> users;
 	private List<Usuario> selectedUsers;
 	private List<Itr> itrs;
 	private List<String> userTypes;
-	private String[] usersStatus = {"Activo", "Inactivo"}; 
+	private String[] usersStatus = {"Activo", "Inactivo"};
+	private List<Departamento> depas;
+	private List<Departamento> cities;
 	
 	@PostConstruct
 	public void init() {
 		users = usuarioBeanRemote.selectAll();
 		itrs = itrBeanRemote.selectAll();
+		depas = depaBeanRemote.selectAll();
 		userTypes = new ArrayList<>();
 		userTypes.add("Analista");
 		userTypes.add("Estudiante");
@@ -63,6 +72,10 @@ public class UsersListView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el estado del usuario no ha podido ser modificado."));
 		}
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+	}
+	
+	public void updateUser() {
+		
 	}
 	
 	public List<Usuario> getUsers() {
@@ -128,5 +141,21 @@ public class UsersListView implements Serializable {
 
 	public void setUsersStatus(String[] usersStatus) {
 		this.usersStatus = usersStatus;
+	}
+
+	public List<Departamento> getDepas() {
+		return depas;
+	}
+
+	public void setDepas(List<Departamento> depas) {
+		this.depas = depas;
+	}
+
+	public List<Departamento> getCities() {
+		return cities;
+	}
+
+	public void setCities(List<Departamento> cities) {
+		this.cities = cities;
 	}
 }
