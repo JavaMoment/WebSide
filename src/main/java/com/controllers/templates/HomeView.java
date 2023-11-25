@@ -1,4 +1,4 @@
-package com.controllers.home;
+package com.controllers.templates;
 
 import java.io.IOException;
 import java.io.Serializable;
