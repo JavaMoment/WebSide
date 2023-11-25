@@ -31,14 +31,28 @@
 	               </div>
 	           </f:facet>
 	           <p:column exportable="false">
-	               <p:commandButton class="ui-button-warning rounded-button" icon="pi pi-user-edit"
-	                                process="@this"
-	                                oncomplete="PF('deleteProductDialog').show()">
-	                   <f:setPropertyActionListener value="#{itr}" target="#{dtItrsiew.selectedItrs}" />
+	               <p:commandButton icon="pi pi-plus" update=":dialogs:add-itr-content"
+	                                oncomplete="PF('addItrDialog').show()" style="display: block"
+	                                class="ui-button-warning rounded-button" process="@this">
+	                   <p:resetInput target=":dialogs:add-itr-content" />
 	               </p:commandButton>
-	               <p:toggleSwitch value="#{itr.active}" onIcon="pi pi-check" offIcon="pi pi-times" />
+	               <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-itr-content"
+	                                oncomplete="PF('manageItrDialog').show()" action="#{itrModification.loadDepartamentos()}"
+	                                class="ui-button-warning rounded-button" process="@this">
+	                   <f:setPropertyActionListener value="#{itr}" target="#{itrModification.selectedItr}" />
+	                   <p:resetInput target=":dialogs:manage-itr-content" />
+	               </p:commandButton>
+	               <p:toggleSwitch value="#{itr.active}" onIcon="pi pi-check" offIcon="pi pi-times" >
+	                 <p:ajax listener="#{dtItrsView.onToggleSwitchChangeActive(itr)}" />
+	               </p:toggleSwitch>
 	           </p:column>
-	           <p:column headerText="Activo" sortBy="#{itr.activo}" >
+	           <p:column headerText="Activo" sortBy="#{itr.activo}" filterBy="#{itr.activo}" >
+	               <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('dtItrs').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtItrsView.itrStatus}" />
+                    </p:selectOneMenu>
+                   </f:facet>
 	               <h:outputText value="#{itr.activo}" />
 	           </p:column>
 	           <p:column headerText="ID" sortBy="#{itr.idItr}" >
@@ -52,6 +66,63 @@
 	           </p:column>
 	       </p:dataTable>
 	     </h:form>
+	     
+	     <h:form id="dialogs">
+           <p:growl id="messages" showDetail="true" />
+           <p:dialog header="Modificar ITR" showEffect="fade" widgetVar="manageItrDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+            <p:outputPanel id="manage-itr-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty itrModification.selectedItr}">
+                    <div class="field">
+                        <p:outputLabel for="name">Nombre</p:outputLabel>
+                        <p:inputText id="name" value="#{itrModification.selectedItr.nombre}" required="true" validator="nameValidator"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="departamentos">Añadir departamentos asociados</p:outputLabel>
+                        <p:pickList id="departamentos" value="#{itrModification.departamentos}" var="d" itemLabel="#{d}" itemValue="#{d}" transferOnCheckboxClick="true"
+                    showCheckbox="true" showSourceControls="false" showTargetControls="false">
+                    </p:pickList>
+                    </div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{itrModification.doUpdateItr()}"
+                    update="manage-itr-content" process="manage-itr-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageItrDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+        <p:dialog header="Añadir ITR" showEffect="fade" widgetVar="addItrDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+            <p:outputPanel id="add-itr-content" class="ui-fluid">
+                <p:outputPanel>
+                    <div class="field">
+                        <p:outputLabel for="addName">Nombre</p:outputLabel>
+                        <p:inputText id="addName" value="#{addItr.name}" required="true" validator="nameValidator"/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="addDepartamentos">Añadir departamento asociado</p:outputLabel>
+                        <p:selectCheckboxMenu id="addDepartamentos"
+                              filter="true" filterMatchMode="startsWith"
+                              label="Departamentos" multiple="true" emptyLabel="Por favor, elija los departamentos asociados..." updateLabel="true"
+                              panelStyle="width: 30rem"
+                              value="#{addItr.relatedDepartamentos}">
+                		  <p:ajax event="itemUnselect" listener="#{addItr.onItemUnselect}"/>
+                		  <f:selectItems id="departamentosList" value="#{addItr.departamentos}"/>
+            			</p:selectCheckboxMenu>
+                    </div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Añadir" icon="pi pi-check" actionListener="#{addItr.doAddItr()}"
+                    update="add-itr-content" process="add-itr-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addItrDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+      </h:form>
       </div>
     </div>
   </div>
