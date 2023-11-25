@@ -20,13 +20,13 @@
     <url-pattern>/faces/*</url-pattern>
     <url-pattern>*.xhtml</url-pattern>
   </servlet-mapping>
-  <filter>
-  	<filter-name>loginfilter</filter-name>
-  	<filter-class>com.filters.loginFilter</filter-class>
-  </filter>
-  <filter-mapping>
-  	<filter-name>loginfilter</filter-name>
-  	<url-pattern>*.xhtml</url-pattern>
-  </filter-mapping>
+<!--   <filter> -->
+<!--   	<filter-name>loginfilter</filter-name> -->
+<!--   	<filter-class>com.filters.loginFilter</filter-class> -->
+<!--   </filter> -->
+<!--   <filter-mapping> -->
+<!--   	<filter-name>loginfilter</filter-name> -->
+<!--   	<url-pattern>*.xhtml</url-pattern> -->
+<!--   </filter-mapping> -->
   
 </web-app>
