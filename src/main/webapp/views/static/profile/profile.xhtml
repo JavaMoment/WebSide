@@ -98,9 +98,7 @@
 											</p:column>
 											<p:column styleClass="input-column">
 												<p:inputText id="cedula" value="#{profile.documento}"
-													styleClass="ui-inputfield">
-													<f:validator
-														validatorId="com.resources.validations.Document" />
+													styleClass="ui-inputfield" validator="ciValidator">
 												</p:inputText>
 											</p:column>
 										</p:row>
