@@ -23,14 +23,37 @@ import com.services.ItrBeanRemote;
 public class ItrsListView implements Serializable {
 
 	@EJB
-	private ItrBeanRemote itrBeanRemote;
+	private ItrBeanRemote itrBean;
 	private Itr selectedItr;
 	private List<Itr> itrs;
 	private List<Itr> selectedItrs;
+	private String[] itrStatus = {"Activo", "Inactivo"};
 	
 	@PostConstruct
 	public void init() {
-		itrs = itrBeanRemote.selectAll();
+		itrs = itrBean.selectAll();
+	}
+	
+	public void onToggleSwitchChangeActive(Itr itr) {
+		int exitCode;
+		String itrName = itr.getNombre();
+		if(itr.isActive()) {
+			itr.setActivo((byte) 0);
+			exitCode = itrBean.logicalDeleteBy(itrName);
+			if(exitCode == 0) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente dado de baja."));
+			}
+		} else {
+			itr.setActivo((byte) 1);
+			exitCode = itrBean.activeItrBy(itrName);
+			if(exitCode == 0) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente activado."));
+			}
+		}
+		if(exitCode != 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el estado del ITR no ha podido ser modificado."));
+		}
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-itrs");
 	}
 	
 	public List<Itr> getItrs() {
@@ -53,28 +76,11 @@ public class ItrsListView implements Serializable {
         this.selectedItrs = selectedItrs;
     }
 
-    public void deleteProduct() {
-        this.itrs.remove(this.selectedItr);
-        this.selectedItrs.remove(this.selectedItr);
-        this.selectedItr = null;
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Product Removed"));
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-itrs");
-    }
+	public String[] getItrStatus() {
+		return itrStatus;
+	}
 
-    public String getDeleteButtonMessage() {
-        if (this.selectedItrs != null && !this.selectedItrs.isEmpty()) {
-            int size = this.selectedItrs.size();
-            return size > 1 ? size + " ITRs seleccionados" : "1 ITR seleccionado";
-        }
-
-        return "Eliminar";
-    }
-
-    public void deleteSelectedUsers() {
-        this.itrs.removeAll(this.selectedItrs);
-        this.selectedItrs = null;
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("users Removed"));
-        PrimeFaces.current().ajax().update("form:messages", "form:dt-itrs");
-        PrimeFaces.current().executeScript("PF('dtItrs').clearFilters()");
-    }
+	public void setItrStatus(String[] itrStatus) {
+		this.itrStatus = itrStatus;
+	}
 }
