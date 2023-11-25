@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
@@ -21,10 +22,11 @@ public class PasswordValidator implements Validator {
     
 	@Override
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-		if(value.toString().trim().isEmpty() || value == null) {
+		UIInput inputComponent = (UIInput) component;
+		if((value.toString().trim().isEmpty() || value == null) & inputComponent.isRequired()) {
 			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_WARN, "Login error","Por favor ingrese una contraseña."));
         }
-		if(!pattern.matcher(value.toString()).matches()) {
+		if(!pattern.matcher(value.toString()).matches() & !value.toString().isEmpty()) {
 			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"¡Cuidadiiitoo!",
 					"Por favor ingrese una contraseña válida que contenga al menos una letra mayúscula, una letra minúscula, un número y un carácter especial, y tenga una longitud de al menos 8 caracteres."
