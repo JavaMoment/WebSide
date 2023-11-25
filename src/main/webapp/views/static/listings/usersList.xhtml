@@ -34,7 +34,7 @@
 	               <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
                       oncomplete="PF('manageUserDialog').show()"
                       class="ui-button-warning rounded-button" process="@this">
-                      <f:setPropertyActionListener value="#{user}" target="#{dtUsersView.selectedUser}" />
+                      <f:setPropertyActionListener value="#{user}" target="#{userModification.selectedUser}" />
                       <p:resetInput target=":dialogs:manage-user-content" />
                    </p:commandButton>
 	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" >
@@ -67,13 +67,13 @@
 	               filterBy="#{user.mailInstitucional}">
 	               <h:outputText value="#{user.mailInstitucional}" />
 	           </p:column>
-	           <p:column headerText="Primer nombre" sortBy="#{user.nombre1}" filterBy="#{user.nombre2}">
+	           <p:column headerText="Primer nombre" sortBy="#{user.nombre1}" filterBy="#{user.nombre1}">
 	               <h:outputText value="#{user.nombre1}" />
 	           </p:column>
 	           <p:column headerText="Segundo nombre" sortBy="#{user.nombre2}" filterBy="#{user.nombre2}">
 	               <h:outputText value="#{user.nombre2}" />
 	           </p:column>
-	           <p:column headerText="Primer apellido" sortBy="#{user.apellido1}" filterBy="#{user.nombre2}">
+	           <p:column headerText="Primer apellido" sortBy="#{user.apellido1}" filterBy="#{user.apellido1}">
 	               <h:outputText value="#{user.apellido1}" />
 	           </p:column>
 	           <p:column headerText="Segundo apellido" sortBy="#{user.apellido2}"
@@ -94,7 +94,7 @@
 	           </p:column>
 	           <p:column headerText="Correo personal" sortBy="#{user.mailPersonal}"
 	               filterBy="#{user.mailPersonal}">
-	               <h:outputText value="#{user.mailInstitucional}" />
+	               <h:outputText value="#{user.mailPersonal}" />
 	           </p:column>
 	           <p:column headerText="Telefono" sortBy="#{user.telefono}"
 	               filterBy="#{user.telefono}">
@@ -128,81 +128,91 @@
            <p:dialog header="Modificar usuario" showEffect="fade" widgetVar="manageUserDialog"
               responsive="true" appendToBody="true" resizable="true" width="800" height="600">
             <p:outputPanel id="manage-user-content" class="ui-fluid">
-                <p:outputPanel rendered="#{not empty dtUsersView.selectedUser}">
+                <p:outputPanel rendered="#{not empty userModification.selectedUser}">
+                <p:growl id="messages" showDetail="true" />
                     <div class="field">
                         <p:outputLabel for="emailPersonal">Correo personal</p:outputLabel>
-                        <p:inputText id="emailPersonal" value="#{dtUsersView.selectedUser.mailPersonal}" required="true" />
+                        <p:inputText id="emailPersonal" value="#{userModification.selectedUser.mailPersonal}" required="true" validator="personalEmailValidator"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="pwd1">Nueva contraseña</p:outputLabel>
-                        <p:inputText id="pwd1" />
+                        <p:password value="#{userModification.newPwd}" style="width: 100%;" id="pwd1" toggleMask="true" redisplay="true" match="pwd2" validator="passwordValidator"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="pwd2">Re-ingrese su nueva contraseña</p:outputLabel>
-                        <p:inputText id="pwd2"/>
+                        <p:password style="width: 100%;" id="pwd2" toggleMask="true" redisplay="true" validator="passwordValidator"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="name">Primer nombre</p:outputLabel>
-                        <p:inputText id="name" value="#{dtUsersView.selectedUser.nombre1}" required="true" />
+                        <p:inputText id="name" value="#{userModification.selectedUser.nombre1}" required="true" validator="nameValidator"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="name2">Segundo nombre</p:outputLabel>
-                        <p:inputText id="name2" value="#{dtUsersView.selectedUser.nombre2}" />
+                        <p:inputText id="name2" value="#{userModification.selectedUser.nombre2}" />
                     </div>
                     <div class="field">
                         <p:outputLabel for="lastname">Primer apellido</p:outputLabel>
-                        <p:inputText id="lastname" value="#{dtUsersView.selectedUser.apellido1}" required="true" />
+                        <p:inputText id="lastname" value="#{userModification.selectedUser.apellido1}" required="true" validator="lastnameValidator"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="name">Segundo apellido</p:outputLabel>
-                        <p:inputText id="lastname2" value="#{dtUsersView.selectedUser.apellido2}" required="true" />
+                        <p:inputText id="lastname2" value="#{userModification.selectedUser.apellido2}" required="true" validator="lastnameValidator" />
                     </div>
                     <div class="field">
                         <p:outputLabel for="birthdate">Fecha de nacimiento</p:outputLabel>
-                        <p:datePicker id="birthdate" value="#{dtUsersView.selectedUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" />
+                        <p:datePicker id="birthdate" value="#{userModification.selectedUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true"/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="ci">Cédula de identidad</p:outputLabel>
-                        <p:inputText id="ci" value="#{dtUsersView.selectedUser.documento}" required="true" />
+                        <p:inputText id="ci" value="#{userModification.selectedUser.documento}" validator="ciValidator" required="true" />
                     </div>
                     <div class="field">
                         <p:outputLabel for="phone">Teléfono</p:outputLabel>
-                        <p:inputText id="phone" validator="phoneValidator" value="#{dtUsersView.selectedUser.telefono}"/>
+                        <p:inputText id="phone" validator="phoneValidator" value="#{userModification.selectedUser.telefono}"/>
                     </div>
                     <div class="field">
-                        <p:outputLabel for="departamento">Departamento de residencia</p:outputLabel>
-                        <p:selectOneMenu id="departamento"  value="#{dtUsersView.selectedUser.departamento}">
-						  <p:ajax event="change" listener="#{commonsOperations.onDepartamentoChanged(user)}" update="ciudad"/>
-                          <f:selectItems value="#{commonsOperations.depas}" />
+                        <p:outputLabel for="departamentos">Departamento de residencia</p:outputLabel>
+                        <p:selectOneMenu id="departamentos"  value="#{userModification.selectedDepaName}" >
+                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione un nuevo departamento" />
+                          <f:selectItems value="#{userModification.depas}" var="d" itemValue="#{d.nombre}" itemLabel="#{d.nombre}" />
+						  <p:ajax listener="#{userModification.onDepartamentoChanged()}" />
 						</p:selectOneMenu>
                     </div>
                     <div class="field">
-                        <p:outputLabel for="ciudad">Ciudad de residencia</p:outputLabel>
-                        <p:selectOneMenu id="ciudad" value="#{dtUsersView.selectedUser.localidad}">
-                          <f:selectItems value="#{commonsOperations.cities}" />
+                        <p:outputLabel for="ciudades">Ciudad de residencia</p:outputLabel>
+                        <p:selectOneMenu id="ciudades" value="#{userModification.selectedCityName}">
+                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione una nueva ciudad" />
+                          <f:selectItems value="#{userModification.cities}" var="c" itemValue="#{c.nombre}" itemLabel="#{c.nombre}"  />
+                          <p:ajax listener="#{userModification.onCityChanged()}" />
 						</p:selectOneMenu>
                     </div>
                     <div class="field">
                         <p:outputLabel for="itr">ITR al que pertenece</p:outputLabel>
-                        <p:selectOneMenu id="itr" value="#{dtUsersView.selectedUser.itr}">
-                          <f:selectItems value="#{commonsOperations.itrs}" />
+                        <p:selectOneMenu id="itr" value="#{userModification.selectedItrName}">
+                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione su nueva ITR" />
+                          <f:selectItems value="#{userModification.itrs}" var="i" itemValue="#{i.nombre}" itemLabel="#{i.nombre}" />
+                          <p:ajax listener="#{userModification.onItrChanged()}" />
 						</p:selectOneMenu>
                     </div>
                     <div class="field">
                         <p:outputLabel for="genero">Genero</p:outputLabel>
-                        <p:selectOneMenu id="genero" />
+                        <p:selectOneMenu id="genero" value="#{userModification.selectedGenreName}">
+                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione el genero" />
+                          <f:selectItems value="#{userModification.genres}" />
+                          <p:ajax listener="#{userModification.onGenreChanged()}" />
+                        </p:selectOneMenu>
                     </div>
                     <div class="field">
                         <p:outputLabel for="userType">Tipo de usuario</p:outputLabel>
-                        <p:selectOneMenu id="userType">
-                          <f:selectItems value="#{dtUsersView.userTypes}" noSelectionOption="false"/>
+                        <p:selectOneMenu id="userType" value = "#{userModification.selectedUser.tipoUsuario}">
+                          <f:selectItems value="#{userModification.userTypes}" noSelectionOption="false"/>
                         </p:selectOneMenu>
                     </div>
               </p:outputPanel>
             </p:outputPanel>
 
             <f:facet name="footer">
-                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{dtUsersView.updateUser()}"
+                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{userModification.doUpdateUser()}"
                     update="manage-user-content" process="manage-user-content @this" />
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialog').hide()"
                     class="ui-button-secondary" type="button" />
