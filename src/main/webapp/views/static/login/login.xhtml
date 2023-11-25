@@ -17,16 +17,16 @@
 				<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
 				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
-						<p:inputText placeholder="Correo personal" validator="personalEmailValidator"> </p:inputText>
-						<p:inputText placeholder="Correo institucional" validator="emailValidator"> </p:inputText>
+						<p:inputText placeholder="Correo personal" validator="personalEmailValidator" required="true"> </p:inputText>
+						<p:inputText placeholder="Correo institucional" validator="emailValidator" required="true"> </p:inputText>
 						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" validator="passwordValidator"/>
 						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" validator="passwordValidator"/>
-						<p:inputText placeholder="Primer nombre" validator="nameValidator"> </p:inputText>
+						<p:inputText placeholder="Primer nombre" validator="nameValidator" required="true" />
 						<p:inputText placeholder="Segundo nombre"> </p:inputText>
-						<p:inputText placeholder="Primer apellido" validator="lastnameValidator"> </p:inputText>
-						<p:inputText placeholder="Segundo apellido" validator="lastnameValidator"> </p:inputText>
-						<p:datePicker id="birthdate" value="#{signup.birthdate}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" />
-						<p:inputText placeholder="Cédula de identidad" validator="ciValidator"> </p:inputText>
+						<p:inputText placeholder="Primer apellido" required="true" validator="lastnameValidator" />
+						<p:inputText placeholder="Segundo apellido" required="true" validator="lastnameValidator"> </p:inputText>
+						<p:datePicker id="birthdate" value="#{signup.birthdate}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true" />
+						<p:inputText placeholder="Cédula de identidad" validator="ciValidator" required="true" />
 						<p:inputText placeholder="Télefono" validator="phoneValidator"> </p:inputText>
 						<p:selectOneMenu id="departamento" label="Departamento de residencia" alwaysDisplayLabel="true" />
 						<p:selectOneMenu id="ciudad" label="Ciudad de residencia" alwaysDisplayLabel="true" />

@@ -32,7 +32,7 @@ public class LoginView implements Serializable {
 	}
 	
 	public void doLogin() {
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Oh no! Oh no no no", "El usuario o contraseña no es correcto");;
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Oh no! Oh no no no", "El usuario o contraseña no es correcto");
 		user = userBeanRemote.selectUserBy(emailUtec);
 		if(user != null && user.isValidUser(password)) {
 			try {

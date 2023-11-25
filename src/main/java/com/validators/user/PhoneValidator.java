@@ -13,7 +13,7 @@ import javax.faces.validator.ValidatorException;
 public class PhoneValidator implements Validator {
 
 	private Pattern pattern;
-    private static final String PHONE_PATTERN = "^\\d{9}$";
+    private static final String PHONE_PATTERN = "^\\d{8}$";
     
     public PhoneValidator() {
     	pattern = Pattern.compile(PHONE_PATTERN);
