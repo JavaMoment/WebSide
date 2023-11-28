@@ -12,7 +12,7 @@
 	<div class="container" id="container">
 		<div class="form-container sign-up-container">
 			<h1>Registro de usuario</h1>
-			<h:form id="signUpForm" action="#">
+			<h:form autocomplete="off" id="signUpForm" action="#">
 				<p:growl id="msgs" showDetail="true"
 					skipDetailIfEqualsSummary="true" />
 				<p:scrollPanel mode="native" id="signUpScrollPane">
@@ -51,6 +51,7 @@
 							<i class="pi pi-user"></i>
 						</div>
 						<p:inputText id="email" placeholder="Correo utec"
+							autocomplete="off"
 							style="padding-left: 6px;" required="true"
 							value="#{login.emailUtec}" validator="emailValidator">
 						</p:inputText>
@@ -60,6 +61,7 @@
 							<i class="pi pi-shield"></i>
 						</div>
 						<p:password placeholder="Contraseña" toggleMask="true"
+							autocomplete="off"
 							redisplay="true" required="true" inline="true" weakLabel="true"
 							goodLabel="true" strongLabel="true" value="#{login.password}"
 							validator="passwordValidator">

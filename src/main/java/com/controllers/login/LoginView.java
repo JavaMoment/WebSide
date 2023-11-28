@@ -36,12 +36,15 @@ public class LoginView implements Serializable {
 		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Oh no! Oh no no no", "El usuario o contraseña no es correcto");
 		user = userBeanRemote.selectUserBy(emailUtec);
 		if(user != null && user.isValidUser(password)) {
-			try {
+			try {				
 				FacesContext context = FacesContext.getCurrentInstance();
 				HttpSession  session = (HttpSession) context.getExternalContext().getSession(true);
 				session.setAttribute("userLogged", user);
 				msg = new FacesMessage("¡Bienvenido!"); 
 				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+				emailUtec = "";
+				password ="";
+				user = null;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
