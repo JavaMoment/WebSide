@@ -25,32 +25,32 @@
                     <div class="col">
                       <div class="card overview-box white">
                         <div class="overview-info">
-                          <h6>Coso</h6>
-                          <h1>si</h1>
+                          <h6>Número de usuarios</h6>
+                          <h1><h:outputText value = "#{chartsView.totalUsers}" /></h1>
                         </div>
                       </div>
                     </div>
                     <div class="col">
                       <div class="card overview-box blue">
                           <div class="overview-info">
-                              <h6>New users (Today)</h6>
-                              <h1>32</h1>
+                              <h6>Número de ITRs</h6>
+                              <h1><h:outputText value = "#{chartsView.itrsCount}" /></h1>
                           </div>
                       </div>
                     </div>
                     <div class="col">
                        <div class="card overview-box gray">
                            <div class="overview-info">
-                               <h6>Uptime</h6>
-                               <h1>5h12m</h1>
+                               <h6>ITRs activos</h6>
+                               <h1><h:outputText value = "#{chartsView.itrsActiveCount}" /></h1>
                            </div>
                        </div>
                     </div>
                     <div class="col">
                        <div class="card overview-box darkgray">
                            <div class="overview-info">
-                               <h6>Text coverage</h6>
-                               <h1>96%</h1>
+                               <h6>ITRs inactivos</h6>
+                               <h1><h:outputText value = "#{chartsView.itrsInactiveCount}" /></h1>
                            </div>
                        </div>
                     </div>
@@ -59,12 +59,12 @@
               </div>
               <div class="col-12 xl:col-4">
                 <div class="card usersTypeChart">
-                  <p:barChart model="#{chartJsView.hbarModel}" style="width: 100%; height: 600px;"/>
+                  <p:barChart model="#{chartsView.hbarModel}" style="width: 100%; height: 600px;"/>
                 </div>
               </div>
               <div class="col-12 xl:col-4">
                 <div class="card activeInactiveChart">
-                  <p:barChart model="#{chartJsView.hbarModel}" style="width: 100%; height: 600px;"/>
+                  <p:pieChart model="#{chartsView.pieModel}" style="width: 100%; height: 600px;"/>
                 </div>
               </div>
             </div>

@@ -116,7 +116,6 @@ public class UserModificationView implements Serializable {
 			PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-users");
 			PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
 		}
-//		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "Class: " + this.se));
 	}
 	
 	public UsuarioBeanRemote getUsuarioBeanRemote() {

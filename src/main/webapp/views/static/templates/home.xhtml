@@ -1,58 +1,56 @@
-	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      >
-	<h:head>
-		<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet' />
-	</h:head>
-	<h:body>
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
+		rel='stylesheet' />
+	<ui:insert name="header"></ui:insert>
+</h:head>
+<h:body>
 	<h:outputStylesheet name="css/templates/home.css" />
-	  <div class="sidebar">
-	    <div class="logo-details">
-	      <i class='icon'></i>
-	        <div class="logo_name">UTEC</div>
-	        <i class='bx bx-menu' id="btn" ></i>
-	    </div>
-	    <ul class="nav-list">
-	      <li>
-	        <a href="/WebSide/views/static/dashboard/dashboard.xhtml">
-	          <i class='bx bx-grid-alt'></i>
-	          <span class="links_name">Dashboard</span>
-	        </a>
-	         <span class="tooltip">Dashboard</span>
-	      </li>
-	      <li>
-	       <a href="/WebSide/views/static/listings/usersList.xhtml">
-	         <i class='bx bx-user' ></i>
-	         <span class="links_name">Listado de usuarios</span>
-	       </a>
-	       <span class="tooltip">Listado de usuarios</span>
-	     </li>
-	     <li>
-	       <a href="/WebSide/views/static/listings/itrsList.xhtml">
-	         <i class='bx bx-buildings'></i>
-	         <span class="links_name">Listado de ITRs</span>
-	       </a>
-	       <span class="tooltip">Listado de ITRs</span>
-	     </li>
-	     <li>
-	       <a href="/WebSide/views/static/profile/profile.xhtml">
-	         <i class='bx bxs-user-account'></i>
-	         <span class="links_name">Mi usuario</span>
-	       </a>
-	       <span class="tooltip">Mi usuario</span>
-	     </li>
-	    </ul>
-	  </div>
-  	  <div id="content">
-  	  <ui:insert name="content">
-<!--   	  	<ui:include src="/WebSide/views/static/commons/commonContent.xhtml" /> -->
-  	  </ui:insert>
-  	  </div>
-	  <script>
+	<div class="sidebar">
+		<div class="logo-details">
+			<i class='icon'></i>
+			<div class="logo_name">UTEC</div>
+			<i class='bx bx-menu' id="btn"></i>
+		</div>
+		<ul class="nav-list">
+			<li><a href="/WebSide/views/static/dashboard/dashboard.xhtml">
+					<i class='bx bx-grid-alt'></i> <span class="links_name">Dashboard</span>
+			</a> <span class="tooltip">Dashboard</span></li>
+			<li><a href="/WebSide/views/static/listings/usersList.xhtml">
+					<i class='bx bx-user'></i> <span class="links_name">Listado
+						de usuarios</span>
+			</a> <span class="tooltip">Listado de usuarios</span></li>
+			<li><a href="/WebSide/views/static/listings/itrsList.xhtml">
+					<i class='bx bx-buildings'></i> <span class="links_name">Listado
+						de ITRs</span>
+			</a> <span class="tooltip">Listado de ITRs</span></li>
+			<li><a href="/WebSide/views/static/profile/profile.xhtml"> <i
+					class='bx bxs-user-account'></i> <span class="links_name">Mi
+						usuario</span>
+			</a> <span class="tooltip">Mi usuario</span></li>
+			<li><h:form>
+					<p:commandLink   action="#{home.logout()}"
+						styleClass="ui-button-update">
+						
+						<i class='bx bxs-user-account'></i> 
+						<span class="links_name">Salir</span>
+	                    <span class="tooltip">Salir</span>
+					</p:commandLink>
+				</h:form></li>
+		</ul>
+	</div>
+	<div id="content">
+		<ui:insert name="content">
+			<!--   	  	<ui:include src="/WebSide/views/static/commons/commonContent.xhtml" /> -->
+		</ui:insert>
+	</div>
+	<script>
 	  let sidebar = document.querySelector(".sidebar");
 	  let closeBtn = document.querySelector("#btn");
 	  closeBtn.addEventListener("click", ()=>{
@@ -64,5 +62,5 @@
 	    }
 	  });
 	  </script>
-	</h:body>
+</h:body>
 </html>

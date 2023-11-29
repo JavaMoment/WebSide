@@ -1,21 +1,20 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	  xmlns:ui="http://java.sun.com/jsf/facelets"
-      >
-	<h:head>
-		<title>Login</title>
-	</h:head> 
-	<h:body>
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Login</title>
+</h:head>
+<h:body>
 	<h:outputStylesheet name="css/login/login.css" />
-		<div class="container" id="container">
-			<div class="form-container sign-up-container">
-					<h1>Registro de usuario</h1>
-				<h:form id="signUpForm" action="#" >
-				<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+	<div class="container" id="container">
+		<div class="form-container sign-up-container">
+			<h1>Registro de usuario</h1>
+			<h:form id="signUpForm" action="#">
+				<p:growl id="msgs" showDetail="true"
+					skipDetailIfEqualsSummary="true" />
 				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
 						<p:inputText placeholder="Correo personal" validator="personalEmailValidator" required="true"> </p:inputText>
@@ -45,59 +44,67 @@
 						</p:selectOneMenu>
 						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" alwaysDisplayLabel="true" />
 					</div>
-					</p:scrollPanel>
-				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem"/>
-				</h:form>
-			</div>
-			<div class="form-container sign-in-container" >
-				<h:form id="signInForm" action="#" >
-				<p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
-					<h1>Login</h1>
+				</p:scrollPanel>
+				<p:commandButton value="Registrarme" update="msgs"
+					style="margin-top: 2rem" />
+			</h:form>
+		</div>
+		<div class="form-container sign-in-container">
+			<h:form id="signInForm" action="#">
+				<p:growl id="msgs" showDetail="true"
+					skipDetailIfEqualsSummary="true" />
+				<h1>Login</h1>
+				<p></p>
+				<div class="grid ui-fluid">
+					<div class="ui-inputgroup">
+						<div class="ui-inputgroup-addon">
+							<i class="pi pi-user"></i>
+						</div>
+						<p:inputText id="email" placeholder="Correo utec"
+							style="padding-left: 6px;" required="true"
+							value="#{login.emailUtec}" validator="emailValidator">
+						</p:inputText>
+					</div>
+					<div class="ui-inputgroup">
+						<div class="ui-inputgroup-addon">
+							<i class="pi pi-shield"></i>
+						</div>
+						<p:password placeholder="Contraseña" toggleMask="true"
+							redisplay="true" required="true" inline="true" weakLabel="true"
+							goodLabel="true" strongLabel="true" value="#{login.password}"
+							validator="passwordValidator">
+						</p:password>
+					</div>
 					<p></p>
-					<div class="grid ui-fluid">
-						<div class="ui-inputgroup" >
-							<div class="ui-inputgroup-addon"><i class="pi pi-user"></i></div>
-							<p:inputText id="email" placeholder="Correo utec" style="padding-left: 6px;"
-										 required="true" value="#{login.emailUtec}" validator="emailValidator"
-							> </p:inputText>
-						</div>
-						<div class="ui-inputgroup" >
-							<div class="ui-inputgroup-addon"><i class="pi pi-shield"></i></div>
-							<p:password placeholder="Contraseña" 
-										toggleMask="true" 
-										redisplay="true"
-										required="true" 
-										inline="true"
-										weakLabel="true"
-										goodLabel="true"
-										strongLabel="true"
-										value="#{login.password}"
-										validator="passwordValidator"
-										>
-							</p:password>
-						</div>
-						<p></p>
-						<p></p>
-						<p:commandButton id="loginButton" update="msgs" value="Ingresar" icon="pi pi-check" action="#{login.doLogin()}"/> 
-					</div>
-				</h:form>
-			</div>
-			<div class="overlay-container">
-				<div class="overlay">
-					<div class="overlay-panel overlay-left">
-						<h1>¡Bienvenido!</h1>
-						<p></p>
-						<p>Por favor, para poder registrarte al sistema de UTEC rellena el formulario con tus datos.</p>
-						<p:commandButton id="loginFormButton" value="Ya estoy registrado :D" onclick="document.getElementById('container').classList.remove('right-panel-active');"/><!-- <button class="ghost" id="signIn">Login</button> -->
-					</div>
-					<div class="overlay-panel overlay-right">
-						<h1>En tu interior está #UTEC</h1>
-						<p></p>
-						<p>Ingresa con tu correo institucional y contraseña para ingresar al #interior.</p>
-					    <p:commandButton id="signUpFormButton" value="Quiero registrarme :)" onclick="document.getElementById('container').classList.add('right-panel-active');"/>
-					</div>
+					<p></p>
+					<p:commandButton id="loginButton" update="msgs" value="Ingresar"
+						icon="pi pi-check" action="#{login.doLogin()}" />
+				</div>
+			</h:form>
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-left">
+					<h1>¡Bienvenido!</h1>
+					<p></p>
+					<p>Por favor, para poder registrarte al sistema de UTEC rellena
+						el formulario con tus datos.</p>
+					<p:commandButton id="loginFormButton"
+						value="Ya estoy registrado :D"
+						onclick="document.getElementById('container').classList.remove('right-panel-active');" />
+					<!-- <button class="ghost" id="signIn">Login</button> -->
+				</div>
+				<div class="overlay-panel overlay-right">
+					<h1>En tu interior está #UTEC</h1>
+					<p></p>
+					<p>Ingresa con tu correo institucional y contraseña para
+						ingresar al #interior.</p>
+					<p:commandButton id="signUpFormButton"
+						value="Quiero registrarme :)"
+						onclick="document.getElementById('container').classList.add('right-panel-active');" />
 				</div>
 			</div>
 		</div>
-	</h:body> 
+	</div>
+</h:body>
 </html>
