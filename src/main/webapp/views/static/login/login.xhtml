@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
@@ -11,32 +12,66 @@
 	<h:outputStylesheet name="css/login/login.css" />
 	<div class="container" id="container">
 		<div class="form-container sign-up-container">
-			<h1>Registro de usuario</h1>
+<!-- 			<h1>Registro de usuario</h1> -->
 			<h:form id="signUpForm" action="#">
 				<p:growl id="msgs" showDetail="true"
 					skipDetailIfEqualsSummary="true" />
 				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
-						<p:inputText placeholder="Correo personal" validator="personalEmailValidator" required="true"> </p:inputText>
-						<p:inputText placeholder="Correo institucional" validator="emailValidator" required="true"> </p:inputText>
-						<p:password  id="pwd1" placeholder="Contraseña" toggleMask="true" redisplay="true" match="pwd2" required="true" validator="passwordValidator"/>
-						<p:password  id="pwd2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" validator="passwordValidator"/>
-						<p:inputText placeholder="Primer nombre" validator="nameValidator" required="true" />
-						<p:inputText placeholder="Segundo nombre"> </p:inputText>
-						<p:inputText placeholder="Primer apellido" required="true" validator="lastnameValidator" />
-						<p:inputText placeholder="Segundo apellido" required="true" validator="lastnameValidator"> </p:inputText>
-						<p:datePicker id="birthdate" value="#{signup.birthdate}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true" />
-						<p:inputText placeholder="Cédula de identidad" validator="ciValidator" required="true" />
-						<p:inputText placeholder="Télefono" validator="phoneValidator"> </p:inputText>
-						<p:selectOneMenu id="departamento" label="Departamento de residencia" alwaysDisplayLabel="true" />
-						<p:selectOneMenu id="ciudad" label="Ciudad de residencia" alwaysDisplayLabel="true" />
-						<p:selectOneMenu id="genero" label="Género" alwaysDisplayLabel="true" />
-						<p:selectOneMenu id="itr" label="ITR al que pertenece" alwaysDisplayLabel="true" />
-						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" alwaysDisplayLabel="true" />
+						<p:inputText id="emailPersonal" value="#{signup.newUser.mailPersonal}" placeholder="Correo personal" validator="personalEmailValidator" required="true"> </p:inputText>
+						<p:inputText id="emailInstitucional" value="#{signup.newUser.mailInstitucional}" placeholder="Correo institucional" validator="emailValidator" required="true"> </p:inputText>
+						<p:password  id="password1" value="#{signup.newUser.contrasenia}" placeholder="Contraseña" toggleMask="true" redisplay="true" match="password2" required="true" validator="passwordValidator"/>
+						<p:password  id="password2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" validator="passwordValidator"/>
+						<p:inputText id="primerNombre" placeholder="Primer nombre" validator="nameValidator" required="true" value="#{signup.newUser.nombre1}"/>
+						<p:inputText id="segundoNombre" placeholder="Segundo nombre" value="#{signup.newUser.nombre2}"> </p:inputText>
+						<p:inputText id="primerApellido" placeholder="Primer apellido" required="true" validator="lastnameValidator" value="#{signup.newUser.apellido1}"/>
+						<p:inputText id="segundoApellido" placeholder="Segundo apellido" required="true" validator="lastnameValidator" value="#{signup.newUser.apellido2}"> </p:inputText>
+						<p:datePicker id="birthdate" value="#{signup.newUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true" />
+						<p:inputText id="documento" placeholder="Cédula de identidad" validator="ciValidator" required="true" value="#{signup.newUser.documento}"/>
+						<p:inputText id="telefono" placeholder="Télefono" validator="phoneValidator" value="#{signup.newUser.telefono}"> </p:inputText>
+						<p:selectOneMenu id="departamento" value="#{signup.selectedDepaName}">
+						  <p:ajax listener="#{signup.onDepartamentoChanged}" update="ciudad" />
+						  <f:selectItem itemLabel="Departamento de residencia" itemValue="#{null}" noSelectionOption="false" />
+                          <f:selectItems value="#{signup.depas}" />
+						</p:selectOneMenu>
+						<p:selectOneMenu id="ciudad" value="#{signup.selectedCityName}">
+						  <f:selectItem itemLabel="Ciudad de residencia" itemValue="#{null}" noSelectionOption="false" />
+                          <f:selectItems value="#{signup.cities}" />
+						</p:selectOneMenu>
+						<p:selectOneMenu id="genero" label="Género" value="#{signup.selectedGenreName}" hideNoSelectionOption="true" >
+                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione el genero" noSelectionOption="false" />
+                          <f:selectItems value="#{signup.genres}" />
+                          <p:ajax listener="#{signup.onGenreChanged()}" />
+                        </p:selectOneMenu>
+						<p:selectOneMenu id="itr" value="#{signup.selectedItrName}">
+						  <f:selectItem itemLabel="ITR al que pertenece" itemValue="#{null}" noSelectionOption="false" />
+                          <f:selectItems value="#{signup.itrs}" />
+						</p:selectOneMenu>
+						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" value="#{signup.userType}">
+						  <f:selectItem itemLabel="Seleccione su tipo de usuario" itemValue="#{null}"  />
+						  <f:selectItems value="#{signup.userTypes}" noSelectionOption="false"/>
+						  <p:ajax update="genWrapper" />
+						</p:selectOneMenu>
+						<h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
+						  <p:outputLabel for="generacionText" rendered="#{signup.userType eq 'Estudiante'}">Generación de ingreso:</p:outputLabel>
+						  <p:inputText id="generacionText" value="#{signup.newStudent.generacion}" rendered="#{signup.userType eq 'Estudiante'}" />
+            			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{signup.currentYear}" range="max" rendered="#{signup.userType eq 'Estudiante'}">
+            			    <p:ajax event="slideEnd" process="@form"/>
+            			  </p:slider>
+            			  <p:selectOneMenu id="roles" value="#{signup.selectedRolName}" rendered="#{signup.userType eq 'Tutor'}">
+						    <f:selectItem itemLabel="Seleccione su rol" itemValue="#{null}" noSelectionOption="false" />
+                            <f:selectItems value="#{signup.roles}" />
+						  </p:selectOneMenu>
+            			  <p:selectOneMenu id="area" value="#{signup.selectedAreaName}" rendered="#{signup.userType eq 'Tutor'}">
+						    <f:selectItem itemLabel="Area a la que pertenece" itemValue="#{null}" noSelectionOption="false" />
+                            <f:selectItems value="#{signup.areas}" />
+						  </p:selectOneMenu>
+            			</h:panelGrid>
 					</div>
 				</p:scrollPanel>
-				<p:commandButton value="Registrarme" update="msgs"
-					style="margin-top: 2rem" />
+				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem" actionListener="#{signup.doSignup()}">
+				  <p:resetInput target="signUpForm" />
+				</p:commandButton>
 			</h:form>
 		</div>
 		<div class="form-container sign-in-container">
@@ -50,7 +85,7 @@
 						<div class="ui-inputgroup-addon">
 							<i class="pi pi-user"></i>
 						</div>
-						<p:inputText id="email" placeholder="Correo utec"
+						<p:inputText id="email" placeholder="Correo UTEC o nombre de usuario"
 							style="padding-left: 6px;" required="true"
 							value="#{login.emailUtec}" validator="emailValidator">
 						</p:inputText>
