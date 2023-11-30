@@ -64,7 +64,6 @@ public class SignupView implements Serializable {
 	private String selectedAreaName;
 	private String selectedRolName;
 	private Departamento selectedDepa;
-	private Itr selectedItr;
 	private Character selectedGenre;
 	private String userType;
 	private final String currentYear = String.valueOf(LocalDate.now().getYear());
@@ -242,14 +241,6 @@ public class SignupView implements Serializable {
 
 	public void setSelectedDepa(Departamento selectedDepa) {
 		this.selectedDepa = selectedDepa;
-	}
-
-	public Itr getSelectedItr() {
-		return selectedItr;
-	}
-
-	public void setSelectedItr(Itr selectedItr) {
-		this.selectedItr = selectedItr;
 	}
 
 	public Character getSelectedGenre() {
