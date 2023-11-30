@@ -53,9 +53,11 @@
 						  <p:ajax update="genWrapper" />
 						</p:selectOneMenu>
 						<h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
-						  <p:outputLabel for="generacion" rendered="#{signup.userType eq 'Estudiante'}" placeholder="">Generación de ingreso:</p:outputLabel>
-						  <p:inputText id="generacion" value="#{signup.newStudent.generacion}" disabled="true" rendered="#{signup.userType eq 'Estudiante'}" />
-            			  <p:slider for="generacion" minValue="2010" maxValue="#{signup.currentYear}" range="max" rendered="#{signup.userType eq 'Estudiante'}" />
+						  <p:outputLabel for="generacionText" rendered="#{signup.userType eq 'Estudiante'}">Generación de ingreso:</p:outputLabel>
+						  <p:inputText id="generacionText" value="#{signup.newStudent.generacion}" rendered="#{signup.userType eq 'Estudiante'}" />
+            			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{signup.currentYear}" range="max" rendered="#{signup.userType eq 'Estudiante'}">
+            			    <p:ajax event="slideEnd" process="@form"/>
+            			  </p:slider>
             			  <p:selectOneMenu id="roles" value="#{signup.selectedRolName}" rendered="#{signup.userType eq 'Tutor'}">
 						    <f:selectItem itemLabel="Seleccione su rol" itemValue="#{null}" noSelectionOption="false" />
                             <f:selectItems value="#{signup.roles}" />
@@ -67,7 +69,9 @@
             			</h:panelGrid>
 					</div>
 				</p:scrollPanel>
-				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem" actionListener="#{signup.doSignup()}" />
+				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem" actionListener="#{signup.doSignup()}">
+				  <p:resetInput target="signUpForm" />
+				</p:commandButton>
 			</h:form>
 		</div>
 		<div class="form-container sign-in-container">
@@ -81,7 +85,7 @@
 						<div class="ui-inputgroup-addon">
 							<i class="pi pi-user"></i>
 						</div>
-						<p:inputText id="email" placeholder="Correo utec"
+						<p:inputText id="email" placeholder="Correo UTEC o nombre de usuario"
 							style="padding-left: 6px;" required="true"
 							value="#{login.emailUtec}" validator="emailValidator">
 						</p:inputText>
