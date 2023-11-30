@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -14,11 +15,13 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
+import com.entities.Analista;
 import com.entities.Area;
 import com.entities.Departamento;
 import com.entities.Estudiante;
 import com.entities.Itr;
 import com.entities.Localidad;
+import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
 import com.enums.Roles;
@@ -89,15 +92,44 @@ public class SignupView implements Serializable {
 		}
 		else if(selectedGenre == null || (selectedGenreName.trim().isBlank() || selectedGenreName == null)) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "su genero."));
-		} else {
+		}
+		else if(userType.equals("Tutor") && (selectedAreaName == null || selectedAreaName.trim().isBlank())) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el area al que pertenece."));
+		}
+		else if(userType.equals("Tutor") && (selectedRolName == null || selectedRolName.trim().isBlank())) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el rol que le corresponde."));
+		}
+		else {
+			newUser.setNombreUsuario(newUser.getMailInstitucional().split("@")[0]);
 			newUser.setDepartamento(depaBeanRemote.selectByName(selectedDepaName));
 			newUser.setLocalidad(cityBeanRemote.selectBy(selectedCityName));
 			newUser.setItr(itrBeanRemote.selectBy(selectedItrName));
+			newUser.setGenero(selectedGenre);
+			switch(userType) {
+				case "Analista":
+					Analista newAnalyst = new Analista(newUser);
+					newUser.setAnalistas(Set.of(newAnalyst));
+					break;
+				case "Estudiante":
+					newStudent.setUsuario(newUser);
+					newUser.setEstudiantes(Set.of(newStudent));
+					break;
+				case "Tutor":
+					Tutor newTeacher = new Tutor(
+							newUser,
+							areaBean.selectBy(selectedAreaName),
+							Roles.valueOf(selectedRolName)
+							);
+					newUser.setTutores(Set.of(newTeacher));
+					break;
+				default:
+					break;
+			}
 			int exitCode = userBeanRemote.create(newUser);
 			if(exitCode == 0) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Felicidades!", "El usuario ha sido correctamente creado.\\nEspere la habilitación del analista para poder ingresar."));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Felicidades!", "El usuario ha sido correctamente creado. Espere la habilitación del analista para poder ingresar."));
 			} else {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Oh no!", "Ha ocurrido un error mientras se intentaba crear el usuario.\\nPor favor, intente de nuevo."));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Oh no!", "Ha ocurrido un error mientras se intentaba crear el usuario. Por favor, intente de nuevo."));
 			}
 		}
 	}
