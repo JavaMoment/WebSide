@@ -1,10 +1,9 @@
 package com.controllers.signup;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
+import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -13,10 +12,17 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
+import org.primefaces.PrimeFaces;
+
+import com.entities.Area;
 import com.entities.Departamento;
+import com.entities.Estudiante;
 import com.entities.Itr;
 import com.entities.Localidad;
 import com.entities.Usuario;
+import com.enums.Genres;
+import com.enums.Roles;
+import com.services.AreaBeanRemote;
 import com.services.DepartamentoBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBeanRemote;
@@ -34,160 +40,82 @@ public class SignupView implements Serializable {
 	private DepartamentoBeanRemote depaBeanRemote;
 	@EJB
 	private LocalidadBeanRemote cityBeanRemote;
-	private String nombreUsuario;
-	private byte activo;
-	private String apellido1;
-	private String apellido2;
-	private String contrasenia;
-	private String documento;
-	private char genero;
-	private Departamento departamento;
-	private Date birthdate;
-	private Itr itr;
-	private Localidad localidad;
-	private String mailInstitucional;
-	private String mailPersonal;
-	private String nombre1;
-	private String nombre2;
-	private String telefono;
+	@EJB
+	private AreaBeanRemote areaBean;
+	
 	private Usuario newUser;
+	private Estudiante newStudent;
+	
 	private List<Itr> itrs;
 	private List<Departamento> depas;
 	private List<Localidad> cities;
-	private Map<String, List<Localidad>> depaCity = new HashMap<>();
+	private List<Area> areas;
+	private List<String> userTypes = Arrays.asList("Analista", "Estudiante", "Tutor");
+	private Genres[] genres = Genres.values();
+	private Roles[] roles = Roles.values();
+	
+	private String selectedGenreName;
+	private String selectedDepaName;
+	private String selectedCityName;
+	private String selectedItrName;
+	private String selectedAreaName;
+	private String selectedRolName;
+	private Departamento selectedDepa;
+	private Itr selectedItr;
+	private Character selectedGenre;
+	private String userType;
+	private final String currentYear = String.valueOf(LocalDate.now().getYear());
 	
 	@PostConstruct
 	public void init() {
 		itrs = itrBeanRemote.selectAll();
 		depas = depaBeanRemote.selectAll();
+		areas = areaBean.selectAll();
 		
-		for(Departamento d : depas) {
-			depaCity.put(d.toString(), cityBeanRemote.selectAllByObject(departamento));
-		}
+		newUser = new Usuario();
+		newStudent = new Estudiante();
 	}
 	
-	public void onDepaChange() {
-		if(departamento != null && !"".equals(departamento.toString())) {
-			cities = depaCity.get(departamento.toString());
+	public void doSignup() {
+		String defaultMessage = "No se ha seleccionado: "; 
+		if(selectedDepaName == null || selectedDepaName.trim().isBlank()) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "un departamento."));
+		}
+		else if(selectedCityName == null || selectedCityName.trim().isBlank()) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "una ciudad de residencia."));
+		}
+		else if(selectedItrName == null || selectedItrName.trim().isBlank()) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el ITR al que pertenece."));
+		}
+		else if(selectedGenre == null || (selectedGenreName.trim().isBlank() || selectedGenreName == null)) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "su genero."));
 		} else {
-			cities = null;
+			newUser.setDepartamento(depaBeanRemote.selectByName(selectedDepaName));
+			newUser.setLocalidad(cityBeanRemote.selectBy(selectedCityName));
+			newUser.setItr(itrBeanRemote.selectBy(selectedItrName));
+			int exitCode = userBeanRemote.create(newUser);
+			if(exitCode == 0) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Felicidades!", "El usuario ha sido correctamente creado.\\nEspere la habilitación del analista para poder ingresar."));
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Oh no!", "Ha ocurrido un error mientras se intentaba crear el usuario.\\nPor favor, intente de nuevo."));
+			}
 		}
-//		FacesMessage msg = new FacesMessage("hola" + departamento.toString());
-//		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
 	
-	public String getNombreUsuario() {
-		return nombreUsuario;
+	public void onDepartamentoChanged() {
+		if((selectedDepa == null & selectedDepaName != null) || !selectedDepa.getNombre().equals(selectedDepaName)) {
+			selectedDepa = depaBeanRemote.selectByName(selectedDepaName);
+			cities = cityBeanRemote.selectAllByObject(selectedDepa);
+			PrimeFaces.current().ajax().update("signUpScrollPane:ciudades");
+		}
 	}
-
-	public void setNombreUsuario(String nombreUsuario) {
-		this.nombreUsuario = nombreUsuario;
-	}
-
-	public byte getActivo() {
-		return activo;
-	}
-
-	public void setActivo(byte activo) {
-		this.activo = activo;
-	}
-
-	public String getApellido1() {
-		return apellido1;
-	}
-
-	public void setApellido1(String apellido1) {
-		this.apellido1 = apellido1;
-	}
-
-	public String getApellido2() {
-		return apellido2;
-	}
-
-	public void setApellido2(String apellido2) {
-		this.apellido2 = apellido2;
-	}
-
-	public String getContrasenia() {
-		return contrasenia;
-	}
-
-	public void setContrasenia(String contrasenia) {
-		this.contrasenia = contrasenia;
-	}
-
-	public String getDocumento() {
-		return documento;
-	}
-
-	public void setDocumento(String documento) {
-		this.documento = documento;
-	}
-
-	public char getGenero() {
-		return genero;
-	}
-
-	public void setGenero(char genero) {
-		this.genero = genero;
-	}
-
-	public Departamento getDepartamento() {
-		return departamento;
-	}
-
-	public void setDepartamento(Departamento departamento) {
-		this.departamento = departamento;
-	}
-
-	public Itr getItr() {
-		return itr;
-	}
-
-	public void setItr(Itr itr) {
-		this.itr = itr;
-	}
-
-	public Localidad getLocalidad() {
-		return localidad;
-	}
-
-	public void setLocalidad(Localidad localidad) {
-		this.localidad = localidad;
-	}
-
-	public String getMailInstitucional() {
-		return mailInstitucional;
-	}
-
-	public void setMailInstitucional(String mailInstitucional) {
-		this.mailInstitucional = mailInstitucional;
-	}
-
-	public String getMailPersonal() {
-		return mailPersonal;
-	}
-
-	public void setMailPersonal(String mailPersonal) {
-		this.mailPersonal = mailPersonal;
-	}
-
-	public String getNombre1() {
-		return nombre1;
-	}
-
-	public void setNombre1(String nombre1) {
-		this.nombre1 = nombre1;
-	}
-
-	public String getNombre2() {
-		return nombre2;
-	}
-
-	public void setNombre2(String nombre2) {
-		this.nombre2 = nombre2;
-	}
-
+	
+	public void onGenreChanged() {
+		if((selectedGenre == null & selectedGenreName != null) || !selectedGenreName.startsWith(selectedGenre.toString())) {
+			selectedGenre = selectedGenreName.equals(Genres.Masculino.toString()) ? 'M' : selectedGenreName.equals(Genres.Femenino.toString()) ? 'F' : 'O';
+		}
+    }
+	
 	public List<Itr> getItrs() {
 		return itrs;
 	}
@@ -212,19 +140,135 @@ public class SignupView implements Serializable {
 		this.cities = cities;
 	}
 
-	public String getTelefono() {
-		return telefono;
+	public List<String> getUserTypes() {
+		return userTypes;
 	}
 
-	public void setTelefono(String telefono) {
-		this.telefono = telefono;
+	public void setUserTypes(List<String> userTypes) {
+		this.userTypes = userTypes;
 	}
 
-	public Date getBirthdate() {
-		return birthdate;
+	public Usuario getNewUser() {
+		return newUser;
 	}
 
-	public void setBirthdate(Date birthdate) {
-		this.birthdate = birthdate;
+	public void setNewUser(Usuario newUser) {
+		this.newUser = newUser;
+	}
+
+	public String getUserType() {
+		return userType;
+	}
+
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	public Genres[] getGenres() {
+		return genres;
+	}
+
+	public void setGenres(Genres[] genres) {
+		this.genres = genres;
+	}
+
+	public String getSelectedGenreName() {
+		return selectedGenreName;
+	}
+
+	public void setSelectedGenreName(String selectedGenreName) {
+		this.selectedGenreName = selectedGenreName;
+	}
+
+	public String getSelectedDepaName() {
+		return selectedDepaName;
+	}
+
+	public void setSelectedDepaName(String selectedDepaName) {
+		this.selectedDepaName = selectedDepaName;
+	}
+
+	public String getSelectedCityName() {
+		return selectedCityName;
+	}
+
+	public void setSelectedCityName(String selectedCityName) {
+		this.selectedCityName = selectedCityName;
+	}
+
+	public String getSelectedItrName() {
+		return selectedItrName;
+	}
+
+	public void setSelectedItrName(String selectedItrName) {
+		this.selectedItrName = selectedItrName;
+	}
+
+	public Departamento getSelectedDepa() {
+		return selectedDepa;
+	}
+
+	public void setSelectedDepa(Departamento selectedDepa) {
+		this.selectedDepa = selectedDepa;
+	}
+
+	public Itr getSelectedItr() {
+		return selectedItr;
+	}
+
+	public void setSelectedItr(Itr selectedItr) {
+		this.selectedItr = selectedItr;
+	}
+
+	public Character getSelectedGenre() {
+		return selectedGenre;
+	}
+
+	public void setSelectedGenre(Character selectedGenre) {
+		this.selectedGenre = selectedGenre;
+	}
+
+	public Estudiante getNewStudent() {
+		return newStudent;
+	}
+
+	public void setNewStudent(Estudiante newStudent) {
+		this.newStudent = newStudent;
+	}
+
+	public String getCurrentYear() {
+		return currentYear;
+	}
+
+	public List<Area> getAreas() {
+		return areas;
+	}
+
+	public void setAreas(List<Area> areas) {
+		this.areas = areas;
+	}
+
+	public String getSelectedAreaName() {
+		return selectedAreaName;
+	}
+
+	public void setSelectedAreaName(String selectedAreaName) {
+		this.selectedAreaName = selectedAreaName;
+	}
+
+	public Roles[] getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Roles[] roles) {
+		this.roles = roles;
+	}
+
+	public String getSelectedRolName() {
+		return selectedRolName;
+	}
+
+	public void setSelectedRolName(String selectedRolName) {
+		this.selectedRolName = selectedRolName;
 	}
 }
