@@ -13,7 +13,7 @@ import javax.faces.validator.ValidatorException;
 public class PhoneValidator implements Validator {
 
 	private Pattern pattern;
-    private static final String PHONE_PATTERN = "\\d{9}$";
+    private static final String PHONE_PATTERN = "\\d{8}$";
     
     public PhoneValidator() {
     	pattern = Pattern.compile(PHONE_PATTERN);
@@ -23,7 +23,7 @@ public class PhoneValidator implements Validator {
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
 
 		if(value.toString().isEmpty() || !pattern.matcher(value.toString()).matches()) {
-        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "El número de telefono ingresado no contiene sólo números y/o tiene menos o mas de 9 digitos", "El número de telefono ingresado no contiene sólo números y/o tiene menos o mas de 9 digitos"));
+        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cuidadiiiitooo", "El número de telefono ingresado no contiene sólo números y/o tiene menos o mas de 8 digitos"));
         }
 	}
 
