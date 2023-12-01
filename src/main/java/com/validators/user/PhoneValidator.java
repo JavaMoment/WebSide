@@ -21,6 +21,7 @@ public class PhoneValidator implements Validator {
     
 	@Override
 	public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
+
 		if(!pattern.matcher(value.toString()).matches() && !value.toString().isEmpty()) {
         	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cuidadiiiitooo", "El número de telefono ingresado no contiene sólo números y/o tiene menos o mas de 8 digitos"));
         }

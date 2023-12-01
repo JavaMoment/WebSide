@@ -33,7 +33,9 @@ public class loginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		if (!req.getRequestURL().toString().contains("login")) {
+		if (!req.getRequestURL().toString().contains("login") && 
+				!req.getRequestURL().toString().contains(".css") &&
+				!req.getRequestURL().toString().contains(".js") ) {
 			Usuario usuario = (Usuario) session.getAttribute("userLogged");
 			if (usuario == null) {
 				resp.sendRedirect("/WebSide/views/static/login/login.xhtml");

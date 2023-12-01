@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <!-- Define el tipo de documento como HTML5 -->
-<html  
-	xmlns="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
-	>
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:body>
 	<!-- Contenedor principal del perfil -->
 	<!-- Enlaza con la hoja de estilos CSS -->
@@ -19,9 +17,8 @@
 			<h:outputStylesheet library="css" name="profile/profile.css" />
 			<div class="main-profile-container">
 				<h:form>
-
+					<p:growl id="msgs" showDetail="true" />
 					<div class="content-wrapper">
-						<p:growl id="messages" life="3000" />
 						<!-- Sección de perfil y detalles -->
 						<div class="profile-details-wrapper">
 							<!-- Contenedor de la imagen de perfil -->
@@ -35,9 +32,11 @@
 								<!-- Contenedor de botones -->
 								<div class="button-container">
 									<p:commandButton value="Follow" styleClass="ui-button-follow"
+									update="msgs"
 										icon="ui-icon-person-add" />
 									<!-- Botón seguir -->
 									<p:commandButton value="Email" styleClass="ui-button-email"
+									update="msgs"
 										icon="ui-icon-mail" />
 									<!-- Botón de email -->
 								</div>
@@ -134,20 +133,22 @@
 
 										<p:row>
 											<p:column styleClass="label-column">
-												<p:outputLabel   value="Contraseña actual:" />
+												<p:outputLabel value="Contraseña actual:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:password	value="#{profile.passwordActual}" validator="passwordValidator">
-												</p:password >
+												<p:password value="#{profile.passwordActual}"
+													validator="passwordValidator">
+												</p:password>
 											</p:column>
 										</p:row>
-										
+
 										<p:row>
 											<p:column styleClass="label-column">
-												<p:outputLabel   value="Contraseña nueva:" />
+												<p:outputLabel value="Contraseña nueva:" />
 											</p:column>
 											<p:column styleClass="input-column">
-												<p:password value="#{profile.passwordNueva}" validator="passwordValidator">
+												<p:password value="#{profile.passwordNueva}"
+													validator="passwordValidator">
 												</p:password>
 											</p:column>
 										</p:row>
@@ -236,12 +237,8 @@
 								</p:row>
 							</p:panelGrid>
 						</p:fieldset>
-						<p:growl id="growl" life="2000" />
-
-
-
 						<p:commandButton value="Actualizar Info"
-							action="#{profile.actualizar}" update="growl"
+							action="#{profile.actualizar}" update="msgs"
 							styleClass="ui-button-update" />
 					</div>
 				</h:form>
