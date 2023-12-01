@@ -17,6 +17,15 @@
     <div class = "layout-content">
       <div class = "card itrs-list">
 	     <h:form id="form">
+	       <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Añadir ITR" update=":dialogs:add-itr-content"
+	                             oncomplete="PF('addItrDialog').show()" style="display: block"
+	                             class="ui-button-warning rounded-button" process="@this">
+                    <p:resetInput target=":dialogs:manage-itr-content" />
+                </p:commandButton>
+            </p:toolbarGroup>
+          </p:toolbar>
 	        <p:growl id="messages" showDetail="true" />
 	        <p:dataTable id="dt-itrs" widgetVar="dtItrs" var="itr" value="#{dtItrsView.itrs}"
 	           reflow="true" selection="#{dtItrsView.selectedItrs}" tableStyle="width:auto"
@@ -31,11 +40,11 @@
 	               </div>
 	           </f:facet>
 	           <p:column exportable="false">
-	               <p:commandButton icon="pi pi-plus" update=":dialogs:add-itr-content"
-	                                oncomplete="PF('addItrDialog').show()" style="display: block"
-	                                class="ui-button-warning rounded-button" process="@this">
-	                   <p:resetInput target=":dialogs:add-itr-content" />
-	               </p:commandButton>
+<!-- 	               <p:commandButton icon="pi pi-plus" update=":dialogs:add-itr-content" -->
+<!-- 	                                oncomplete="PF('addItrDialog').show()" style="display: block" -->
+<!-- 	                                class="ui-button-warning rounded-button" process="@this"> -->
+<!-- 	                   <p:resetInput target=":dialogs:add-itr-content" /> -->
+<!-- 	               </p:commandButton> -->
 	               <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-itr-content"
 	                                oncomplete="PF('manageItrDialog').show()" action="#{itrModification.loadDepartamentos()}"
 	                                class="ui-button-warning rounded-button" process="@this">
