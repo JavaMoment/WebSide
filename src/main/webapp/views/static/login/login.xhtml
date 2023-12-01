@@ -28,7 +28,7 @@
 						<p:inputText id="segundoApellido" placeholder="Segundo apellido" required="true" validator="lastnameValidator" value="#{signup.newUser.apellido2}"> </p:inputText>
 						<p:datePicker id="birthdate" value="#{signup.newUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true" />
 						<p:inputText id="documento" placeholder="Cédula de identidad" validator="ciValidator" required="true" value="#{signup.newUser.documento}"/>
-						<p:inputText id="telefono" placeholder="Télefono" validator="phoneValidator" value="#{signup.newUser.telefono}"> </p:inputText>
+						<p:inputText id="telefono" placeholder="Telefono" validator="phoneValidator" value="#{signup.newUser.telefono}"> </p:inputText>
 						<p:selectOneMenu id="departamento" value="#{signup.selectedDepaName}">
 						  <p:ajax listener="#{signup.onDepartamentoChanged}" update="ciudad" />
 						  <f:selectItem itemLabel="Departamento de residencia" itemValue="#{null}" noSelectionOption="false" />
@@ -63,7 +63,7 @@
                             <f:selectItems value="#{signup.roles}" />
 						  </p:selectOneMenu>
             			  <p:selectOneMenu id="area" value="#{signup.selectedAreaName}" rendered="#{signup.userType eq 'Tutor'}">
-						    <f:selectItem itemLabel="Area a la que pertenece" itemValue="#{null}" noSelectionOption="false" />
+						    <f:selectItem itemLabel="Área a la que pertenece" itemValue="#{null}" noSelectionOption="false" />
                             <f:selectItems value="#{signup.areas}" />
 						  </p:selectOneMenu>
             			</h:panelGrid>
@@ -94,7 +94,7 @@
 						<div class="ui-inputgroup-addon">
 							<i class="pi pi-shield"></i>
 						</div>
-						<p:password placeholder="Contraseña" toggleMask="true"
+						<p:password placeholder="Contraseña" toggleMask="true" id="password"
 							autocomplete="off"
 							redisplay="true" required="true" inline="true" weakLabel="true"
 							goodLabel="true" strongLabel="true" value="#{login.password}"

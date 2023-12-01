@@ -30,16 +30,16 @@
 								<!-- Imagen de perfil -->
 
 								<!-- Contenedor de botones -->
-								<div class="button-container">
-									<p:commandButton value="Follow" styleClass="ui-button-follow"
-									update="msgs"
-										icon="ui-icon-person-add" />
-									<!-- Botón seguir -->
-									<p:commandButton value="Email" styleClass="ui-button-email"
-									update="msgs"
-										icon="ui-icon-mail" />
-									<!-- Botón de email -->
-								</div>
+<!-- 								<div class="button-container"> -->
+<!-- 									<p:commandButton value="Follow" styleClass="ui-button-follow" -->
+<!-- 									update="msgs" -->
+<!-- 										icon="ui-icon-person-add" /> -->
+<!-- 									Botón seguir -->
+<!-- 									<p:commandButton value="Email" styleClass="ui-button-email" -->
+<!-- 									update="msgs" -->
+<!-- 										icon="ui-icon-mail" /> -->
+<!-- 									Botón de email -->
+<!-- 								</div> -->
 
 							</div>
 
@@ -177,7 +177,7 @@
 
 									<!-- Departamento -->
 									<p:column styleClass="input-column-v2">
-
+										<p:outputLabel for="departamento" value="Departamento:" style="padding-right: 10px;"/>
 										<p:selectOneMenu id="departamento"
 											value="#{profile.departmentId}" styleClass="input-field-v2">
 											<f:selectItems value="#{profile.listaDepartamento}"
@@ -201,7 +201,7 @@
 
 									<!-- Localidad -->
 									<p:column styleClass="input-column-v2">
-
+									    <p:outputLabel for="localidad" value="Localidad:" style="padding-right:10px;" />
 										<p:selectOneMenu id="localidad" value="#{profile.locationId}"
 											styleClass="input-field-v2">
 											<f:selectItems value="#{profile.listaLocalidad}"
@@ -225,6 +225,7 @@
 									<!-- ITR -->
 
 									<p:column styleClass="input-column-v2">
+										<p:outputLabel for="itr" value="ITR:" style="padding-right:10px;" />
 										<p:selectOneMenu id="itr" value="#{profile.itrId}"
 											styleClass="input-field-v2">
 											<f:selectItems value="#{profile.listaItr}" var="itr"
