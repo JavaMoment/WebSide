@@ -206,7 +206,27 @@
                         <p:outputLabel for="userType">Tipo de usuario</p:outputLabel>
                         <p:selectOneMenu id="userType" value = "#{userModification.selectedUser.tipoUsuario}">
                           <f:selectItems value="#{userModification.userTypes}" noSelectionOption="false"/>
+                          <p:ajax update="genWrapper" />
                         </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                      <h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
+						  <p:outputLabel for="generacionText" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">Seleccione la nueva generación de ingreso:</p:outputLabel>
+						  <p:inputText id="generacionText" value="#{userModification.selectedGeneracion}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}" />
+            			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{userModification.currentYear}" range="max" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
+            			    <p:ajax event="slideEnd" process="@form"/>
+            			  </p:slider>
+            			  <p:outputLabel for="roles" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Rol:</p:outputLabel>
+            			  <p:selectOneMenu id="roles" value="#{userModification.selectedRolName}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
+						    <f:selectItem itemLabel="Seleccione su nuevo rol" itemValue="#{null}" noSelectionOption="false" />
+                            <f:selectItems value="#{userModification.roles}" />
+						  </p:selectOneMenu>
+						  <p:outputLabel for="area" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Area:</p:outputLabel>
+            			  <p:selectOneMenu id="area" value="#{userModification.selectedAreaName}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
+						    <f:selectItem itemLabel="Seleccione la nueva área a la que pertenece" itemValue="#{null}" noSelectionOption="false" />
+                            <f:selectItems value="#{userModification.areas}" />
+						  </p:selectOneMenu>
+            			</h:panelGrid>
                     </div>
               </p:outputPanel>
             </p:outputPanel>

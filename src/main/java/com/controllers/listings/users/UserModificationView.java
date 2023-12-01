@@ -9,17 +9,27 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
+import com.entities.Analista;
+import com.entities.Area;
 import com.entities.Departamento;
+import com.entities.Estudiante;
 import com.entities.Itr;
 import com.entities.Localidad;
+import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
+import com.enums.Roles;
+import com.services.AnalistaBeanRemote;
+import com.services.AreaBeanRemote;
 import com.services.DepartamentoBeanRemote;
+import com.services.EstudianteBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBeanRemote;
+import com.services.TutorBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -30,32 +40,67 @@ public class UserModificationView implements Serializable {
 	@EJB
 	private UsuarioBeanRemote usuarioBeanRemote;
 	@EJB
+	private EstudianteBeanRemote studentBean;
+	@EJB
+	private TutorBeanRemote teacherBean;
+	@EJB
+	private AnalistaBeanRemote analystBean;
+	@EJB
 	private ItrBeanRemote itrBeanRemote;
 	@EJB
 	private DepartamentoBeanRemote depaBeanRemote;
 	@EJB
 	private LocalidadBeanRemote cityBeanRemote;
+	@EJB
+	private AreaBeanRemote areaBean;
+	
 	private Usuario selectedUser;
+	private Estudiante selectedStudent;
+	private Tutor selectedTeacher;
+	private Analista selectedAnalyst;
+	
 	private List<String> userTypes = Arrays.asList("Analista", "Estudiante", "Tutor");
 	private String[] usersStatus = {"Activo", "Inactivo"};
 	private List<Itr> itrs;
 	private List<Departamento> depas;
 	private List<Localidad> cities;
+	private List<Area> areas;
 	private Genres[] genres = Genres.values();
+	private Roles[] roles = Roles.values();
+	
 	private String selectedDepaName;
 	private String selectedCityName;
 	private String selectedItrName;
 	private String selectedGenreName;
+	private String selectedAreaName;
+	private String selectedRolName;
+	private String selectedGeneracion;
 	private Departamento selectedDepa;
 	private Localidad selectedCity;
 	private Itr selectedItr;
 	private Character selectedGenre;
 	private String newPwd;
+	private final String currentYear = String.valueOf(LocalDate.now().getYear());
 	
 	@PostConstruct
 	public void init() {
 		itrs = itrBeanRemote.selectAll();
 		depas = depaBeanRemote.selectAll();
+		areas = areaBean.selectAll();
+		
+//		switch(selectedUser.getTipoUsuario()) {
+//			case "Estudiante":
+//				selectedStudent = studentBean.selectUserBy(selectedUser.getNombreUsuario());
+//				break;
+//			case "Tutor":
+//				setSelectedTeacher(teacherBean.selectUserBy(selectedUser.getNombreUsuario()));
+//				break;
+//			case "Analista":
+//				selectedAnalyst = analystBean.selectUserBy(selectedUser.getNombreUsuario());
+//				break;
+//			default:
+//				break;
+//		}
 	}
 	
 	public void onDepartamentoChanged() {
@@ -106,15 +151,60 @@ public class UserModificationView implements Serializable {
 			newPwd = null;
 		}
 		
-		int exitCode = usuarioBeanRemote.update(selectedUser);
-		String username = selectedUser.getNombreUsuario();
-		if(exitCode != 0) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Que mal..", "El usuario " + username + " no ha sido correctamente modificado."));
-			PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+		final String defaultMessage = "No se ha seleccionado: ";
+		if(selectedUser.getTipoUsuario().equals("Tutor") && (selectedAreaName == null || selectedAreaName.trim().isBlank())) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el area al que pertenece."));
+		}
+		else if(selectedUser.getTipoUsuario().equals("Tutor") && (selectedRolName == null || selectedRolName.trim().isBlank())) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el rol que le corresponde."));
 		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Que bien!", "El usuario " + username + " ha sido correctamente modificado."));
-			PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-users");
-			PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+			String username = selectedUser.getNombreUsuario();
+			
+			Analista analyst = analystBean.selectUserBy(username);
+			Tutor teacher = teacherBean.selectUserBy(username);
+			Estudiante student = studentBean.selectUserBy(username);
+			
+			selectedUser.removeAnalista(analyst);
+			selectedUser.removeEstudiante(student);
+			selectedUser.removeTutor(teacher);
+			
+			switch(selectedUser.getTipoUsuario()) {
+			case "Estudiante":
+				if(student == null) {
+					student = new Estudiante(selectedUser, selectedGeneracion);
+				}
+				selectedUser.addEstudiante(student);
+				break;
+			case "Tutor":
+				if(teacher == null) {
+					teacher = new Tutor(
+							selectedUser,
+							areaBean.selectBy(selectedAreaName),
+							Roles.valueOf(selectedRolName)
+							);
+				}
+				selectedUser.addTutor(teacher);
+				break;
+			case "Analista":
+				if(analyst == null) {
+					analyst = new Analista(selectedUser);
+				}
+				
+				selectedUser.addAnalista(analyst);
+				break;
+			default:
+				break;
+			}
+			
+			int exitCode = usuarioBeanRemote.update(selectedUser);
+			if(exitCode != 0) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Que mal..", "El usuario " + username + " no ha sido correctamente modificado."));
+				PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Que bien!", "El usuario " + username + " ha sido correctamente modificado."));
+				PrimeFaces.current().ajax().update("dialogs:messages", "form:dt-users");
+				PrimeFaces.current().executeScript("PF('manageUserDialog').hide()");
+			}
 		}
 	}
 	
@@ -215,5 +305,73 @@ public class UserModificationView implements Serializable {
 
 	public void setNewPwd(String newPwd) {
 		this.newPwd = newPwd;
+	}
+
+	public Estudiante getSelectedStudent() {
+		return selectedStudent;
+	}
+
+	public void setSelectedStudent(Estudiante selectedStudent) {
+		this.selectedStudent = selectedStudent;
+	}
+
+	public Analista getSelectedAnalyst() {
+		return selectedAnalyst;
+	}
+
+	public void setSelectedAnalyst(Analista selectedAnalyst) {
+		this.selectedAnalyst = selectedAnalyst;
+	}
+
+	public Tutor getSelectedTeacher() {
+		return selectedTeacher;
+	}
+
+	public void setSelectedTeacher(Tutor selectedTeacher) {
+		this.selectedTeacher = selectedTeacher;
+	}
+
+	public String getCurrentYear() {
+		return currentYear;
+	}
+
+	public String getSelectedAreaName() {
+		return selectedAreaName;
+	}
+
+	public void setSelectedAreaName(String selectedAreaName) {
+		this.selectedAreaName = selectedAreaName;
+	}
+
+	public String getSelectedRolName() {
+		return selectedRolName;
+	}
+
+	public void setSelectedRolName(String selectedRolName) {
+		this.selectedRolName = selectedRolName;
+	}
+
+	public Roles[] getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Roles[] roles) {
+		this.roles = roles;
+	}
+
+	public List<Area> getAreas() {
+		return areas;
+	}
+
+	public void setAreas(List<Area> areas) {
+		this.areas = areas;
+	}
+
+	public String getSelectedGeneracion() {
+		return selectedGeneracion;
+	}
+
+	public void setSelectedGeneracion(String selectedGeneracion) {
+		this.selectedGeneracion = selectedGeneracion;
 	}
 }

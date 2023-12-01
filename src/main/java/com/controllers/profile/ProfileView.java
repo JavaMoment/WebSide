@@ -303,7 +303,10 @@ public class ProfileView implements Serializable {
 				}
 				if (isValid) {
 					// Intenta guardar los cambios
-					int resultado = userBeanRemote.update(usuario);
+					int resultado = userBeanRemote.update(usuario); 
+					session.setAttribute("userLogged", usuario);
+					
+					
 					System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" + resultado);
 					if (resultado == 0) {
 						System.out.println("se actualiza todo bien");
