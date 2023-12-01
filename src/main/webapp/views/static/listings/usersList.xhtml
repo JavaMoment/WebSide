@@ -202,13 +202,13 @@
                           <p:ajax listener="#{userModification.onGenreChanged()}" />
                         </p:selectOneMenu>
                     </div>
-<!--                     <div class="field"> -->
-<!--                         <p:outputLabel for="userType">Tipo de usuario</p:outputLabel> -->
-<!--                         <p:selectOneMenu id="userType" value = "#{userModification.selectedUser.tipoUsuario}"> -->
-<!--                           <f:selectItems value="#{userModification.userTypes}" noSelectionOption="false"/> -->
-<!--                           <p:ajax update="genWrapper" /> -->
-<!--                         </p:selectOneMenu> -->
-<!--                     </div> -->
+                    <div class="field">
+                        <p:outputLabel for="userType">Tipo de usuario</p:outputLabel>
+                        <p:selectOneMenu id="userType" value = "#{userModification.selectedUser.tipoUsuario}">
+                          <f:selectItems value="#{userModification.userTypes}" noSelectionOption="false"/>
+                          <p:ajax update="genWrapper" />
+                        </p:selectOneMenu>
+                    </div>
                     <div class="field">
                       <h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
 						  <p:outputLabel for="generacionText" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">Seleccione la nueva generación de ingreso:</p:outputLabel>
