@@ -17,6 +17,7 @@ import org.wildfly.security.http.HttpServerResponse;
 
 import com.entities.Usuario;
 import com.resources.utils.Utils;
+import com.services.JWTservice;
 
 public class loginFilter implements Filter {
 	FilterConfig fc;
@@ -33,13 +34,14 @@ public class loginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		if (!req.getRequestURL().toString().contains("login") && 
-				!req.getRequestURL().toString().contains(".css") &&
-				!req.getRequestURL().toString().contains(".js") ) {
-			Usuario usuario = (Usuario) session.getAttribute("userLogged");
-			if (usuario == null) {
+		if (!req.getRequestURL().toString().contains("login") && !req.getRequestURL().toString().contains(".css")
+				&& !req.getRequestURL().toString().contains(".js")) {
+			String token = (String) session.getAttribute("token");
+			Usuario user = (Usuario) session.getAttribute("userLogged");
+			if (!JWTservice.validateToken(token,user)) {
 				resp.sendRedirect("/WebSide/views/static/login/login.xhtml");
 			}
+
 		}
 		chain.doFilter(req, resp);
 
