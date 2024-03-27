@@ -19,7 +19,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Named("itrModification")
 @ViewScoped
@@ -31,20 +30,19 @@ public class ItrModificationView implements Serializable {
 	private DepartamentoBeanRemote depaBean;
 	
 	private Itr selectedItr;
-	private List<Departamento> selectedDepas;
-	private List<Departamento> itrDepas;
-	private List<Departamento> departamentosSource;
-	private DualListModel<Departamento> departamentos;
+	private List<String> departamentosSource;
+	private List<String> departamentosTarget;
+	private DualListModel<String> departamentos;
 	
 	@PostConstruct
 	public void init() {
 	}
 
 	public void doUpdateItr() {
-		Set<Departamento> relatedDepartamentos = new HashSet<>(departamentos.getTarget());
-		selectedItr.setDepartamentos(relatedDepartamentos);
+		selectedItr.setDepartamentos(departamentos.getTarget() != null && departamentos.getTarget().size() > 1 ? new HashSet<Departamento>(depaBean.selectAllBy(departamentos.getTarget())) : null);
 		int exitCode = itrBean.update(selectedItr);
-		if(exitCode == 0) {
+		selectedItr = itrBean.selectById(selectedItr.getIdItr());
+		if(exitCode == 0 && selectedItr != null) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + selectedItr.getNombre() + " ha sido correctamente modificado."));
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el ITR no ha podido ser modificado."));
@@ -54,8 +52,8 @@ public class ItrModificationView implements Serializable {
 	}
 	
 	public void loadDepartamentos() {
-		departamentosSource = depaBean.selectAll();
-		List<Departamento> departamentosTarget = new ArrayList<>(selectedItr.getDepartamentos());
+		departamentosSource = depaBean.selectAll().stream().map(d -> d.getNombre()).toList();
+		departamentosTarget = new ArrayList<>(selectedItr.getDepartamentos().stream().map(d -> d.getNombre()).toList());
 		departamentos = new DualListModel<>(departamentosSource, departamentosTarget);
 	}
 	
@@ -67,27 +65,19 @@ public class ItrModificationView implements Serializable {
 		this.selectedItr = selectedItr;
 	}
 
-	public List<Departamento> getSelectedDepas() {
-		return selectedDepas;
-	}
-
-	public void setSelectedDepas(List<Departamento> selectedDepas) {
-		this.selectedDepas = selectedDepas;
-	}
-
-	public List<Departamento> getDepartamentosSource() {
+	public List<String> getDepartamentosSource() {
 		return departamentosSource;
 	}
 
-	public void setDepartamentosSource(List<Departamento> departamentos) {
+	public void setDepartamentosSource(List<String> departamentos) {
 		this.departamentosSource = departamentos;
 	}
 
-	public void setDepartamentos(DualListModel<Departamento> departamentos) {
+	public void setDepartamentos(DualListModel<String> departamentos) {
 		this.departamentos = departamentos;
 	}
 	
-	public DualListModel<Departamento> getDepartamentos() {
+	public DualListModel<String> getDepartamentos() {
 		return departamentos;
 	}
 }
