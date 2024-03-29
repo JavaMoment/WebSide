@@ -2,7 +2,7 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
   <display-name>WebSide</display-name>
   <welcome-file-list>
-    <welcome-file>views/static/login/login.xhtml</welcome-file>
+	<welcome-file>views/login.xhtml</welcome-file>
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
     <welcome-file>index.htm</welcome-file>
@@ -26,7 +26,7 @@
   </filter>
   <filter-mapping>
   	<filter-name>loginfilter</filter-name>
-  	<url-pattern>*.xhtml</url-pattern>
-  </filter-mapping> 
+  	<url-pattern>/views/static/*</url-pattern>
+  </filter-mapping>
   
 </web-app>
