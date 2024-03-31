@@ -2,7 +2,7 @@ package com.filters;
 
 import java.io.IOException;
 
-import javax.faces.context.FacesContext;
+import javax.faces.application.ResourceHandler;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -12,11 +12,6 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.wildfly.security.http.HttpServerResponse;
-
-import com.entities.Usuario;
-import com.resources.utils.Utils;
 
 public class loginFilter implements Filter {
 	FilterConfig fc;
@@ -28,21 +23,23 @@ public class loginFilter implements Filter {
 	}
 
 	@Override
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
 			throws IOException, ServletException {
-		HttpServletRequest req = (HttpServletRequest) request;
-		HttpServletResponse resp = (HttpServletResponse) response;
-		HttpSession session = req.getSession();
-		if (!req.getRequestURL().toString().contains("login") && 
-				!req.getRequestURL().toString().contains(".css") &&
-				!req.getRequestURL().toString().contains(".js") ) {
-			Usuario usuario = (Usuario) session.getAttribute("userLogged");
-			if (usuario == null) {
-				resp.sendRedirect("/WebSide/views/static/login/login.xhtml");
-			}
-		}
-		chain.doFilter(req, resp);
+		
+		HttpServletRequest request = (HttpServletRequest) req;
+        HttpServletResponse response = (HttpServletResponse) res;
+        HttpSession session = request.getSession();
+        String loginURL = request.getContextPath() + "/";
 
+        boolean loggedIn = (session != null) && (session.getAttribute("userLogged") != null); // ¿El usuario inicio sesion?
+        boolean loginRequest = request.getRequestURI().equals(loginURL); // ¿La pagina solicitada es la del login? loggin esta mapeada como /WebSide/ == ContextPath
+        boolean resourceRequest = request.getRequestURI().startsWith(request.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER); // ¿Se solicito un recurso (.css, .js, etc)?
+
+        if (loggedIn || loginRequest || resourceRequest) {
+            chain.doFilter(request, response);
+        } else {
+            response.sendRedirect(loginURL);
+        }
 	}
 
 }
