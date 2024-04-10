@@ -34,9 +34,14 @@ public class EmailValidator implements Validator {
         if(value.toString().contains("@") && !value.toString().endsWith(".utec.edu.uy")) {
         	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cuidadiiiitooo", "Por favor ingrese una dirección de correo electrónico institucional válida."));
         }
-        if(!component.getId().equals("email") && userBean.isUserRegistered(value.toString().split("@")[0])) {
-        	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Atención!", "Usted ya se encuentra registrado."));
-        }
+        try {
+        	if(!component.getId().equals("email") && userBean.isUserRegistered(value.toString().split("@")[0])) {
+        		throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Atención!", "Usted ya se encuentra registrado."));
+        	}
+        	
+        }catch (Exception e) {
+
+		}
     }
 
 }

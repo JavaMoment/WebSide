@@ -10,6 +10,7 @@ import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import com.entities.Usuario;
+import com.services.JWTservice;
 import com.services.UsuarioBeanRemote;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.io.Serializable;
 @Named("login")
 @SessionScoped
 public class LoginView implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private UsuarioBeanRemote userBeanRemote;
@@ -26,24 +27,28 @@ public class LoginView implements Serializable {
 	private String emailUtec;
 	private String password;
 	private Usuario user;
-	
+
 	@PostConstruct
 	public void init() {
-		
+
 	}
-	
+
 	public void doLogin() {
-		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Oh no! Oh no no no", "El usuario o contraseña no es correcto");
+		FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR, "¡Oh no! Oh no no no",
+				"El usuario o contraseña no es correcto");
 		user = userBeanRemote.selectUserBy(emailUtec);
-		if(user != null && user.isValidUser(password)) {
-			try {				
+		if (user != null && user.isValidUser(password)) {
+			String jwt = JWTservice.generateToken(user);
+			try {
 				FacesContext context = FacesContext.getCurrentInstance();
-				HttpSession  session = (HttpSession) context.getExternalContext().getSession(true);
+				HttpSession session = (HttpSession) context.getExternalContext().getSession(true);
 				session.setAttribute("userLogged", user);
-				msg = new FacesMessage("¡Bienvenido!"); 
-				FacesContext.getCurrentInstance().getExternalContext().redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+				session.setAttribute("token", jwt);
+				msg = new FacesMessage("¡Bienvenido!");
+				FacesContext.getCurrentInstance().getExternalContext()
+						.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
 				emailUtec = "";
-				password ="";
+				password = "";
 				user = null;
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -52,7 +57,7 @@ public class LoginView implements Serializable {
 		}
 		FacesContext.getCurrentInstance().addMessage(null, msg);
 	}
-	
+
 	public Usuario getUser() {
 		return user;
 	}
@@ -64,15 +69,15 @@ public class LoginView implements Serializable {
 	public String getEmailUtec() {
 		return emailUtec;
 	}
-	
+
 	public void setEmailUtec(String email) {
 		this.emailUtec = email;
 	}
-	
+
 	public String getPassword() {
 		return password;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
