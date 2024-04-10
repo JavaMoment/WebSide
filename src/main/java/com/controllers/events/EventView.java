@@ -189,19 +189,31 @@ public class EventView implements Serializable {
 	}
 
 	public void save() {
+	try {
 		System.out.print("asdas");
-		this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
-		this.evento.setItr(itrBeanRemote.selectById(itrId));
-		this.evento.setEstado(estadoBeanRemote.selectById(estadoId)); 
-		int id = eventBeanRemote.create(this.evento);
-		this.evento.setIdEvento(id);
-		for (Long tutorId : selectedTutores) { 
-			tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+		if(selectedTutores.length  == 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", "Selecciona al menos un tutor"));
+		}else {
+			
+			this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
+			this.evento.setItr(itrBeanRemote.selectById(itrId));
+			this.evento.setEstado(estadoBeanRemote.selectById(estadoId)); 
+			evento = eventBeanRemote.createEvento(evento); 
+			for (Long tutorId : selectedTutores) { 
+				tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+			}
+			// Mensaje de éxito
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
 		}
-		// Mensaje de éxito
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
+		
 
+	}catch (Exception e) {
+		// Mensaje de error
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+				"Error", "Falta completar datos."));
+	}
 	}
 
 	@PostConstruct
