@@ -40,7 +40,7 @@
 							value="#{event.evento.tipoEvento}"
 							styleClass="event-registration-select">
 							<f:selectItem itemLabel="Seleccione uno" itemValue=""
-								noSelectionOption="true" />
+								noSelectionOption="true" required="true" requiredMessage="Debe especificar el tipo de evento"/>
 							<f:selectItems value="#{event.listaTipoEvento}" var="tipo"
 								itemLabel="#{tipo}" itemValue="#{tipo}" />
 						</p:selectOneMenu>
@@ -52,13 +52,14 @@
 						<p:calendar id="fechaHoraInicio"
 							value="#{event.evento.fechaHoraInicio}"
 							pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
-							class="event-registration-input" />
+							class="event-registration-input"
+							required="true" requiredMessage="La fecha es obligatoria" />
 
 						<label class="event-registration-label">Fecha y Hora <br/> de
 							Finalización:</label>
 						<p:calendar id="fechaHoraFinal"
 							value="#{event.evento.fechaHoraFinal}" pattern="dd/MM/yyyy HH:mm"
-							timeZone="-03:00" class="event-registration-input" />
+							timeZone="-03:00" class="event-registration-input" required="true" requiredMessage="La fecha es obligatoria" />
 
 						<label class="event-registration-label">Modalidad:</label>
 						<p:selectOneMenu id="modalidad" value="#{event.modalidadId}"
@@ -92,7 +93,6 @@
 						<h:outputLabel for="localización" value="Localización:"
 							class="event-registration-label" />
 						<p:inputText id="localidad" value="#{event.evento.localizacion}"
-							required="true" requiredMessage="Localización requerida"
 							styleClass="event-registration-input" />
 						
 
@@ -100,7 +100,7 @@
 						<p:selectCheckboxMenu id="tutores"
 							value="#{event.selectedTutores}" filter="true"
 							label="Seleccione tutores" multiple="true"
-							class="event-registration-input">
+							class="event-registration-input" required="true" requiredMessage="La fecha es obligatoria">
 							<f:selectItems value="#{event.listaTutor}" var="tutor"
 								itemLabel="#{tutor.usuario.nombreUsuario}"
 								itemValue="#{tutor.idTutor}" />
@@ -109,11 +109,15 @@
 					<div class="event-registration-actions">
 						<div class="event-registration-actions">
 
+							<p:commandButton value="Cancelar" action="#{event.cancel}"
+								update="msgs" styleClass="ui-button-update" />
+
 							<p:commandButton value="Registrar Evento" action="#{event.save}"
 								update="msgs" styleClass="ui-button-update" />
 
 						</div>
 					</div>
+					
 
 
 				</div>

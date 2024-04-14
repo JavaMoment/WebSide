@@ -1,5 +1,6 @@
 package com.controllers.events;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,9 +10,12 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.context.Flash;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.RequestDispatcher;
 
 import com.entities.Estado;
 import com.entities.Evento;
@@ -193,6 +197,19 @@ public class EventView implements Serializable {
 	public void setSelectedTutores(Long[] selectedTutores) {
 		this.selectedTutores = selectedTutores;
 	}
+	
+	public void cancel() throws IOException {
+		// Mensaje de cancelacion
+		FacesContext conext = FacesContext.getCurrentInstance();
+		Flash flash = conext .getExternalContext().getFlash();
+		flash.setKeepMessages(true); 
+		
+		conext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Evento cancelado con éxito."));
+		
+		
+		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+		ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+	}
 
 	public List<Evento> getEvents() {
 		return events;
@@ -203,19 +220,47 @@ public class EventView implements Serializable {
 	}
 
 	public void save() {
-		System.out.print("asdas");
-		this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
-		this.evento.setItr(itrBeanRemote.selectById(itrId));
-		this.evento.setEstado(estadoBeanRemote.selectById(estadoId)); 
-		int id = eventBeanRemote.create(this.evento);
-		this.evento.setIdEvento(id);
-		for (Long tutorId : selectedTutores) { 
-			tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+	try {
+		System.out.print(evento.getTipoEvento());
+		if(selectedTutores.length  == 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+					"Error", "Selecciona al menos un tutor"));
+		}else {
+			
+			
+			if(evento.getFechaHoraInicio().after( evento.getFechaHoraFinal())) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+						"Error", "La fecha de inicio no puede ser mayor que la de finalizacion"));
+			}else {
+			
+				
+				this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
+				this.evento.setItr(itrBeanRemote.selectById(itrId));
+				this.evento.setEstado(estadoBeanRemote.selectById(estadoId)); 
+				evento = eventBeanRemote.createEvento(evento); 
+				for (Long tutorId : selectedTutores) { 
+					tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+				}
+				// Mensaje de éxito
+				FacesContext conext = FacesContext.getCurrentInstance();
+				Flash flash = conext .getExternalContext().getFlash();
+				flash.setKeepMessages(true); 
+				
+				conext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
+				
+				
+				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+				ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+			}
+			
 		}
-		// Mensaje de éxito
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
+		
 
+	}catch (Exception e) {
+		// Mensaje de error
+		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+				"Error", "Falta completar datos."));
+	}
 	}
 
 }

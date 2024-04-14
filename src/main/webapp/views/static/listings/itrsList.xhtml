@@ -28,7 +28,7 @@
           </p:toolbar>
 	        <p:growl id="messages" showDetail="true" />
 	        <p:dataTable id="dt-itrs" widgetVar="dtItrs" var="itr" value="#{dtItrsView.itrs}"
-	           reflow="true" selection="#{dtItrsView.selectedItrs}" tableStyle="width:auto"
+	           reflow="true" selection="#{dtItrsView.selectedItrs}" tableStyle="-webkit-fill-available"
 	           rowKey="#{itr.nombre}" paginator="true" rows="15" paginatorPosition="bottom"
 	           resizableColumns="true" showGridlines="true" resizeMode="expand" >
 	           <f:facet name="header">
@@ -40,11 +40,6 @@
 	               </div>
 	           </f:facet>
 	           <p:column exportable="false">
-<!-- 	               <p:commandButton icon="pi pi-plus" update=":dialogs:add-itr-content" -->
-<!-- 	                                oncomplete="PF('addItrDialog').show()" style="display: block" -->
-<!-- 	                                class="ui-button-warning rounded-button" process="@this"> -->
-<!-- 	                   <p:resetInput target=":dialogs:add-itr-content" /> -->
-<!-- 	               </p:commandButton> -->
 	               <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-itr-content"
 	                                oncomplete="PF('manageItrDialog').show()" action="#{itrModification.loadDepartamentos()}"
 	                                class="ui-button-warning rounded-button" process="@this">
@@ -78,8 +73,8 @@
 	     
 	     <h:form id="dialogs">
            <p:growl id="messages" showDetail="true" />
-           <p:dialog header="Modificar ITR" showEffect="fade" widgetVar="manageItrDialog"
-              responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+           <p:dialog id="manage-itr-dialog" header="Modificar ITR" showEffect="fade" widgetVar="manageItrDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600" >
             <p:outputPanel id="manage-itr-content" class="ui-fluid">
                 <p:outputPanel rendered="#{not empty itrModification.selectedItr}">
                     <div class="field">
@@ -97,7 +92,8 @@
 
             <f:facet name="footer">
                 <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{itrModification.doUpdateItr()}"
-                    update="manage-itr-content" process="manage-itr-content @this" />
+                    update=":form:dt-itrs" action="#{dtItrsView.reloadItrs()}" process="manage-itr-content @this" >
+                 </p:commandButton>
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageItrDialog').hide()"
                     class="ui-button-secondary" type="button" />
             </f:facet>
@@ -126,7 +122,7 @@
 
             <f:facet name="footer">
                 <p:commandButton value="Añadir" icon="pi pi-check" actionListener="#{addItr.doAddItr()}"
-                    update="add-itr-content" process="add-itr-content @this" />
+                    update=":form:dt-itrs" action="#{dtItrsView.reloadItrs()}" process="add-itr-content @this" />
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addItrDialog').hide()"
                     class="ui-button-secondary" type="button" />
             </f:facet>
