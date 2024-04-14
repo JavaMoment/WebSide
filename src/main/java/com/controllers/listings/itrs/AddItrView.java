@@ -1,6 +1,7 @@
 package com.controllers.listings.itrs;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -28,12 +29,12 @@ public class AddItrView implements Serializable {
 	private ItrBeanRemote itrBean;
 	
 	private String name;
-	private List<Departamento> relatedDepartamentos;
-	private List<Departamento> departamentos;
+	private List<String> relatedDepartamentos;
+	private List<String> departamentos;
 	
 	@PostConstruct
 	public void init() {
-		departamentos = depaBean.selectAll();
+		departamentos = depaBean.selectAll().stream().map(d -> d.getNombre()).toList();
 	}
 
 	public void onItemUnselect(UnselectEvent event) {
@@ -46,8 +47,14 @@ public class AddItrView implements Serializable {
     }
 	
 	public void doAddItr() {
-		Itr newItr = new Itr(name, relatedDepartamentos);
+		// Crear el ITR primero
+		Itr newItr = new Itr(name);
 		int exitCode = itrBean.create(newItr);
+		// Luego adicionar la relacion con los departamentos
+		newItr = itrBean.selectItrBy(newItr.getNombre());
+		newItr.setDepartamentos(relatedDepartamentos != null && relatedDepartamentos.size() > 0 ? new HashSet<>(depaBean.selectAllBy(relatedDepartamentos)) : null);
+		exitCode = itrBean.update(newItr);
+		// Esto es a causa de la falta de manejo por transacciones je
 		if(exitCode == 0) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + newItr.getNombre() + " ha sido correctamente añadido."));
 		} else {
@@ -65,19 +72,19 @@ public class AddItrView implements Serializable {
 		this.name = name;
 	}
 
-	public List<Departamento> getRelatedDepartamentos() {
+	public List<String> getRelatedDepartamentos() {
 		return relatedDepartamentos;
 	}
 
-	public void setRelatedDepartamentos(List<Departamento> relatedDepartamentos) {
+	public void setRelatedDepartamentos(List<String> relatedDepartamentos) {
 		this.relatedDepartamentos = relatedDepartamentos;
 	}
 
-	public List<Departamento> getDepartamentos() {
+	public List<String> getDepartamentos() {
 		return departamentos;
 	}
 
-	public void setDepartamentos(List<Departamento> departamentos) {
+	public void setDepartamentos(List<String> departamentos) {
 		this.departamentos = departamentos;
 	}
 	

@@ -56,6 +56,10 @@ public class ItrsListView implements Serializable {
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-itrs");
 	}
 	
+	public void reloadItrs() {
+		itrs = itrBean.selectAll(); 
+	}
+	
 	public List<Itr> getItrs() {
 		return itrs;
 	}
