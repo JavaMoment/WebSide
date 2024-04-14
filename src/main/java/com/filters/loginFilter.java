@@ -41,7 +41,7 @@ public class loginFilter implements Filter {
 
     
         if (!JWTservice.validateToken(token,user)) {
-				resp.sendRedirect("/WebSide/views/static/login/login.xhtml");
+				response.sendRedirect(loginURL);
 			  }
     
         if (loggedIn || loginRequest || resourceRequest) {
