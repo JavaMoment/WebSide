@@ -62,7 +62,13 @@ public class EventView implements Serializable {
 	private long itrId;
 	private long estadoId;
 	private TipoEvento tipoEvento;
-
+	private List<Evento> events;
+	
+	@PostConstruct
+	public void init() {
+		this.evento = new Evento();
+		events = eventBeanRemote.selectAll();
+	}
 	public Evento getEvento() {
 		return evento;
 	}
@@ -188,6 +194,14 @@ public class EventView implements Serializable {
 		this.selectedTutores = selectedTutores;
 	}
 
+	public List<Evento> getEvents() {
+		return events;
+	}
+
+	public void setEvents(List<Evento> events) {
+		this.events = events;
+	}
+
 	public void save() {
 		System.out.print("asdas");
 		this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
@@ -204,8 +218,4 @@ public class EventView implements Serializable {
 
 	}
 
-	@PostConstruct
-	public void init() {
-		this.evento = new Evento();
-	}
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Listado de Eventos</title>
+</h:head>
+
+<ui:composition template="../templates/home.xhtml">
+	<ui:define name="content">
+		<link rel="stylesheet"
+			href="https://unpkg.com/primeflex@3.3.1/primeflex.css" />
+
+		<h:body>
+			<div class="card">
+				<h:form id="form">
+					<div class="w-11 ml-5 mt-5">
+
+						<p:dataTable id="dt-users" widgetVar="dtEvents" var="evento"
+							value="#{event.events}" reflow="true" tableStyle="width:100%;"
+							rowKey="#{evento.titulo}" paginator="true" rows="15"
+							paginatorPosition="bottom" resizableColumns="true"
+							showGridlines="true" scrollable="true" scrollWidth="100%"
+							scrollHeight="100%" class="h-full">
+
+							<f:facet name="header">
+								<h3>Listado de Eventos</h3>
+								<p:commandButton icon="pi pi-plus"
+									update=""
+									oncomplete=""
+									class="ui-button-succes rounded-button ml-1" process="@this">
+									<f:setPropertyActionListener value="#{evento}"
+										target="#{userModification.selectedUser}" />
+									<p:resetInput target=":dialogs:manage-user-content" />
+								</p:commandButton>
+							</f:facet>
+
+							<p:column exportable="false" class="text-center" style="width:3%;">
+								<p:commandButton icon="pi pi-pencil"
+									update=""
+									oncomplete=""
+									class="ui-button-warning rounded-button ml-1" process="@this">
+									<f:setPropertyActionListener value="#{evento}"
+										target="#{userModification.selectedUser}" />
+									<p:resetInput target=":dialogs:manage-user-content" />
+								</p:commandButton>
+								<br />
+								 <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" class="mt-2 ">
+					             	<p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
+					             </p:toggleSwitch>
+							</p:column>
+							<p:column headerText="Titulo del Evento"
+								sortBy="#{evento.titulo}" filterBy="#{evento.titulo}">
+								<h:outputText value="#{evento.titulo}" />
+							</p:column>
+
+							<p:column headerText="Tipo de evento"
+								sortBy="#{evento.tipoEvento}" filterBy="#{evento.tipoEvento}">
+								<h:outputText value="#{evento.tipoEvento}" />
+							</p:column>
+
+							<p:column headerText="Modalidad" sortBy="#{evento.modalidad}"
+								filterBy="#{evento.modalidad}">
+								<h:outputText value="#{evento.modalidad}" />
+							</p:column>
+
+							<p:column headerText="ITR" sortBy="#{evento.itr}"
+								filterBy="#{evento.itr}">
+								<h:outputText value="#{evento.itr}" />
+							</p:column>
+
+							<p:column headerText="Fecha Inicio"
+								sortBy="#{evento.fechaHoraInicio}"
+								filterBy="#{evento.fechaHoraInicio}">
+								<h:outputText value="#{evento.fechaHoraInicio}" />
+							</p:column>
+
+							<p:column headerText="Fecha Final"
+								sortBy="#{evento.fechaHoraFinal}"
+								filterBy="#{evento.fechaHoraFinal}">
+								<h:outputText value="#{evento.fechaHoraFinal}" />
+							</p:column>
+
+							<p:column headerText="Estado" sortBy="#{evento.estado}"
+								filterBy="#{evento.estado}">
+								<h:outputText value="#{evento.estado}" />
+							</p:column>
+
+
+						</p:dataTable>
+					</div>
+				</h:form>
+			</div>
+
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

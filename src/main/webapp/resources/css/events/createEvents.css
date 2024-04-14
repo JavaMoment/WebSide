@@ -16,6 +16,7 @@ body, html {
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
     margin: 5% auto;
+    
 }
 
 .event-registration-header {
@@ -43,6 +44,7 @@ body, html {
 
 .event-registration-input, .event-registration-select, .event-registration-textarea {
     justify-self: start; /* Align input fields to the left of their cell */
+    width: 100%;
     padding: 12px;
     font-size: 14px;
     border: 1px solid #e0e0e0;
