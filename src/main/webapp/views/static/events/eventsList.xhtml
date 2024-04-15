@@ -8,6 +8,7 @@
 
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<h:outputStylesheet name="css/events/createEvents.css" />
 	<title>Listado de Eventos</title>
 </h:head>
 
@@ -15,44 +16,47 @@
 	<ui:define name="content">
 		<link rel="stylesheet"
 			href="https://unpkg.com/primeflex@3.3.1/primeflex.css" />
-
+		<h:outputStylesheet name="css/events/createEvents.css" />
+			
 		<h:body>
-			<div class="card">
+			<div class="card">   
 				<h:form id="form">
 					<div class="w-11 ml-5 mt-5">
 
-						<p:dataTable id="dt-users" widgetVar="dtEvents" var="evento"
-							value="#{event.events}" reflow="true" tableStyle="width:100%;"
-							rowKey="#{evento.titulo}" paginator="true" rows="15"
-							paginatorPosition="bottom" resizableColumns="true"
-							showGridlines="true" scrollable="true" scrollWidth="100%"
-							scrollHeight="100%" class="h-full">
+						<p:dataTable id="dt-events" widgetVar="dtEvents" var="evento"
+							value="#{eventView.events}" reflow="true"
+							tableStyle="width:100%;" rowKey="#{evento.titulo}"
+							paginator="true" rows="15" paginatorPosition="bottom"
+							resizableColumns="true" showGridlines="true" scrollable="true"
+							scrollWidth="100%" scrollHeight="100%" class="h-full">
 
 							<f:facet name="header">
-								<h3>Listado de Eventos</h3>
-								<p:commandButton icon="pi pi-plus"
-									update=""
-									oncomplete=""
-									class="ui-button-succes rounded-button ml-1" process="@this">
-									<f:setPropertyActionListener value="#{evento}"
-										target="#{userModification.selectedUser}" />
-									<p:resetInput target=":dialogs:manage-user-content" />
-								</p:commandButton>
+								<div class="flex">
+									<h3 class="flex-shrink-1">Listado de Eventos</h3>
+									<div class="flex-shrink-0 w-9"></div>
+									<p:commandButton icon="pi pi-plus" update=":dialogs:new-event-content" oncomplete="PF('newEventDialog').show()"
+										class="ui-button-succes rounded-button flex-shrink-1"
+										process="@this" value="Añadir evento">
+										<p:resetInput target=":dialogs:new-event-dialog" />
+									</p:commandButton>
+								</div>
+
 							</f:facet>
 
-							<p:column exportable="false" class="text-center" style="width:3%;">
-								<p:commandButton icon="pi pi-pencil"
-									update=""
-									oncomplete=""
+							<p:column exportable="false" class="text-center"
+								style="width:3%;">
+								<p:commandButton icon="pi pi-pencil" update="" oncomplete=""
 									class="ui-button-warning rounded-button ml-1" process="@this">
 									<f:setPropertyActionListener value="#{evento}"
 										target="#{userModification.selectedUser}" />
 									<p:resetInput target=":dialogs:manage-user-content" />
 								</p:commandButton>
 								<br />
-								 <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" class="mt-2 ">
-					             	<p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
-					             </p:toggleSwitch>
+								<p:toggleSwitch value="#{evento.active}" onIcon="pi pi-check"
+									offIcon="pi pi-times" class="mt-2 ">
+									<p:ajax
+										listener="#{eventView.onToggleSwitchChangeActive(evento)}" />
+								</p:toggleSwitch>
 							</p:column>
 							<p:column headerText="Titulo del Evento"
 								sortBy="#{evento.titulo}" filterBy="#{evento.titulo}">
@@ -96,6 +100,119 @@
 					</div>
 				</h:form>
 			</div>
+
+			<h:form id="dialogs">
+				<p:growl id="msgs" showDetail="true" />
+				<p:dialog id="new-event-dialog" header="Nuevo Evento" showEffect="fade" widgetVar="newEventDialog"
+						responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+					<p:outputPanel id="new-event-content">
+						<div>
+							<div class="event-registration-grid">
+	
+								<!-- Event Title -->
+								<h:outputLabel for="titulo" value="Título:"
+									class="event-registration-label" />
+								<p:inputText id="titulo" value="#{event.evento.titulo}"
+									required="true" requiredMessage="El título es obligatorio"
+									styleClass="event-registration-input" />
+	
+								<!-- Event Type -->
+								<h:outputLabel for="tipoEvento" value="Tipo de Evento:"
+									class="event-registration-label" />
+								<p:selectOneMenu id="tipoEvento"
+									value="#{event.evento.tipoEvento}"
+									styleClass="event-registration-select">
+									<f:selectItem itemLabel="Seleccione uno" itemValue=""
+										noSelectionOption="true" required="true"
+										requiredMessage="Debe especificar el tipo de evento" />
+									<f:selectItems value="#{event.listaTipoEvento}" var="tipo"
+										itemLabel="#{tipo}" itemValue="#{tipo}" />
+								</p:selectOneMenu>
+	
+	
+	
+								<label class="event-registration-label">Fecha y Hora <br />
+									de Inicio:
+								</label>
+								<p:calendar id="fechaHoraInicio"
+									value="#{event.evento.fechaHoraInicio}"
+									pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
+									class="event-registration-input" required="true"
+									requiredMessage="La fecha es obligatoria" />
+	
+								<label class="event-registration-label">Fecha y Hora <br />
+									de Finalización:
+								</label>
+								<p:calendar id="fechaHoraFinal"
+									value="#{event.evento.fechaHoraFinal}"
+									pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
+									class="event-registration-input" required="true"
+									requiredMessage="La fecha es obligatoria" />
+	
+								<label class="event-registration-label">Modalidad:</label>
+								<p:selectOneMenu id="modalidad" value="#{event.modalidadId}"
+									class="event-registration-input">
+									<f:selectItem itemLabel="Seleccione uno" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{event.listaModalidad}" var="modalidad"
+										itemLabel="#{modalidad.nombre}"
+										itemValue="#{modalidad.idModalidad}" />
+								</p:selectOneMenu>
+	
+	
+								<label class="event-registration-label">ITR responsable:</label>
+								<p:selectOneMenu id="itr" value="#{event.itrId}">
+									<f:selectItem itemLabel="Seleccione uno" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{event.listaItr}" var="itr"
+										itemLabel="#{itr.nombre}" itemValue="#{itr.idItr}"
+										noSelectionOption="false" />
+								</p:selectOneMenu>
+	
+								<label class="event-registration-label">Estado:</label>
+								<p:selectOneMenu id="estado" value="#{event.estadoId}">
+									<f:selectItem itemLabel="Seleccione uno" itemValue=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{event.listaEstado}" var="estado"
+										itemLabel="#{estado.nombre}" itemValue="#{estado.idEstado}"
+										noSelectionOption="false" />
+								</p:selectOneMenu>
+	
+								<h:outputLabel for="localización" value="Localización:"
+									class="event-registration-label" />
+								<p:inputText id="localidad" value="#{event.evento.localizacion}"
+									styleClass="event-registration-input" />
+	
+	
+								<label class="event-registration-label">Tutores:</label>
+								<p:selectCheckboxMenu id="tutores"
+									value="#{event.selectedTutores}" filter="true"
+									label="Seleccione tutores" multiple="true"
+									class="event-registration-input" required="true"
+									requiredMessage="La fecha es obligatoria">
+									<f:selectItems value="#{event.listaTutor}" var="tutor"
+										itemLabel="#{tutor.usuario.nombreUsuario}"
+										itemValue="#{tutor.idTutor}" />
+								</p:selectCheckboxMenu>
+							</div>
+							<div class="event-registration-actions">
+								<div class="event-registration-actions">
+	
+									<p:commandButton value="Cancelar" action="#{event.cancel}"
+										update="msgs" styleClass="ui-button-update" />
+	
+									<p:commandButton value="Registrar Evento" action="#{event.save}"
+										update="msgs" styleClass="ui-button-update" />
+	
+								</div>
+							</div>
+
+						</div>
+					</p:outputPanel>
+				</p:dialog>
+
+			</h:form>
+
 
 		</h:body>
 	</ui:define>

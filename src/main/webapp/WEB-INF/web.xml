@@ -24,10 +24,10 @@
       <filter-name>loginfilter</filter-name>
       <filter-class>com.filters.loginFilter</filter-class>
   </filter>
-
+<!--  
   <filter-mapping>
   	<filter-name>loginfilter</filter-name>
   	<url-pattern>/views/static/*</url-pattern>
   </filter-mapping>
-  
+ -->
 </web-app>
