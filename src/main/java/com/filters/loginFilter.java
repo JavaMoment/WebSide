@@ -33,16 +33,15 @@ public class loginFilter implements Filter {
         HttpSession session = request.getSession();
         String loginURL = request.getContextPath() + "/";
 
-    		String token = (String) session.getAttribute("token");
-			  Usuario user = (Usuario) session.getAttribute("userLogged");
+		String token = (String) session.getAttribute("token");
+	    Usuario user = (Usuario) session.getAttribute("userLogged");
         boolean loggedIn = (session != null) && (session.getAttribute("userLogged") != null); // ¿El usuario inicio sesion?
         boolean loginRequest = request.getRequestURI().equals(loginURL); // ¿La pagina solicitada es la del login? loggin esta mapeada como /WebSide/ == ContextPath
         boolean resourceRequest = request.getRequestURI().startsWith(request.getContextPath() + ResourceHandler.RESOURCE_IDENTIFIER); // ¿Se solicito un recurso (.css, .js, etc)?
 
-    
         if (!JWTservice.validateToken(token,user)) {
-				resp.sendRedirect("/WebSide/views/static/login/login.xhtml");
-			  }
+				response.sendRedirect(loginURL);
+	    }
     
         if (loggedIn || loginRequest || resourceRequest) {
             chain.doFilter(request, response);
