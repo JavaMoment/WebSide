@@ -13,6 +13,7 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import com.entities.Reclamo;
+import com.entities.StatusReclamo;
 import com.services.ReclamoBeanRemote;
 import com.services.StatusReclamoBeanRemote;
 
@@ -27,35 +28,41 @@ public class ClaimsListView implements Serializable {
 	
 	private List<Reclamo> claims;
 	private Reclamo selectedClaim; 
-	private String[] status;
+	private StatusReclamo actualStatus;
+	private List<StatusReclamo> statuses;
 	
 	@PostConstruct
 	public void init() {
 		setClaims(reclamoService.selectAll());
-		setStatus(statusReclamoService.selectAll().stream().map(s -> s.getNombre()).distinct().toArray(String[]::new));
+		setStatuses(statusReclamoService.selectAll());
 	}
 	
-	public void onToggleSwitchChangeActive(Reclamo claim) {
+	public void onSelectionChangeStatus(Reclamo claim) {
 		int exitCode;
 		long reclamoId = claim.getIdReclamo();
-		// TODO: Implementar atributo de activo al reclamo
-//		if(claim.isActive()) {
-//			claim.setActivo((byte) 0);
-//			exitCode = reclamoService.logicalDeleteBy(reclamoId); TODO: Implementar baja logica por ID
-//			if(exitCode == 0) {
-//				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + claimName + " ha sido correctamente dado de baja."));
-//			}
-//		} else {
-//			claim.setActivo((byte) 1);
-//			exitCode = reclamoService.activeItrBy(claimName);
-//			if(exitCode == 0) {
-//				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + claimName + " ha sido correctamente activado."));
-//			}
-//		}
-//		if(exitCode != 0) {
-//			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el estado del ITR no ha podido ser modificado."));
-//		}
-//		PrimeFaces.current().ajax().update("form:messages", "form:dt-claims");
+		StatusReclamo statusReclamoInDB = statusReclamoService.selectById(claim.getStatusReclamo().getIdStatus());
+		Reclamo reclamoInDB = reclamoService.selectById(reclamoId);
+		reclamoInDB.setStatusReclamo(statusReclamoInDB);
+		exitCode = reclamoService.update(reclamoInDB);
+		if(exitCode == 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El status del reclamo #" + reclamoId + " ha sido correctamente actualizado a: " + statusReclamoInDB.getNombre() + "."));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el status del reclamo no ha podido ser modificado."));
+		}
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-claims");
+	}
+	
+	public void doUpdateDetail() {
+		int exitCode;
+		Reclamo reclamoInDB = reclamoService.selectById(selectedClaim.getIdReclamo());
+		reclamoInDB.setDetalle(selectedClaim.getDetalle());
+		exitCode = reclamoService.update(reclamoInDB);
+		if(exitCode == 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El detalle del reclamo #" + reclamoInDB.getIdReclamo() + " ha sido correctamente actualizado."));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el detalle del reclamo seleccionado no ha podido ser modificado."));
+		}
+		PrimeFaces.current().ajax().update("form:messages", "form:dt-claims");
 	}
 
 	public List<Reclamo> getClaims() {
@@ -66,20 +73,28 @@ public class ClaimsListView implements Serializable {
 		this.claims = claims;
 	}
 
-	public String[] getStatus() {
-		return status;
-	}
-
-	public void setStatus(String[] status) {
-		this.status = status;
-	}
-
 	public Reclamo getSelectedClaim() {
 		return selectedClaim;
 	}
 
-	public void setSelectedClaim(Reclamo selectedClaim) {
-		this.selectedClaim = selectedClaim;
+	public void setSelectedClaim(Reclamo actualClaim) {
+		this.selectedClaim = actualClaim;
+	}
+
+	public StatusReclamo getActualStatus() {
+		return actualStatus;
+	}
+
+	public void setActualStatus(StatusReclamo actualStatus) {
+		this.actualStatus = actualStatus;
+	}
+
+	public List<StatusReclamo> getStatuses() {
+		return statuses;
+	}
+
+	public void setStatuses(List<StatusReclamo> statuses) {
+		this.statuses = statuses;
 	}
 
 }
