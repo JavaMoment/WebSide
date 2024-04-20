@@ -19,6 +19,7 @@
 			<i class='bx bx-menu' id="btn"></i>
 		</div>
 		<ul class="nav-list">
+			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 			<li>
 				<a href="/WebSide/views/static/dashboard/dashboard.xhtml">
 					<i class='bx bx-grid-alt'></i>
@@ -26,6 +27,8 @@
 				</a>
 				<span class="tooltip">Dashboard</span>
 			</li>
+			</ui:fragment>
+			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 			<li>
 				<a href="/WebSide/views/static/listings/usersList.xhtml">
 					<i class='bx bx-user'></i>
@@ -33,6 +36,8 @@
 				</a>
 				<span class="tooltip">Listado de usuarios</span>
 			</li>
+			</ui:fragment>
+			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 			<li>
 				<a href="/WebSide/views/static/listings/itrsList.xhtml">
 					<i class='bx bx-buildings'></i>
@@ -40,6 +45,8 @@
 				</a>
 				<span class="tooltip">Listado de ITRs</span>
 			</li>
+			</ui:fragment>
+			<ui:fragment rendered="#{!session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('TUTOR')}">
 			<li>
 				<a href="/WebSide/views/static/listings/claimsList.xhtml">
 					<i class='bx bx-box' ></i>
@@ -47,6 +54,7 @@
 				</a>
 				<span class="tooltip">Listado de reclamos</span>
 			</li>
+			</ui:fragment>
 			<li>
 				<a href="/WebSide/views/static/profile/profile.xhtml">
 					<i class='bx bxs-user-account'></i>
