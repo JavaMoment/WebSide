@@ -21,6 +21,7 @@ import com.entities.Departamento;
 import com.entities.Estudiante;
 import com.entities.Itr;
 import com.entities.Localidad;
+import com.entities.TiposTutor;
 import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
@@ -29,6 +30,7 @@ import com.services.AreaBeanRemote;
 import com.services.DepartamentoBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBeanRemote;
+import com.services.TiposTutorBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 @Named("signup")
@@ -45,6 +47,8 @@ public class SignupView implements Serializable {
 	private LocalidadBeanRemote cityBeanRemote;
 	@EJB
 	private AreaBeanRemote areaBean;
+	@EJB
+	private TiposTutorBeanRemote tiposTutorBeanRemote;
 	
 	private Usuario newUser;
 	private Estudiante newStudent;
@@ -55,7 +59,7 @@ public class SignupView implements Serializable {
 	private List<Area> areas;
 	private List<String> userTypes = Arrays.asList("Analista", "Estudiante", "Tutor");
 	private Genres[] genres = Genres.values();
-	private Roles[] roles = Roles.values();
+	private List<TiposTutor> roles;
 	
 	private String selectedGenreName;
 	private String selectedDepaName;
@@ -73,6 +77,7 @@ public class SignupView implements Serializable {
 		itrs = itrBeanRemote.selectAll();
 		depas = depaBeanRemote.selectAll();
 		areas = areaBean.selectAll();
+		roles = tiposTutorBeanRemote.selectAll();
 		
 		newUser = new Usuario();
 		newStudent = new Estudiante();
@@ -100,7 +105,6 @@ public class SignupView implements Serializable {
 		}
 		else {
 			newUser.setNombreUsuario(newUser.getMailInstitucional().split("@")[0]);
-			newUser.setDepartamento(depaBeanRemote.selectByName(selectedDepaName));
 			newUser.setLocalidad(cityBeanRemote.selectBy(selectedCityName));
 			newUser.setItr(itrBeanRemote.selectBy(selectedItrName));
 			newUser.setGenero(selectedGenre);
@@ -117,7 +121,7 @@ public class SignupView implements Serializable {
 					Tutor newTeacher = new Tutor(
 							newUser,
 							areaBean.selectBy(selectedAreaName),
-							Roles.valueOf(selectedRolName)
+							tiposTutorBeanRemote.selectBy(selectedRolName)
 							);
 					newUser.setTutores(Set.of(newTeacher));
 					break;
@@ -279,11 +283,11 @@ public class SignupView implements Serializable {
 		this.selectedAreaName = selectedAreaName;
 	}
 
-	public Roles[] getRoles() {
+	public List<TiposTutor> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Roles[] roles) {
+	public void setRoles(List<TiposTutor> roles) {
 		this.roles = roles;
 	}
 
