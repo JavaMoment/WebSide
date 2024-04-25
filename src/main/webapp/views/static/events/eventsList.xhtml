@@ -64,8 +64,8 @@
 							</p:column>
 
 							<p:column headerText="Tipo de evento"
-								sortBy="#{evento.tipoEvento}" filterBy="#{evento.tipoEvento}">
-								<h:outputText value="#{evento.tipoEvento}" />
+								sortBy="#{evento.tiposEvento}" filterBy="#{evento.tiposEvento}">
+								<h:outputText value="#{evento.tiposEvento}" />
 							</p:column>
 
 							<p:column headerText="Modalidad" sortBy="#{evento.modalidad}"
@@ -90,9 +90,9 @@
 								<h:outputText value="#{evento.fechaHoraFinal}" />
 							</p:column>
 
-							<p:column headerText="Estado" sortBy="#{evento.estado}"
-								filterBy="#{evento.estado}">
-								<h:outputText value="#{evento.estado}" />
+							<p:column headerText="Estado" sortBy="#{evento.statusEvento.nombre}"
+								filterBy="#{evento.statusEvento.nombre}">
+								<h:outputText value="#{evento.statusEvento.nombre}" />
 							</p:column>
 
 
@@ -120,15 +120,14 @@
 								<h:outputLabel for="tipoEvento" value="Tipo de Evento:"
 									class="event-registration-label" />
 								<p:selectOneMenu id="tipoEvento"
-									value="#{event.evento.tipoEvento}"
+									value="#{event.tipoEventoID}"
 									styleClass="event-registration-select">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" required="true"
 										requiredMessage="Debe especificar el tipo de evento" />
-									<f:selectItems value="#{event.listaTipoEvento}" var="tipo"
-										itemLabel="#{tipo}" itemValue="#{tipo}" />
+									<f:selectItems value="#{event.listaTiposEvento}" var="tipo"
+										itemLabel="#{tipo.nombre}" itemValue="#{tipo.idTipoEvento}" />
 								</p:selectOneMenu>
-	
 	
 	
 								<label class="event-registration-label">Fecha y Hora <br />

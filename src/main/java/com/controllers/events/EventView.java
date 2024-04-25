@@ -21,15 +21,16 @@ import com.entities.Estado;
 import com.entities.Evento;
 import com.entities.Itr;
 import com.entities.Modalidad;
+import com.entities.TiposEvento;
 import com.entities.Tutor;
 import com.entities.TutorEvento;
-import com.enums.TipoEvento;
 import com.services.EstadoBeanRemote;
 import com.services.EventoBeanRemote;
 import com.services.ItrBean;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBean;
 import com.services.ModalidadBeanRemote;
+import com.services.TiposEventoBeanRemote;
 import com.services.TutorBeanRemote;
 
 @Named("event")
@@ -52,7 +53,9 @@ public class EventView implements Serializable {
 
 	@EJB
 	private EstadoBeanRemote estadoBeanRemote;
-
+	
+	@EJB
+	private TiposEventoBeanRemote tiposEventoBeanRemote;
 
 	private long idEvento;
 	private Date fechaHoraFinal;
@@ -65,7 +68,8 @@ public class EventView implements Serializable {
 	private long modalidadId;
 	private long itrId;
 	private long estadoId;
-	private TipoEvento tipoEvento;
+	private long tipoEventoID;
+	private TiposEvento tipoEvento;
 	private List<Evento> events;
 	
 	@PostConstruct
@@ -165,16 +169,23 @@ public class EventView implements Serializable {
 		return estadoBeanRemote.selectAll();
 	}
 
-	public TipoEvento getTipoEvento() {
+	public List<TiposEvento> getListaTiposEvento() {
+		return tiposEventoBeanRemote.selectAll();
+	}
+	
+	public TiposEvento getTipoEvento() {
 		return tipoEvento;
 	}
-
-	public List<TipoEvento> getListaTipoEvento() {
-
-		return new ArrayList<TipoEvento>(EnumSet.allOf(TipoEvento.class));
+	
+	public long getTipoEventoID() {
+		return tipoEventoID;
+	}
+	public void setTipoEventoID(long tipoEventoID) {
+		this.tipoEventoID = tipoEventoID;
 	}
 
-	public void setTipoEvento(TipoEvento tipoEvento) {
+
+	public void setTipoEvento(TiposEvento tipoEvento) {
 		this.tipoEvento = tipoEvento;
 	}
 
@@ -221,7 +232,7 @@ public class EventView implements Serializable {
 
 	public void save() {
 	try {
-		System.out.print(evento.getTipoEvento());
+		System.out.print(evento.getTiposEvento());
 		if(selectedTutores.length  == 0) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
 					"Error", "Selecciona al menos un tutor"));
@@ -236,7 +247,7 @@ public class EventView implements Serializable {
 				
 				this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
 				this.evento.setItr(itrBeanRemote.selectById(itrId));
-				this.evento.setEstado(estadoBeanRemote.selectById(estadoId)); 
+				this.evento.setstatusEvento(estadoBeanRemote.selectById(estadoId)); 
 				evento = eventBeanRemote.createEvento(evento); 
 				for (Long tutorId : selectedTutores) { 
 					tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));

@@ -22,12 +22,13 @@ import com.entities.Estado;
 import com.entities.Evento;
 import com.entities.Itr;
 import com.entities.Modalidad;
+import com.entities.TiposEvento;
 import com.entities.Tutor;
-import com.enums.TipoEvento;
 import com.services.EstadoBeanRemote;
 import com.services.EventoBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.ModalidadBeanRemote;
+import com.services.TiposEventoBeanRemote;
 import com.services.TutorBeanRemote;
 
 @Named("eventView")
@@ -50,6 +51,10 @@ public class EventsListView implements Serializable{
 
 	@EJB
 	private EstadoBeanRemote estadoBeanRemote;
+	
+	@EJB
+	private TiposEventoBeanRemote tiposEventoBeanRemote;
+
 
 
 	private long idEvento;
@@ -63,7 +68,7 @@ public class EventsListView implements Serializable{
 	private long modalidadId;
 	private long itrId;
 	private long estadoId;
-	private TipoEvento tipoEvento;
+	private TiposEvento tipoEvento;
 	private List<Evento> events;
 	
 	@PostConstruct
@@ -186,17 +191,17 @@ public class EventsListView implements Serializable{
 	public List<Estado> getListaEstado() {
 		return estadoBeanRemote.selectAll();
 	}
+	
+	public List<TiposEvento> getListaTiposEvento() {
+		return tiposEventoBeanRemote.selectAll();
+	}
 
-	public TipoEvento getTipoEvento() {
+	public TiposEvento getTipoEvento() {
 		return tipoEvento;
 	}
 
-	public List<TipoEvento> getListaTipoEvento() {
 
-		return new ArrayList<TipoEvento>(EnumSet.allOf(TipoEvento.class));
-	}
-
-	public void setTipoEvento(TipoEvento tipoEvento) {
+	public void setTipoEvento(TiposEvento tipoEvento) {
 		this.tipoEvento = tipoEvento;
 	}
 
