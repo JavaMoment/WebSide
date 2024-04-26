@@ -58,7 +58,7 @@
 	               <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('dtClaims').filter()" styleClass="ui-custom-filter">
                         <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{dtClaimsView.status}" />
+                        <f:selectItems value="#{dtClaimsView.statuses}" />
                     </p:selectOneMenu>
                    </f:facet>
 	               <h:outputText
@@ -68,10 +68,11 @@
 	               <p:selectOneMenu
 	               		styleClass="ui-custom-filter"
 	               		rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}"
+	               		value="#{claim.statusReclamo}"
 	               >
-	               		<f:selectItem itemLabel="#{claim.statusReclamo.nombre}">
-	               		</f:selectItem>
-                        <f:selectItems value="#{dtClaimsView.status}">
+	               		<f:converter converterId="StatusConverter" />
+                        <p:ajax event="itemSelect" update="form:messages" listener="#{dtClaimsView.onSelectionChangeStatus(claim)}" />
+                        <f:selectItems value="#{dtClaimsView.statuses}">
                         </f:selectItems>
                     </p:selectOneMenu>
 	           </p:column>
@@ -123,6 +124,7 @@
                 	icon="pi pi-check"
                     update=":form:dt-claims"
                     process="manage-detail-claim-content @this"
+                    actionListener="#{dtClaimsView.doUpdateDetail()}"
                  >
                  </p:commandButton>
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDetailClaimDialog').hide()"
