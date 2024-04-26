@@ -19,7 +19,6 @@ import com.entities.TiposTutor;
 import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
-import com.enums.Roles;
 import com.services.AnalistaBeanRemote;
 import com.services.AreaBeanRemote;
 import com.services.DepartamentoBeanRemote;
