@@ -100,9 +100,9 @@
 	               filterBy="#{user.telefono}">
 	               <h:outputText value="#{user.telefono}" />
 	           </p:column>
-	           <p:column headerText="Departamento de residencia" sortBy="#{user.departamento.nombre}"
-	               filterBy="#{user.departamento.nombre}">
-	               <h:outputText value="#{user.departamento.nombre}" />
+	           <p:column headerText="Departamento de residencia" sortBy="#{user.localidad.departamento.nombre}"
+	               filterBy="#{user.localidad.departamento.nombre}">
+	               <h:outputText value="#{user.localidad.departamento.nombre}" />
 	           </p:column>
 	           <p:column headerText="Ciudad de residencia" sortBy="#{user.localidad.nombre}"
 	               filterBy="#{user.localidad.nombre}">
@@ -171,14 +171,14 @@
                         <p:inputText id="phone" validator="phoneValidator" value="#{userModification.selectedUser.telefono}"/>
                     </div>
                     <div class="field">
+                    <div class="field">
                         <p:outputLabel for="departamentos">Departamento de residencia</p:outputLabel>
                         <p:selectOneMenu id="departamentos"  value="#{userModification.selectedDepaName}" >
                           <f:selectItem itemValue="#{null}" itemLabel="Seleccione un nuevo departamento" />
                           <f:selectItems value="#{userModification.depas}" var="d" itemValue="#{d.nombre}" itemLabel="#{d.nombre}" />
-						  <p:ajax listener="#{userModification.onDepartamentoChanged()}" />
-						</p:selectOneMenu>
+                            <p:ajax listener="#{userModification.onDepartamentoChanged()}" />
+                        </p:selectOneMenu>
                     </div>
-                    <div class="field">
                         <p:outputLabel for="ciudades">Ciudad de residencia</p:outputLabel>
                         <p:selectOneMenu id="ciudades" value="#{userModification.selectedCityName}">
                           <f:selectItem itemValue="#{null}" itemLabel="Seleccione una nueva ciudad" />

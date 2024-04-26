@@ -27,3 +27,5 @@ replay_pid*
 .settings/
 src/main/java/Test.java
 build/
+/bin/
+.externalToolBuilders
