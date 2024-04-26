@@ -19,39 +19,53 @@
 			<i class='bx bx-menu' id="btn"></i>
 		</div>
 		<ul class="nav-list">
-			<li><a href="/WebSide/views/static/dashboard/dashboard.xhtml">
-					<i class='bx bx-grid-alt'></i> <span class="links_name">Dashboard</span>
-			</a> <span class="tooltip">Dashboard</span></li>
-			<li><a href="/WebSide/views/static/listings/usersList.xhtml">
-					<i class='bx bx-user'></i> <span class="links_name">Listado
-						de usuarios</span>
-			</a> <span class="tooltip">Listado de usuarios</span></li>
-			<li><a href="/WebSide/views/static/listings/itrsList.xhtml">
-					<i class='bx bx-buildings'></i> <span class="links_name">Listado
-						de ITRs</span>
-			</a> <span class="tooltip">Listado de ITRs</span></li>
-			<li><a href="/WebSide/views/static/profile/profile.xhtml"> <i
-					class='bx bxs-user-account'></i> <span class="links_name">Mi
-						usuario</span>
-			</a> <span class="tooltip">Mi usuario</span></li>
-			<li><a href="/WebSide/views/static/events/eventsList.xhtml">
-					<i class='bx bx-buildings'></i> <span class="links_name">
-						Alta evento</span>
-			</a> <span class="tooltip">Alta eventos</span></li>
-			<li><h:form>
-					<p:commandLink action="#{home.logout()}"
-						styleClass="ui-button-update">
-
-						<i class='bx bx-log-out'></i>
+			<li>
+				<a href="/WebSide/views/static/dashboard/dashboard.xhtml">
+					<i class='bx bx-grid-alt'></i>
+					<span class="links_name">Dashboard</span>
+				</a>
+				<span class="tooltip">Dashboard</span>
+			</li>
+			<li>
+				<a href="/WebSide/views/static/listings/usersList.xhtml">
+					<i class='bx bx-user'></i>
+					<span class="links_name">Listado de usuarios</span>
+				</a>
+				<span class="tooltip">Listado de usuarios</span>
+			</li>
+			<li>
+				<a href="/WebSide/views/static/listings/itrsList.xhtml">
+					<i class='bx bx-buildings'></i>
+					<span class="links_name">Listado de ITRs</span>
+				</a>
+				<span class="tooltip">Listado de ITRs</span>
+			</li>
+			<li>
+				<a href="/WebSide/views/static/listings/claimsList.xhtml">
+					<i class='bx bx-box' ></i>
+					<span class="links_name">Listado de reclamos</span>
+				</a>
+				<span class="tooltip">Listado de reclamos</span>
+			</li>
+			<li>
+				<a href="/WebSide/views/static/profile/profile.xhtml">
+					<i class='bx bxs-user-account'></i>
+					<span class="links_name">Mi usuario</span>
+				</a>
+				<span class="tooltip">Mi usuario</span></li>
+			<li>
+				<h:form>
+					<p:commandLink  action="#{home.logout()}" styleClass="ui-button-update">
+						<i class='bx bx-log-out'></i> 
 						<span class="links_name">Salir</span>
-						<span class="tooltip">Salir</span>
+	                    <span class="tooltip">Cerrar su sesión</span>
 					</p:commandLink>
-				</h:form></li>
+				</h:form>
+			</li>
 		</ul>
 	</div>
 	<div id="content">
 		<ui:insert name="content">
-			<!--   	  	<ui:include src="/WebSide/views/static/commons/commonContent.xhtml" /> -->
 		</ui:insert>
 	</div>
 	<script>

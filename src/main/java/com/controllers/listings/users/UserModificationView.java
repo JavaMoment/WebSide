@@ -15,6 +15,7 @@ import com.entities.Departamento;
 import com.entities.Estudiante;
 import com.entities.Itr;
 import com.entities.Localidad;
+import com.entities.TiposTutor;
 import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
@@ -25,6 +26,7 @@ import com.services.DepartamentoBeanRemote;
 import com.services.EstudianteBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBeanRemote;
+import com.services.TiposTutorBeanRemote;
 import com.services.TutorBeanRemote;
 import com.services.UsuarioBeanRemote;
 
@@ -48,11 +50,13 @@ public class UserModificationView implements Serializable {
 	@EJB
 	private ItrBeanRemote itrBeanRemote;
 	@EJB
-	private DepartamentoBeanRemote depaBeanRemote;
-	@EJB
 	private LocalidadBeanRemote cityBeanRemote;
 	@EJB
 	private AreaBeanRemote areaBean;
+	@EJB
+	private DepartamentoBeanRemote depaBeanRemote;
+	@EJB
+	private TiposTutorBeanRemote tiposTutorBeanRemote;
 	
 	private Usuario selectedUser;
 	private Estudiante selectedStudent;
@@ -66,7 +70,7 @@ public class UserModificationView implements Serializable {
 	private List<Localidad> cities;
 	private List<Area> areas;
 	private Genres[] genres = Genres.values();
-	private Roles[] roles = Roles.values();
+	private List<TiposTutor> roles;
 	
 	private String selectedDepaName;
 	private String selectedCityName;
@@ -85,31 +89,18 @@ public class UserModificationView implements Serializable {
 	@PostConstruct
 	public void init() {
 		itrs = itrBeanRemote.selectAll();
-		depas = depaBeanRemote.selectAll();
 		areas = areaBean.selectAll();
-		
-//		switch(selectedUser.getTipoUsuario()) {
-//			case "Estudiante":
-//				selectedStudent = studentBean.selectUserBy(selectedUser.getNombreUsuario());
-//				break;
-//			case "Tutor":
-//				setSelectedTeacher(teacherBean.selectUserBy(selectedUser.getNombreUsuario()));
-//				break;
-//			case "Analista":
-//				selectedAnalyst = analystBean.selectUserBy(selectedUser.getNombreUsuario());
-//				break;
-//			default:
-//				break;
-//		}
+		depas = depaBeanRemote.selectAll();
+		roles = tiposTutorBeanRemote.selectAll();
 	}
 	
 	public void onDepartamentoChanged() {
 		if((selectedDepa == null & selectedDepaName != null) || !selectedDepa.getNombre().equals(selectedDepaName)) {
-			selectedDepa = depaBeanRemote.selectByName(selectedDepaName);
-			cities = cityBeanRemote.selectAllByObject(selectedDepa);
-			PrimeFaces.current().ajax().update("dialogs:ciudades");
+		        selectedDepa = depaBeanRemote.selectByName(selectedDepaName);
+		        cities = cityBeanRemote.selectAllByObject(selectedDepa);
+		        PrimeFaces.current().ajax().update("dialogs:ciudades");
 		}
-    }
+	}
 	
 	public void onCityChanged() {
 		if((selectedCity == null & selectedCityName != null) || !selectedCity.getNombre().equals(selectedCityName)) {
@@ -130,10 +121,6 @@ public class UserModificationView implements Serializable {
     }
 	
 	public void doUpdateUser() {
-		if(selectedDepaName != null && !selectedDepaName.equals(selectedUser.getDepartamento().getNombre())) {
-			selectedUser.setDepartamento(selectedDepa);
-			selectedDepa = null;
-		}
 		if(selectedCityName != null && !selectedCityName.equals(selectedUser.getLocalidad().getNombre())) {
 			selectedUser.setLocalidad(selectedCity);
 			selectedCity = null;
@@ -180,7 +167,7 @@ public class UserModificationView implements Serializable {
 					teacher = new Tutor(
 							selectedUser,
 							areaBean.selectBy(selectedAreaName),
-							Roles.valueOf(selectedRolName)
+							tiposTutorBeanRemote.selectBy(selectedRolName)
 							);
 				}
 				selectedUser.addTutor(teacher);
@@ -351,11 +338,11 @@ public class UserModificationView implements Serializable {
 		this.selectedRolName = selectedRolName;
 	}
 
-	public Roles[] getRoles() {
+	public List<TiposTutor> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Roles[] roles) {
+	public void setRoles(List<TiposTutor> roles) {
 		this.roles = roles;
 	}
 

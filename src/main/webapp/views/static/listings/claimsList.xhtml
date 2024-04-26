@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  >
+<h:head>
+	<title>Administración de reclamos</title>
+</h:head>
+<ui:composition template="../templates/home.xhtml">
+<ui:define name="content">
+<h:body>
+  <h:outputStylesheet name="css/listings/claimsList.css" />
+  <div class = "layout-main">
+    <div class = "layout-content">
+      <div class = "card claims-list">
+	     <h:form id="form">
+	        <p:growl id="messages" showDetail="true" />
+	        <p:dataTable id="dt-claims" widgetVar="dtClaims" var="claim" value="#{dtClaimsView.claims}"
+	           reflow="true" tableStyle="-webkit-fill-available"
+	           rowKey="#{claim.titulo}" paginator="true" rows="15" paginatorPosition="bottom"
+	           resizableColumns="true" showGridlines="true" resizeMode="expand" >
+	           <f:facet name="header">
+	               <div class="claims-table-header">
+	                   <span style="font-weight: bold">Listado de reclamos</span>
+	                   <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+	                       <p:inputText id="globalFilter" onkeyup="PF('dtClaims').filter()" placeholder="Buscar..." />
+	                   </span>
+	               </div>
+	           </f:facet>
+	           <p:column 
+	           		exportable="false"
+	           		headerText="Acciones"
+	           >
+	               <p:commandButton 
+	               		icon="pi pi-pencil"
+	               		class="ui-button-warning rounded-button"
+	               		rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}"
+	               	>
+	               		<!-- update=":dialogs:manage-claim-content" oncomplete="PF('manageClaimDialog').show()" process="@this"> --> <!-- TODO: Crear manageClaimDialog @federico.martinez -->
+                      <f:setPropertyActionListener value="#{claim}" target="#{dtClaimsView.selectedClaim}" />
+                      <p:resetInput target=":dialogs:manage-claim-content" />
+                   </p:commandButton>
+                   <p:commandButton 
+	               		icon="pi pi-pencil"
+	               		class="ui-button-warning rounded-button"
+	               		rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}"
+	               		value="Editar detalle"
+	               		update=":dialogs:manage-detail-claim-content" oncomplete="PF('manageDetailClaimDialog').show()" process="@this">
+                      <f:setPropertyActionListener value="#{claim}" target="#{dtClaimsView.selectedClaim}" />
+                      <p:resetInput target=":dialogs:manage-detail-claim-content" />
+                   </p:commandButton>
+	           </p:column>
+	           <p:column headerText="Estado del reclamo" sortBy="#{claim.statusReclamo.nombre}" 
+	               filterMatchMode="exact" filterBy="#{claim.statusReclamo.nombre}">
+	               <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('dtClaims').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtClaimsView.status}" />
+                    </p:selectOneMenu>
+                   </f:facet>
+	               <h:outputText
+	               		value="#{claim.statusReclamo.nombre}"
+	               		rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
+	               </h:outputText>
+	               <p:selectOneMenu
+	               		styleClass="ui-custom-filter"
+	               		rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}"
+	               >
+	               		<f:selectItem itemLabel="#{claim.statusReclamo.nombre}">
+	               		</f:selectItem>
+                        <f:selectItems value="#{dtClaimsView.status}">
+                        </f:selectItems>
+                    </p:selectOneMenu>
+	           </p:column>
+	           <p:column headerText="#ID" sortBy="#{claim.idReclamo}">
+	               <h:outputText value="#{claim.idReclamo}" />
+	           </p:column>
+	           <p:column headerText="Titulo" sortBy="#{claim.titulo}"
+	               filterBy="#{claim.titulo}">
+	               <h:outputText value="#{claim.titulo}" />
+	           </p:column>
+	           <p:column headerText="Descripción" sortBy="#{claim.descripcion}" filterBy="#{claim.descripcion}">
+	               <h:outputText value="#{claim.descripcion}" />
+	           </p:column>
+	           <p:column headerText="Fecha y hora de creación" sortBy="#{claim.auditDate}">
+	               <h:outputText value="#{claim.auditDate}" />
+	           </p:column>
+	           <p:column headerText="Estudiante asociado" sortBy="#{claim.estudiante}" filterBy="#{claim.estudiante}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+	               <h:outputText value="#{claim.estudiante.nombreUsuario}" />
+	           </p:column>
+	           <p:column headerText="Evento asociado" sortBy="#{claim.evento}"
+	               filterBy="#{claim.evento}">
+	               <h:outputText value="#{claim.evento.titulo}" />
+	           </p:column>
+	           <p:column headerText="Detalle actual" sortBy="#{claim.detalle}"
+	               filterBy="#{claim.detalle}">
+	               <h:outputText value="#{claim.detalle}" />
+	           </p:column>
+	           <p:column headerText="Analista a cargo" sortBy="#{claim.analista}"
+	               filterBy="#{claim.analista}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
+	               <h:outputText value="#{claim.analista.usuario.nombreUsuario}" />
+	           </p:column>
+	       </p:dataTable>
+      </h:form>
+      <h:form id="dialogs">
+           <p:growl id="messages" showDetail="true" />
+           <p:dialog id="manage-detail-dialog" header="Editar el detalle del reclamo" showEffect="fade" widgetVar="manageDetailClaimDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600" >
+            <p:outputPanel id="manage-detail-claim-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty dtClaimsView.selectedClaim}">
+                    <div class="field">
+                        <p:inputTextarea id="detail" value="#{dtClaimsView.selectedClaim.detalle}" rows="6" cols="33"/>
+                    </div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton
+                	value="Guardar"
+                	icon="pi pi-check"
+                    update=":form:dt-claims"
+                    process="manage-detail-claim-content @this"
+                 >
+                 </p:commandButton>
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDetailClaimDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+      </h:form>
+      </div>
+    </div>
+  </div>
+</h:body>
+</ui:define>
+</ui:composition>
+</html>

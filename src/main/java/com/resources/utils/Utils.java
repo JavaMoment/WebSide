@@ -18,7 +18,7 @@ import java.lang.StringBuilder;
 // Declaración de la clase Utils
 public class Utils {
 	   // Constante para la ruta base para EJBs
-    private static final String baseRoute = "ejb:/PDTServerSide/";
+    private static final String baseRoute = "ejb:TecnicaturaUtec/ServerSide/";
     
     // Método genérico para obtener un bean EJB
     public static <T> T getBean(Class<T> expectedBean) {

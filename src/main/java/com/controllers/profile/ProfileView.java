@@ -231,7 +231,6 @@ public class ProfileView implements Serializable {
 				this.mailInstitucional = usuario.getMailInstitucional();
 				this.mailPersonal = usuario.getMailPersonal();
 				this.telefono = usuario.getTelefono();
-				this.departmentId = usuario.getDepartamento().getIdDepartamento();
 				this.itrId = usuario.getItr().getIdItr();
 				this.locationId = usuario.getLocalidad().getIdLocalidad();
 				this.fechaNacimiento = usuario.getFechaNacimiento();
@@ -284,7 +283,6 @@ public class ProfileView implements Serializable {
 				usuario.setMailInstitucional(this.mailInstitucional);
 				usuario.setMailPersonal(this.mailPersonal);
 				usuario.setTelefono(this.telefono);
-				usuario.setDepartamento(depabean.selectById(this.departmentId));
 				usuario.setLocalidad(lbean.selectById(this.locationId));
 				usuario.setItr(itrbean.selectById(this.itrId));
 				usuario.setFechaNacimiento(fechaNacimiento);
