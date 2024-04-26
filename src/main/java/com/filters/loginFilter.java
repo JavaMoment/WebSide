@@ -41,7 +41,7 @@ public class loginFilter implements Filter {
 
         if (!JWTservice.validateToken(token,user)) {
 				response.sendRedirect(loginURL);
-	    }
+			  }
     
         if (loggedIn || loginRequest || resourceRequest) {
             chain.doFilter(request, response);
