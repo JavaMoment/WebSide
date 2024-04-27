@@ -37,7 +37,6 @@
 				<span class="tooltip">Listado de usuarios</span>
 			</li>
 			</ui:fragment>
-			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 			<li>
 				<a href="/WebSide/views/static/events/eventsList.xhtml">
 					<i class='bx bxs-bookmarks'></i>
@@ -45,6 +44,7 @@
 				</a>
 				<span class="tooltip">Listado de eventos</span>
 			</li>
+			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 			<li>
 				<a href="/WebSide/views/static/listings/itrsList.xhtml">
 					<i class='bx bx-buildings'></i>
