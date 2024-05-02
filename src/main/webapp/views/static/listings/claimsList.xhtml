@@ -93,15 +93,15 @@
 	           <p:column headerText="Fecha y hora de creación" sortBy="#{claim.auditDate}">
 	               <h:outputText value="#{claim.auditDate}" />
 	           </p:column>
-	           <p:column headerText="Estudiante asociado" sortBy="#{claim.estudiante}" filterBy="#{claim.estudiante}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+	           <p:column headerText="Estudiante asociado" sortBy="#{claim.estudiante.usuario.nombreUsuario}" filterBy="#{claim.estudiante.usuario.nombreUsuario}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 	               <h:outputText value="#{claim.estudiante.nombreUsuario}" />
 	           </p:column>
-	           <p:column headerText="Evento asociado" sortBy="#{claim.evento}"
-	               filterBy="#{claim.evento}">
+	           <p:column headerText="Evento asociado" sortBy="#{claim.evento.titulo}"
+	               filterBy="#{claim.evento.titulo}">
 	               <h:outputText value="#{claim.evento.titulo}" />
 	           </p:column>
-	           <p:column headerText="Analista a cargo" sortBy="#{claim.analista}"
-	               filterBy="#{claim.analista}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
+	           <p:column headerText="Analista a cargo" sortBy="#{claim.analista.usuario.nombreUsuario}"
+	               filterBy="#{claim.analista.usuario.nombreUsuario}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
 	               <h:outputText value="#{claim.analista.usuario.nombreUsuario}" />
 	           </p:column>
 	           <p:column headerText="Semestre" sortBy="#{claim.semestre}"
