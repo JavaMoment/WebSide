@@ -63,6 +63,7 @@ public class ClaimsListView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el detalle del reclamo seleccionado no ha podido ser modificado."));
 		}
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-claims");
+		PrimeFaces.current().executeScript("PF('manageDetailClaimDialog').hide()");
 	}
 
 	public List<Reclamo> getClaims() {
