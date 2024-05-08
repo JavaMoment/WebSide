@@ -67,7 +67,7 @@ public class EventView implements Serializable {
 	private Evento evento;
 	private long modalidadId;
 	private long itrId;
-	private long estadoId;
+	private long statusEvento;
 	private long tipoEventoID;
 	private TiposEvento tipoEvento;
 	private List<Evento> events;
@@ -193,13 +193,6 @@ public class EventView implements Serializable {
 		this.evento = evento;
 	}
 
-	public long getEstadoId() {
-		return estadoId;
-	}
-
-	public void setEstadoId(long estadoId) {
-		this.estadoId = estadoId;
-	}
 
 	public Long[] getSelectedTutores() {
 		return selectedTutores;
@@ -212,7 +205,7 @@ public class EventView implements Serializable {
 	public void cancel() throws IOException {
 		// Mensaje de cancelacion
 		FacesContext conext = FacesContext.getCurrentInstance();
-		Flash flash = conext .getExternalContext().getFlash();
+		Flash flash = conext.getExternalContext().getFlash();
 		flash.setKeepMessages(true); 
 		
 		conext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Evento cancelado con éxito."));
@@ -247,7 +240,7 @@ public class EventView implements Serializable {
 				
 				this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
 				this.evento.setItr(itrBeanRemote.selectById(itrId));
-				this.evento.setstatusEvento(estadoBeanRemote.selectById(estadoId)); 
+				this.evento.setstatusEvento(estadoBeanRemote.selectById(statusEvento)); 
 				evento = eventBeanRemote.createEvento(evento); 
 				for (Long tutorId : selectedTutores) { 
 					tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
@@ -270,8 +263,14 @@ public class EventView implements Serializable {
 	}catch (Exception e) {
 		// Mensaje de error
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-				"Error", "Falta completar datos."));
+				"Error", "Excepcion"));
 	}
+	}
+	public long getStatusEvento() {
+		return statusEvento;
+	}
+	public void setStatusEvento(long statusEvento) {
+		this.statusEvento = statusEvento;
 	}
 
 }

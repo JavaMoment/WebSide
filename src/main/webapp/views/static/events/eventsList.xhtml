@@ -112,7 +112,7 @@
 								<!-- Event Title -->
 								<h:outputLabel for="titulo" value="Título:"
 									class="event-registration-label" />
-								<p:inputText id="titulo" value="#{event.evento.titulo}"
+								<p:inputText id="titulo" value="#{event.titulo}"
 									required="true" requiredMessage="El título es obligatorio"
 									styleClass="event-registration-input" />
 	
@@ -123,8 +123,7 @@
 									value="#{event.tipoEventoID}"
 									styleClass="event-registration-select">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
-										noSelectionOption="true" required="true"
-										requiredMessage="Debe especificar el tipo de evento" />
+										noSelectionOption="true" />
 									<f:selectItems value="#{event.listaTiposEvento}" var="tipo"
 										itemLabel="#{tipo.nombre}" itemValue="#{tipo.idTipoEvento}" />
 								</p:selectOneMenu>
@@ -134,19 +133,19 @@
 									de Inicio:
 								</label>
 								<p:calendar id="fechaHoraInicio"
-									value="#{event.evento.fechaHoraInicio}"
+									value="#{event.fechaHoraInicio}"
 									pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
 									class="event-registration-input" required="true"
-									requiredMessage="La fecha es obligatoria" />
+									requiredMessage="La fecha de inicio es obligatoria" />
 	
 								<label class="event-registration-label">Fecha y Hora <br />
 									de Finalización:
 								</label>
 								<p:calendar id="fechaHoraFinal"
-									value="#{event.evento.fechaHoraFinal}"
+									value="#{event.fechaHoraFinal}"
 									pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
 									class="event-registration-input" required="true"
-									requiredMessage="La fecha es obligatoria" />
+									requiredMessage="La fecha de finalización es obligatoria" />
 	
 								<label class="event-registration-label">Modalidad:</label>
 								<p:selectOneMenu id="modalidad" value="#{event.modalidadId}"
@@ -169,7 +168,7 @@
 								</p:selectOneMenu>
 	
 								<label class="event-registration-label">Estado:</label>
-								<p:selectOneMenu id="estado" value="#{event.estadoId}">
+								<p:selectOneMenu id="estado" value="#{event.estado}">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
 									<f:selectItems value="#{event.listaEstado}" var="estado"
@@ -188,8 +187,8 @@
 									value="#{event.selectedTutores}" filter="true"
 									label="Seleccione tutores" multiple="true"
 									class="event-registration-input" required="true"
-									requiredMessage="La fecha es obligatoria">
-									<f:selectItems value="#{event.listaTutor}" var="tutor"
+									requiredMessage="Selecciona al menos un tutor">
+								<f:selectItems value="#{event.listaTutor}" var="tutor"
 										itemLabel="#{tutor.usuario.nombreUsuario}"
 										itemValue="#{tutor.idTutor}" />
 								</p:selectCheckboxMenu>
