@@ -79,6 +79,10 @@
 	           <p:column headerText="#ID" sortBy="#{claim.idReclamo}">
 	               <h:outputText value="#{claim.idReclamo}" />
 	           </p:column>
+	           <p:column headerText="Detalle actual" sortBy="#{claim.detalle}"
+	               filterBy="#{claim.detalle}">
+	               <h:outputText value="#{claim.detalle}" />
+	           </p:column>
 	           <p:column headerText="Titulo" sortBy="#{claim.titulo}"
 	               filterBy="#{claim.titulo}">
 	               <h:outputText value="#{claim.titulo}" />
@@ -96,13 +100,17 @@
 	               filterBy="#{claim.evento}">
 	               <h:outputText value="#{claim.evento.titulo}" />
 	           </p:column>
-	           <p:column headerText="Detalle actual" sortBy="#{claim.detalle}"
-	               filterBy="#{claim.detalle}">
-	               <h:outputText value="#{claim.detalle}" />
-	           </p:column>
 	           <p:column headerText="Analista a cargo" sortBy="#{claim.analista}"
 	               filterBy="#{claim.analista}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
 	               <h:outputText value="#{claim.analista.usuario.nombreUsuario}" />
+	           </p:column>
+	           <p:column headerText="Semestre" sortBy="#{claim.semestre}"
+	               filterBy="#{claim.semestre}">
+	               <h:outputText value="#{claim.semestre == null ? 'No aplica' : claim.semestre}" />
+	           </p:column>
+	           <p:column headerText="Créditos solicitados" sortBy="#{claim.creditos}"
+	               filterBy="#{claim.creditos}">
+	               <h:outputText value="#{claim.creditos == null ? 'No aplica' : claim.creditos}" />
 	           </p:column>
 	       </p:dataTable>
       </h:form>
