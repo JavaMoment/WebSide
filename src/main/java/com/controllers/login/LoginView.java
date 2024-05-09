@@ -46,7 +46,7 @@ public class LoginView implements Serializable {
 				session.setAttribute("token", jwt);
 				msg = new FacesMessage("¡Bienvenido!");
 				FacesContext.getCurrentInstance().getExternalContext()
-						.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+						.redirect("/WebSide/views/static/commons/main.xhtml");
 				emailUtec = "";
 				password = "";
 				user = null;
