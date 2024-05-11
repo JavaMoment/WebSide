@@ -96,7 +96,7 @@
 	               <h:outputText value="#{claim.auditDate}" />
 	           </p:column>
 	           <p:column headerText="Estudiante asociado" sortBy="#{claim.estudiante.usuario.nombreUsuario}" filterBy="#{claim.estudiante.usuario.nombreUsuario}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
-	               <h:outputText value="#{claim.estudiante.nombreUsuario}" />
+	               <h:outputText value="#{claim.estudiante.usuario.nombreUsuario}" />
 	           </p:column>
 	           <p:column headerText="Evento asociado" sortBy="#{claim.evento.titulo}"
 	               filterBy="#{claim.evento.titulo}">
