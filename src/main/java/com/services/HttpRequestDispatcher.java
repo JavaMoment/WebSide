@@ -53,7 +53,18 @@ public class HttpRequestDispatcher {
             e.printStackTrace();
         }
 	}
+	
 	// TODO: Get parametrizados ej: url=*WebSide/api/v1/departamentos/{id_departamento}
+	
+	/**
+	 * Envía una solicitud GET a un endpoint especificado.
+	 *
+	 * @param context 				  El contexto del punto final, una lista ordenada de cómo llegar a la URI
+	 *                				  (por ejemplo, ["signup", "estudiante"] para ~/signup/estudiante/).
+	 * @return HttpResponse 		  La respuesta recibida del servidor.
+	 * @throws IOException            Si ocurre un error de entrada o salida durante la comunicación con el servidor.
+	 * @throws InterruptedException   Si la ejecución del hilo es interrumpida mientras espera la respuesta del servidor.
+	 */
 	public HttpResponse sendGet(ArrayList<String> context) throws IOException, InterruptedException {
 		context.add(0, baseUri);
 		String endpointUri = String.join("/", context);  
@@ -71,6 +82,15 @@ public class HttpRequestDispatcher {
 		return response;
 	}
 	
+	/**
+	 * Envía una solicitud POST a un endpoint especificado con un cuerpo de entidad en formato JSON.
+	 *
+	 * @param context      			El contexto del endpoint, una lista ordenada de como llegar a la uri (ej: [signup, estudiante] => ~/signup/estudiante/).
+	 * @param entityMapped 			El cuerpo de la solicitud en forma de un map, que se convertirá a JSON.
+	 * @return HttpResponse 		La respuesta recibida del servidor.
+	 * @throws IOException          Si ocurre un error de entrada o salida durante la comunicación con el servidor.
+	 * @throws InterruptedException Si la ejecución del hilo es interrumpida mientras espera la respuesta del servidor.
+	 */
 	public HttpResponse sendPost(ArrayList<String> context, Map<String, Object> entityMapped) throws IOException, InterruptedException {
 		context.add(0, baseUri);
 		String endpointUri = String.join("/", context);
