@@ -41,14 +41,14 @@
 	                <p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
 	               </p:toggleSwitch>
 	           </p:column>
-	           <p:column headerText="Activo" sortBy="#{user.activo}" filterBy="#{user.activo}">
+	           <p:column headerText="Activo" sortBy="#{user.activo}" filterBy="#{user.activo == 1 ? 'Activo' : 'Inactivo'}">
 	               <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
                         <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{dtUsersView.usersStatus}" />
                     </p:selectOneMenu>
                    </f:facet>
-	               <h:outputText value="#{user.activo}" />
+	               <h:outputText value="#{user.activo == 1 ? 'Activo' : 'Inactivo'}" />
 	           </p:column>
 	           <p:column headerText="Tipo de usuario" sortBy="#{user.tipoUsuario}" 
 	               filterMatchMode="exact" filterBy="#{user.tipoUsuario}">

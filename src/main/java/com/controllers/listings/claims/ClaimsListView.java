@@ -9,11 +9,13 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.PrimeFaces;
 
 import com.entities.Reclamo;
 import com.entities.StatusReclamo;
+import com.entities.Usuario;
 import com.services.ReclamoBeanRemote;
 import com.services.StatusReclamoBeanRemote;
 
@@ -30,10 +32,18 @@ public class ClaimsListView implements Serializable {
 	private Reclamo selectedClaim; 
 	private StatusReclamo actualStatus;
 	private List<StatusReclamo> statuses;
+	private HttpSession session;
 	
 	@PostConstruct
 	public void init() {
-		setClaims(reclamoService.selectAll());
+		FacesContext context = FacesContext.getCurrentInstance();
+		session = (HttpSession) context.getExternalContext().getSession(true);
+		Usuario userLogged = (Usuario) session.getAttribute("userLogged"); 
+		if(userLogged.getTipoUsuario().toUpperCase().equals("ESTUDIANTE")) {
+			setClaims(reclamoService.selectAllBy(userLogged.getNombreUsuario()));
+		} else {
+			setClaims(reclamoService.selectAll());
+		}
 		setStatuses(statusReclamoService.selectAll());
 	}
 	
@@ -63,6 +73,7 @@ public class ClaimsListView implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el detalle del reclamo seleccionado no ha podido ser modificado."));
 		}
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-claims");
+		PrimeFaces.current().executeScript("PF('manageDetailClaimDialog').hide()");
 	}
 
 	public List<Reclamo> getClaims() {
