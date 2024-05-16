@@ -37,7 +37,7 @@ public class ItrsListView implements Serializable {
 	public void onToggleSwitchChangeActive(Itr itr) {
 		int exitCode;
 		String itrName = itr.getNombre();
-		if(itr.isActive()) {
+		if(itr.getActivo() == (byte) 1) {
 			itr.setActivo((byte) 0);
 			exitCode = itrBean.logicalDeleteBy(itrName);
 			if(exitCode == 0) {
