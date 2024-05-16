@@ -1,5 +1,8 @@
 package com.api.app.schemas.users;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class AreaDTO {
 
 	private Long idArea;
