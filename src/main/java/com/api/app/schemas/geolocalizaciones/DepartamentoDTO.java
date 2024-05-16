@@ -1,7 +1,9 @@
-package com.api.app.schemas;
+package com.api.app.schemas.geolocalizaciones;
 
 import com.api.app.schemas.itr.ItrInDbDTO;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class DepartamentoDTO {
 
 	private Long idDepartamento;

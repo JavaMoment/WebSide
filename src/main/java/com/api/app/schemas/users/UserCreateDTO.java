@@ -2,7 +2,7 @@ package com.api.app.schemas.users;
 
 import java.util.Date;
 
-import com.api.app.schemas.LocalidadDTO;
+import com.api.app.schemas.geolocalizaciones.LocalidadDTO;
 import com.api.app.schemas.itr.ItrInDbDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
