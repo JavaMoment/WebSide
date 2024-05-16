@@ -18,10 +18,10 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
-import com.entities.Estado;
 import com.entities.Evento;
 import com.entities.Itr;
 import com.entities.Modalidad;
+import com.entities.StatusEvento;
 import com.entities.TiposEvento;
 import com.entities.Tutor;
 import com.services.EstadoBeanRemote;
@@ -61,7 +61,7 @@ public class EventsListView implements Serializable{
 	private Date fechaHoraFinal;
 	private Date fechaHoraInicio;
 	private String titulo;
-	private Estado estado;
+	private StatusEvento statusEvento;
 	private Long[] selectedTutores;
 	private int activo;
 	private Evento evento;
@@ -144,12 +144,12 @@ public class EventsListView implements Serializable{
 		this.titulo = titulo;
 	}
 
-	public Estado getEstado() {
-		return estado;
+	public StatusEvento getEstado() {
+		return statusEvento;
 	}
 
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+	public void setEstado(StatusEvento statusEvento) {
+		this.statusEvento = statusEvento;
 	}
 
 	public int getActivo() {
@@ -188,7 +188,7 @@ public class EventsListView implements Serializable{
 		return tutorBeanRemote.selectAll();
 	}
 
-	public List<Estado> getListaEstado() {
+	public List<StatusEvento> getListaEstado() {
 		return estadoBeanRemote.selectAll();
 	}
 	

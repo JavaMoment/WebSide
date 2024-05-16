@@ -10,16 +10,16 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<h:outputStylesheet name="css/events/createEvents.css" />
 	<title>Listado de Eventos</title>
-</h:head> 
+</h:head>
 
 <ui:composition template="../templates/home.xhtml">
 	<ui:define name="content">
 		<link rel="stylesheet"
 			href="https://unpkg.com/primeflex@3.3.1/primeflex.css" />
 		<h:outputStylesheet name="css/events/createEvents.css" />
-			
+
 		<h:body>
-			<div class="card">   
+			<div class="card">
 				<h:form id="form">
 					<div class="w-11 ml-5 mt-5">
 
@@ -34,7 +34,9 @@
 								<div class="flex">
 									<h3 class="flex-shrink-1">Listado de Eventos</h3>
 									<div class="flex-shrink-0 w-9"></div>
-									<p:commandButton icon="pi pi-plus" update=":dialogs:new-event-content" oncomplete="PF('newEventDialog').show()"
+									<p:commandButton icon="pi pi-plus"
+										update=":dialogs:new-event-content"
+										oncomplete="PF('newEventDialog').show()"
 										class="ui-button-succes rounded-button flex-shrink-1"
 										process="@this" value="Añadir evento">
 										<p:resetInput target=":dialogs:new-event-dialog" />
@@ -59,40 +61,42 @@
 								</p:toggleSwitch>
 							</p:column>
 							<p:column headerText="Titulo del Evento"
-								sortBy="#{evento.titulo}" filterBy="#{evento.titulo}">
-								<h:outputText value="#{evento.titulo}" />
+								sortBy="#{event.evento.titulo}" filterBy="#{evento.titulo}">
+								<h:outputText value="#{event.evento.titulo}" />
 							</p:column>
 
 							<p:column headerText="Tipo de evento"
-								sortBy="#{evento.tiposEvento}" filterBy="#{evento.tiposEvento}">
-								<h:outputText value="#{evento.tiposEvento.nombre}" />
+								sortBy="#{event.evento.tiposEvento.nombre}"
+								filterBy="#{evento.tiposEvento.nombre}">
+								<h:outputText value="#{event.evento.tiposEvento.nombre}" />
 							</p:column>
 
-							<p:column headerText="Modalidad" sortBy="#{evento.modalidad}"
+							<p:column headerText="Modalidad" sortBy="#{event.evento.modalidad}"
 								filterBy="#{evento.modalidad}">
-								<h:outputText value="#{evento.modalidad}" />
+								<h:outputText value="#{event.evento.modalidad}" />
 							</p:column>
 
-							<p:column headerText="ITR" sortBy="#{evento.itr}"
+							<p:column headerText="ITR" sortBy="#{event.evento.itr}"
 								filterBy="#{evento.itr}">
-								<h:outputText value="#{evento.itr}" />
+								<h:outputText value="#{event.evento.itr}" />
 							</p:column>
 
 							<p:column headerText="Fecha Inicio"
-								sortBy="#{evento.fechaHoraInicio}"
+								sortBy="#{event.evento.fechaHoraInicio}"
 								filterBy="#{evento.fechaHoraInicio}">
-								<h:outputText value="#{evento.fechaHoraInicio}" />
+								<h:outputText value="#{event.evento.fechaHoraInicio}" />
 							</p:column>
 
 							<p:column headerText="Fecha Final"
-								sortBy="#{evento.fechaHoraFinal}"
+								sortBy="#{event.evento.fechaHoraFinal}"
 								filterBy="#{evento.fechaHoraFinal}">
-								<h:outputText value="#{evento.fechaHoraFinal}" />
+								<h:outputText value="#{event.evento.fechaHoraFinal}" />
 							</p:column>
 
-							<p:column headerText="Estado" sortBy="#{evento.statusEvento.nombre}"
+							<p:column headerText="Estado"
+								sortBy="#{event.evento.statusEvento.nombre}"
 								filterBy="#{evento.statusEvento.nombre}">
-								<h:outputText value="#{evento.statusEvento.nombre}" />
+								<h:outputText value="#{event.evento.statusEvento.nombre}" />
 							</p:column>
 
 
@@ -103,50 +107,49 @@
 
 			<h:form id="dialogs">
 				<p:growl id="msgs" showDetail="true" />
-				<p:dialog id="new-event-dialog" header="Nuevo Evento" showEffect="fade" widgetVar="newEventDialog"
-						responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+				<p:dialog id="new-event-dialog" header="Nuevo Evento"
+					showEffect="fade" widgetVar="newEventDialog" responsive="true"
+					appendToBody="true" resizable="true" width="800" height="600">
 					<p:outputPanel id="new-event-content">
 						<div>
 							<div class="event-registration-grid">
-	
+
 								<!-- Event Title -->
 								<h:outputLabel for="titulo" value="Título:"
 									class="event-registration-label" />
-								<p:inputText id="titulo" value="#{event.titulo}"
-									required="true" requiredMessage="El título es obligatorio"
+								<p:inputText id="titulo" value="#{event.evento.titulo}" required="true"
+									requiredMessage="El título es obligatorio"
 									styleClass="event-registration-input" />
-	
+
 								<!-- Event Type -->
 								<h:outputLabel for="tipoEvento" value="Tipo de Evento:"
 									class="event-registration-label" />
-								<p:selectOneMenu id="tipoEvento"
-									value="#{event.tipoEventoID}"
+								<p:selectOneMenu id="tipoEvento" value="#{event.tipoEventoId}"
 									styleClass="event-registration-select">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
-									<f:selectItems value="#{event.listaTiposEvento}" var="tipo"
+									<f:selectItems value="#{event.listaTiposEventos}" var="tipo"
 										itemLabel="#{tipo.nombre}" itemValue="#{tipo.idTipoEvento}" />
 								</p:selectOneMenu>
-	
-	
+
+
 								<label class="event-registration-label">Fecha y Hora <br />
 									de Inicio:
 								</label>
 								<p:calendar id="fechaHoraInicio"
-									value="#{event.fechaHoraInicio}"
-									pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
-									class="event-registration-input" required="true"
+									value="#{event.evento.fechaHoraInicio}" pattern="dd/MM/yyyy HH:mm"
+									timeZone="-03:00" class="event-registration-input"
+									required="true"
 									requiredMessage="La fecha de inicio es obligatoria" />
-	
+
 								<label class="event-registration-label">Fecha y Hora <br />
 									de Finalización:
 								</label>
-								<p:calendar id="fechaHoraFinal"
-									value="#{event.fechaHoraFinal}"
+								<p:calendar id="fechaHoraFinal" value="#{event.evento.fechaHoraFinal}"
 									pattern="dd/MM/yyyy HH:mm" timeZone="-03:00"
 									class="event-registration-input" required="true"
 									requiredMessage="La fecha de finalización es obligatoria" />
-	
+
 								<label class="event-registration-label">Modalidad:</label>
 								<p:selectOneMenu id="modalidad" value="#{event.modalidadId}"
 									class="event-registration-input">
@@ -156,8 +159,8 @@
 										itemLabel="#{modalidad.nombre}"
 										itemValue="#{modalidad.idModalidad}" />
 								</p:selectOneMenu>
-	
-	
+
+
 								<label class="event-registration-label">ITR responsable:</label>
 								<p:selectOneMenu id="itr" value="#{event.itrId}">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
@@ -166,42 +169,44 @@
 										itemLabel="#{itr.nombre}" itemValue="#{itr.idItr}"
 										noSelectionOption="false" />
 								</p:selectOneMenu>
-	
+
 								<label class="event-registration-label">Estado:</label>
-								<p:selectOneMenu id="estado" value="#{event.estado}">
+								<h:selectOneMenu id="estado" value="#{event.statusEventoID}"
+									class="event-registration-input">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
-									<f:selectItems value="#{event.listaEstado}" var="estado"
-										itemLabel="#{estado.nombre}" itemValue="#{estado.idEstado}"
-										noSelectionOption="false" />
-								</p:selectOneMenu>
-	
+									<f:selectItems value="#{event.listaStatusEvento}" var="estado"
+										itemValue="#{estado.idStatus}" itemLabel="#{estado.nombre}" />
+								</h:selectOneMenu>
+
+
 								<h:outputLabel for="localización" value="Localización:"
 									class="event-registration-label" />
 								<p:inputText id="localidad" value="#{event.evento.localizacion}"
 									styleClass="event-registration-input" />
-	
-	
+
+
 								<label class="event-registration-label">Tutores:</label>
 								<p:selectCheckboxMenu id="tutores"
 									value="#{event.selectedTutores}" filter="true"
 									label="Seleccione tutores" multiple="true"
 									class="event-registration-input" required="true"
 									requiredMessage="Selecciona al menos un tutor">
-								<f:selectItems value="#{event.listaTutor}" var="tutor"
+									<f:selectItems value="#{event.listaTutor}" var="tutor"
 										itemLabel="#{tutor.usuario.nombreUsuario}"
 										itemValue="#{tutor.idTutor}" />
 								</p:selectCheckboxMenu>
 							</div>
 							<div class="event-registration-actions">
 								<div class="event-registration-actions">
-	
+
 									<p:commandButton value="Cancelar" action="#{event.cancel}"
 										update="msgs" styleClass="ui-button-update" />
-	
-									<p:commandButton value="Registrar Evento" action="#{event.save}"
-										update="msgs" styleClass="ui-button-update" />
-	
+
+									<p:commandButton value="Registrar Evento"
+										action="#{event.save()}" update="msgs"
+										styleClass="ui-button-update" />
+
 								</div>
 							</div>
 

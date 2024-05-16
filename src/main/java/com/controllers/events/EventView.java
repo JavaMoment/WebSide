@@ -2,9 +2,7 @@ package com.controllers.events;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.EnumSet;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -15,20 +13,16 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
-import javax.servlet.RequestDispatcher;
 
-import com.entities.Estado;
+import com.entities.StatusEvento;
 import com.entities.Evento;
 import com.entities.Itr;
 import com.entities.Modalidad;
 import com.entities.TiposEvento;
 import com.entities.Tutor;
-import com.entities.TutorEvento;
 import com.services.EstadoBeanRemote;
 import com.services.EventoBeanRemote;
-import com.services.ItrBean;
 import com.services.ItrBeanRemote;
-import com.services.LocalidadBean;
 import com.services.ModalidadBeanRemote;
 import com.services.TiposEventoBeanRemote;
 import com.services.TutorBeanRemote;
@@ -37,240 +31,189 @@ import com.services.TutorBeanRemote;
 @ViewScoped
 public class EventView implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@EJB
-	private EventoBeanRemote eventBeanRemote;
+    @EJB
+    private EventoBeanRemote eventBeanRemote;
 
-	@EJB
-	private ModalidadBeanRemote modalidadBeanRemote;
+    @EJB
+    private ModalidadBeanRemote modalidadBeanRemote;
 
-	@EJB
-	private ItrBeanRemote itrBeanRemote;
+    @EJB
+    private ItrBeanRemote itrBeanRemote;
 
-	@EJB
-	private TutorBeanRemote tutorBeanRemote;
+    @EJB
+    private TutorBeanRemote tutorBeanRemote;
 
-	@EJB
-	private EstadoBeanRemote estadoBeanRemote;
-	
-	@EJB
-	private TiposEventoBeanRemote tiposEventoBeanRemote;
-
-	private long idEvento;
-	private Date fechaHoraFinal;
-	private Date fechaHoraInicio;
-	private String titulo;
-	private Estado estado;
-	private Long[] selectedTutores;
-	private int activo;
-	private Evento evento;
-	private long modalidadId;
-	private long itrId;
-	private long statusEvento;
-	private long tipoEventoID;
-	private TiposEvento tipoEvento;
-	private List<Evento> events;
-	
-	@PostConstruct
-	public void init() {
-		this.evento = new Evento();
-		events = eventBeanRemote.selectAll();
-	}
-	public Evento getEvento() {
-		return evento;
-	}
-
-	public EventoBeanRemote getEventBeanRemote() {
-		return eventBeanRemote;
-	}
-
-	public void setEventBeanRemote(EventoBeanRemote eventBeanRemote) {
-		this.eventBeanRemote = eventBeanRemote;
-	}
-
-	public long getIdEvento() {
-		return idEvento;
-	}
-
-	public void setIdEvento(long idEvento) {
-		this.idEvento = idEvento;
-	}
-
-	public Date getFechaHoraFinal() {
-		return fechaHoraFinal;
-	}
-
-	public void setFechaHoraFinal(Date fechaHoraFinal) {
-		this.fechaHoraFinal = fechaHoraFinal;
-	}
-
-	public Date getFechaHoraInicio() {
-		return fechaHoraInicio;
-	}
-
-	public void setFechaHoraInicio(Date fechaHoraInicio) {
-		this.fechaHoraInicio = fechaHoraInicio;
-	}
-
-	public String getTitulo() {
-		return titulo;
-	}
-
-	public void setTitulo(String titulo) {
-		this.titulo = titulo;
-	}
-
-	public Estado getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Estado estado) {
-		this.estado = estado;
-	}
-
-	public int getActivo() {
-		return activo;
-	}
-
-	public void setActivo(int activo) {
-		this.activo = activo;
-	}
-
-	public long getModalidadId() {
-		return modalidadId;
-	}
-
-	public void setModalidadId(long modalidadId) {
-		this.modalidadId = modalidadId;
-	}
-
-	public long getItrId() {
-		return itrId;
-	}
-
-	public void setItrId(long itrId) {
-		this.itrId = itrId;
-	}
-
-	public List<Modalidad> getListaModalidad() {
-		return modalidadBeanRemote.selectAll();
-	}
-
-	public List<Itr> getListaItr() {
-		return itrBeanRemote.selectAll();
-	}
-
-	public List<Tutor> getListaTutor() {
-		return tutorBeanRemote.selectAll();
-	}
-
-	public List<Estado> getListaEstado() {
-		return estadoBeanRemote.selectAll();
-	}
-
-	public List<TiposEvento> getListaTiposEvento() {
-		return tiposEventoBeanRemote.selectAll();
-	}
-	
-	public TiposEvento getTipoEvento() {
-		return tipoEvento;
-	}
-	
-	public long getTipoEventoID() {
-		return tipoEventoID;
-	}
-	public void setTipoEventoID(long tipoEventoID) {
-		this.tipoEventoID = tipoEventoID;
-	}
+    @EJB
+    private EstadoBeanRemote estadoBeanRemote;
+    
+    @EJB
+    private TiposEventoBeanRemote tiposEventoBeanRemote;
 
 
-	public void setTipoEvento(TiposEvento tipoEvento) {
-		this.tipoEvento = tipoEvento;
-	}
+    private Long[] selectedTutores;
+    private Evento evento; 
+    private Long modalidadId; 
+    private Long itrId; 
+    private Long statusEventoID; 
+    private Long tipoEventoId; 
+    private TiposEvento tipoEvento;
+    private List<Evento> events;
+    private List<StatusEvento> statusEventos; // List of StatusEvento for dropdown
+    private List<TiposEvento> tiposEventos; // List of TiposEvento for dropdown
 
-	public void setEvento(Evento evento) {
-		this.evento = evento;
-	}
+    @PostConstruct
+    public void init() {
+        this.evento = new Evento();
+        events = eventBeanRemote.selectAll();
+        statusEventos = estadoBeanRemote.selectAll(); // Initialize statusEventos list
+        tiposEventos = tiposEventoBeanRemote.selectAll(); // Initialize tiposEventos list
+    }
 
+    // Getters and Setters
+    
+    public Long getModalidadId() {
+        return modalidadId;
+    }
 
-	public Long[] getSelectedTutores() {
-		return selectedTutores;
-	}
+    
+    public Long getItrId() {
+        return itrId;
+    }
 
-	public void setSelectedTutores(Long[] selectedTutores) {
-		this.selectedTutores = selectedTutores;
-	}
-	
-	public void cancel() throws IOException {
-		// Mensaje de cancelacion
-		FacesContext conext = FacesContext.getCurrentInstance();
-		Flash flash = conext.getExternalContext().getFlash();
-		flash.setKeepMessages(true); 
-		
-		conext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Evento cancelado con éxito."));
-		
-		
-		ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-		ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
-	}
+    
+    public Long getStatusEventoID() {
+        return statusEventoID;
+    }
+    
 
-	public List<Evento> getEvents() {
-		return events;
-	}
+    public void setModalidadId(Long v) {
+        modalidadId = v;
+    }
+    public Long getTipoEventoId() {
+    	return tipoEventoId;
+    }
+    
+    
+    public void setTipoEventoId(Long v) {
+    	tipoEventoId = v;
+    }
 
-	public void setEvents(List<Evento> events) {
-		this.events = events;
-	}
+    
+    public void setItrId(Long v) {
+          itrId= v;
+    }
 
-	public void save() {
-	try {
-		System.out.print(evento.getTiposEvento());
-		if(selectedTutores.length  == 0) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Error", "Selecciona al menos un tutor"));
-		}else {
-			
-			
-			if(evento.getFechaHoraInicio().after( evento.getFechaHoraFinal())) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-						"Error", "La fecha de inicio no puede ser mayor que la de finalizacion"));
-			}else {
-			
-				
-				this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
-				this.evento.setItr(itrBeanRemote.selectById(itrId));
-				this.evento.setstatusEvento(estadoBeanRemote.selectById(statusEvento)); 
-				evento = eventBeanRemote.createEvento(evento); 
-				for (Long tutorId : selectedTutores) { 
-					tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
-				}
-				// Mensaje de éxito
-				FacesContext conext = FacesContext.getCurrentInstance();
-				Flash flash = conext .getExternalContext().getFlash();
-				flash.setKeepMessages(true); 
-				
-				conext.addMessage(null,new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
-				
-				
-				ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-				ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
-			}
-			
-		}
-		
+    
+    public void setStatusEventoID(Long v) {
+          statusEventoID= v;
+    }
 
-	}catch (Exception e) {
-		// Mensaje de error
-		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
-				"Error", "Excepcion"));
-	}
-	}
-	public long getStatusEvento() {
-		return statusEvento;
-	}
-	public void setStatusEvento(long statusEvento) {
-		this.statusEvento = statusEvento;
-	}
+    
+    public Evento getEvento() {
+        return this.evento;
+    }
 
+ 
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+ 
+
+    public Long[] getSelectedTutores() {
+        return selectedTutores;
+    }
+
+    public void setSelectedTutores(Long[] selectedTutores) {
+        this.selectedTutores = selectedTutores;
+    }
+ 
+
+    public List<Evento> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Evento> events) {
+        this.events = events;
+    }
+
+    public List<StatusEvento> getStatusEventos() {
+        return statusEventos;
+    }
+
+    public void setStatusEventos(List<StatusEvento> statusEventos) {
+        this.statusEventos = statusEventos;
+    }
+
+    public List<TiposEvento> getListaTiposEventos() {
+        return tiposEventoBeanRemote.selectAll();
+    }
+
+    public void setListaTiposEventos(List<TiposEvento> tiposEventos) {
+        this.tiposEventos = tiposEventos;
+    }
+
+    public List<Modalidad> getListaModalidad() {
+        return modalidadBeanRemote.selectAll();
+    }
+
+    public List<Itr> getListaItr() {
+        return itrBeanRemote.selectAll();
+    }
+
+    public List<Tutor> getListaTutor() {
+        return tutorBeanRemote.selectAll();
+    }
+    
+    public List<StatusEvento> getListaStatusEvento() {
+        return estadoBeanRemote.selectAll();
+    }
+    
+
+    public void cancel() throws IOException {
+        FacesContext context = FacesContext.getCurrentInstance();
+        Flash flash = context.getExternalContext().getFlash();
+        flash.setKeepMessages(true); 
+        
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Evento cancelado con éxito."));
+        
+        ExternalContext ec = context.getExternalContext();
+        ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+    }
+
+    public void save() {
+        try {
+            if (selectedTutores.length == 0) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                        "Error", "Selecciona al menos un tutor"));
+            } else {
+                if (evento.getFechaHoraInicio().after(evento.getFechaHoraFinal())) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Error", "La fecha de inicio no puede ser mayor que la de finalización"));
+                } else {
+                    this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
+                    this.evento.setItr(itrBeanRemote.selectById(itrId));
+                    this.evento.setstatusEvento(estadoBeanRemote.selectById(statusEventoID));
+                    this.evento.setTiposEvento(tiposEventoBeanRemote.selectById(tipoEventoId));
+                    evento = eventBeanRemote.createEvento(evento);
+                    for (Long tutorId : selectedTutores) {
+                        tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+                    }
+                    // Mensaje de éxito
+                    FacesContext context = FacesContext.getCurrentInstance();
+                    Flash flash = context.getExternalContext().getFlash();
+                    flash.setKeepMessages(true);
+
+                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
+
+                   ExternalContext ec = context.getExternalContext();
+                    ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+                }
+            }
+        } catch (Exception e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Error", "Excepción: " + e.getMessage()));
+        }
+    }
 }
