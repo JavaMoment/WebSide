@@ -14,6 +14,8 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import com.api.app.misc.MediaTypes;
+import com.api.app.schemas.PatchDTO;
 import com.api.app.schemas.users.UserCreateDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -54,8 +56,6 @@ public class HttpRequestDispatcher {
         }
 	}
 	
-	// TODO: Get parametrizados ej: url=*WebSide/api/v1/departamentos/{id_departamento}
-	
 	/**
 	 * Envía una solicitud GET a un endpoint especificado.
 	 *
@@ -66,7 +66,9 @@ public class HttpRequestDispatcher {
 	 * @throws InterruptedException   Si la ejecución del hilo es interrumpida mientras espera la respuesta del servidor.
 	 */
 	public HttpResponse sendGet(ArrayList<String> context) throws IOException, InterruptedException {
-		context.add(0, baseUri);
+		if(!context.get(0).toUpperCase().equals(baseUri)) {
+			context.add(0, baseUri);
+		}
 		String endpointUri = String.join("/", context);  
 		System.out.println(endpointUri);
 		HttpRequest request = HttpRequest.newBuilder()
@@ -92,7 +94,9 @@ public class HttpRequestDispatcher {
 	 * @throws InterruptedException Si la ejecución del hilo es interrumpida mientras espera la respuesta del servidor.
 	 */
 	public HttpResponse sendPost(ArrayList<String> context, Map<String, Object> entityMapped) throws IOException, InterruptedException {
-		context.add(0, baseUri);
+		if(!context.get(0).toUpperCase().equals(baseUri)) {
+			context.add(0, baseUri);
+		}
 		String endpointUri = String.join("/", context);
 		System.out.println(endpointUri);
 		String requestBody = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entityMapped);
@@ -104,6 +108,33 @@ public class HttpRequestDispatcher {
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
         return response;
+	}
+	
+	/**
+	 * Envía una solicitud PATCH a un endpoint especificado.
+	 *
+	 * @param context      			El contexto del endpoint, una lista ordenada de como llegar a la uri (ej: [signup, estudiante] => ~/signup/estudiante/).
+	 * @param entityMapped 			El cuerpo de la solicitud PATCH (siguiendo IEEE RFC#6902), que se convertirá a JSON.
+	 * @return HttpResponse 		La respuesta recibida del servidor.
+	 * @throws IOException          Si ocurre un error de entrada o salida durante la comunicación con el servidor.
+	 * @throws InterruptedException Si la ejecución del hilo es interrumpida mientras espera la respuesta del servidor.
+	 */
+	public HttpResponse sendPatch(ArrayList<String> context, PatchDTO operation) throws IOException, InterruptedException {
+		PatchDTO[] operationToJson = {operation};
+		if(!context.get(0).toUpperCase().equals(baseUri)) {
+			context.add(0, baseUri);
+		}
+		String endpointUri = String.join("/", context);
+		System.out.println(endpointUri);
+		String requestBody = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(operationToJson);
+		System.out.println(requestBody);
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(endpointUri))
+				.header("Content-Type", MediaTypes.APPLICATION_JSON_PATCH)
+				.method("PATCH", HttpRequest.BodyPublishers.ofString(requestBody))
+				.build();
+		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+		return response;
 	}
 	
 	public Properties getEnv() {
