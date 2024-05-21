@@ -1,4 +1,4 @@
-package com.api;
+package com.api.app.routers;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -8,6 +8,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.api.app.schemas.LoginCreateDTO;
+import com.api.app.schemas.TokenDTO;
 import com.entities.Usuario;
 import com.services.JWTservice;
 import com.services.UsuarioBeanRemote;
@@ -28,13 +30,9 @@ public class LoginService {
     @Context
     private HttpServletRequest request; 
 
-    public static class LoginRequest {
-        public String emailUtec;
-        public String password;
-    }
-
     @POST
-    public Response doLogin(LoginRequest requestBody) {
+    public Response doLogin(LoginCreateDTO requestBody) {
+    	// TODO: devolver el token en la resp o como cookie, no manejar la sesión.
         Usuario user = userBeanRemote.selectUserBy(requestBody.emailUtec); // buscamos el usuario por su correo
         if (user != null && user.isValidUser(requestBody.password)) { // si el usuario es válido
             String jwt = JWTservice.generateToken(user); // generamos el token jwt
@@ -43,22 +41,12 @@ public class LoginService {
             session.setAttribute("token", jwt); // guardamos el token en la sesión
 
             return Response.ok()
-                .entity(new LoginResponse("¡Bienvenido!", jwt)) // respondemos con un mensaje de bienvenida y el token
+                .entity(new TokenDTO("¡Bienvenido!", jwt)) // respondemos con un mensaje de bienvenida y el token
                 .build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED)
-                .entity(new LoginResponse("¡Oh no! Oh no no no", "El usuario o contraseña no es correcto")) // respondemos con un error si las credenciales son incorrectas
+                .entity(new TokenDTO("¡Oh no! Oh no no no", "El usuario o contraseña no es correcto")) // respondemos con un error si las credenciales son incorrectas
                 .build();
-        }
-    }
-
-    public static class LoginResponse {
-        public String message;
-        public String token;
-
-        public LoginResponse(String message, String token) {
-            this.message = message; // mensaje usuario
-            this.token = token; // el token jwt
         }
     }
 }

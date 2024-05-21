@@ -1,6 +1,9 @@
 package com.controllers.listings.claims;
 
+import java.io.IOException;
 import java.io.Serializable;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -13,9 +16,13 @@ import javax.servlet.http.HttpSession;
 
 import org.primefaces.PrimeFaces;
 
+import com.api.app.schemas.PatchDTO;
 import com.entities.Reclamo;
 import com.entities.StatusReclamo;
 import com.entities.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.services.HttpRequestDispatcher;
 import com.services.ReclamoBeanRemote;
 import com.services.StatusReclamoBeanRemote;
 
@@ -33,31 +40,49 @@ public class ClaimsListView implements Serializable {
 	private StatusReclamo actualStatus;
 	private List<StatusReclamo> statuses;
 	private HttpSession session;
+	protected HttpRequestDispatcher dispatcher;
+	protected ObjectMapper objectMapper;
 	
 	@PostConstruct
 	public void init() {
+		dispatcher = new HttpRequestDispatcher();
+		HttpResponse resp = null;
+		objectMapper = new ObjectMapper();
+		
 		FacesContext context = FacesContext.getCurrentInstance();
 		session = (HttpSession) context.getExternalContext().getSession(true);
-		Usuario userLogged = (Usuario) session.getAttribute("userLogged"); 
-		if(userLogged.getTipoUsuario().toUpperCase().equals("ESTUDIANTE")) {
-			setClaims(reclamoService.selectAllBy(userLogged.getNombreUsuario()));
-		} else {
-			setClaims(reclamoService.selectAll());
+		Usuario userLogged = (Usuario) session.getAttribute("userLogged");
+		try {
+			if(userLogged.getTipoUsuario().toUpperCase().equals("ESTUDIANTE")) {
+				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos", userLogged.getNombreUsuario())));
+				setClaims(objectMapper.readValue(resp.body().toString(), new TypeReference<List<Reclamo>>(){}));
+			} else {
+				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos")));
+				setClaims(objectMapper.readValue(resp.body().toString(), new TypeReference<List<Reclamo>>(){}));
+			}
+		} catch(IOException | InterruptedException e) {
+			// TODO: Si la api esta caida, avisar con algun dialogo.
+			e.printStackTrace();
 		}
 		setStatuses(statusReclamoService.selectAll());
 	}
 	
 	public void onSelectionChangeStatus(Reclamo claim) {
-		int exitCode;
 		long reclamoId = claim.getIdReclamo();
+		HttpResponse resp = null;
+		try {
+			resp = dispatcher.sendPatch(
+					new ArrayList<String>(List.of("reclamos", claim.getIdReclamo().toString())), 
+					new PatchDTO("replace", "/statusReclamo/idStatus", claim.getStatusReclamo().getIdStatus().toString())
+					);
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el status del reclamo no ha podido ser modificado."));
+		}
 		StatusReclamo statusReclamoInDB = statusReclamoService.selectById(claim.getStatusReclamo().getIdStatus());
 		Reclamo reclamoInDB = reclamoService.selectById(reclamoId);
-		reclamoInDB.setStatusReclamo(statusReclamoInDB);
-		exitCode = reclamoService.update(reclamoInDB);
-		if(exitCode == 0) {
+		if(resp != null && resp.statusCode() == 200) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El status del reclamo #" + reclamoId + " ha sido correctamente actualizado a: " + statusReclamoInDB.getNombre() + "."));
-		} else {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el status del reclamo no ha podido ser modificado."));
 		}
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-claims");
 	}

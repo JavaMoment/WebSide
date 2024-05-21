@@ -1,24 +1,27 @@
-package com.api.app.schemas.users;
+package com.api.app.schemas.claims;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class TipoTutorDTO {
+public class StatusReclamoDTO {
 	
-	private Long idTipoTutor;
+	private Long idStatus;
 	private String nombre;
-	
-	public Long getIdTipoTutor() {
-		return idTipoTutor;
-	}
-	public void setIdTipoTutor(Long idTipoTutor) {
-		this.idTipoTutor = idTipoTutor;
-	}
+
 	public String getNombre() {
 		return nombre;
 	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public Long getIdStatus() {
+		return idStatus;
+	}
+
+	public void setIdStatus(Long idStatus) {
+		this.idStatus = idStatus;
 	}
 
 }
