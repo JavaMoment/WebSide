@@ -64,8 +64,8 @@
 							</p:column>
 
 							<p:column headerText="Tipo de evento"
-								sortBy="#{evento.tiposEvento}" filterBy="#{evento.tiposEvento}">
-								<h:outputText value="#{evento.tiposEvento}" />
+								sortBy="#{evento.tiposEvento.nombre}" filterBy="#{evento.tiposEvento.nombre}">
+								<h:outputText value="#{evento.tiposEvento.nombre}" />
 							</p:column>
 
 							<p:column headerText="Modalidad" sortBy="#{evento.modalidad}"
