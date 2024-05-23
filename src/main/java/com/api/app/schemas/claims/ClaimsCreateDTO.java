@@ -6,7 +6,7 @@ import com.api.app.schemas.events.EventInDbDTO;
 import com.api.app.schemas.users.AnalistaInDbDTO;
 import com.api.app.schemas.users.EstudianteInDbDTO;
 
-public class AddClaimsDTO {
+public class ClaimsCreateDTO {
 
 	private AnalistaInDbDTO analista;
 	private EstudianteInDbDTO estudiante;

@@ -19,7 +19,7 @@ import javax.ws.rs.core.Response;
 import com.api.app.misc.IgnoreType;
 import com.api.app.misc.MediaTypes;
 import com.api.app.patchImpl.ObjectPatch;
-import com.api.app.schemas.claims.AddClaimsDTO;
+import com.api.app.schemas.claims.ClaimsCreateDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
 import com.api.app.schemas.users.AnalistaDTO;
 import com.api.app.schemas.users.UserInDbDTO;
@@ -86,7 +86,7 @@ public class ReclamosResource {
 	
 	@POST
 	@Path("new")
-	public Response createClaim(AddClaimsDTO newClaimDTO) {
+	public Response createClaim(ClaimsCreateDTO newClaimDTO) {
 		ObjectMapper om = new ObjectMapper();
 		Reclamo newClaim = om.convertValue(newClaimDTO, Reclamo.class);
 		int exitCode = reclamoService.create(newClaim); 
