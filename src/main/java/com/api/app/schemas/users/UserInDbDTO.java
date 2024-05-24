@@ -2,7 +2,7 @@ package com.api.app.schemas.users;
 
 import java.util.Date;
 
-import com.api.app.schemas.LocalidadDTO;
+import com.api.app.schemas.geolocalizaciones.LocalidadDTO;
 import com.api.app.schemas.itr.ItrInDbDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -10,8 +10,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class UserInDbDTO {
 	
 	private String nombreUsuario;
-//	@JsonIgnore
-//	private String contrasenia;
 	private Byte activo;
 	private String apellido1;
 	private String apellido2;

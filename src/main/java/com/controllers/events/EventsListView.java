@@ -81,7 +81,7 @@ public class EventsListView implements Serializable{
 		int exitCode;
 		String eventName = evento.getTitulo();
 		Long eventId = event.getIdEvento();
-		if(event.isActive()) {
+		if(event.getActivo() == (byte) 1) {
 			event.setActivo((byte) 0);
 			exitCode = eventBeanRemote.logicalDeleteBy(eventId);
 			if(exitCode == 0) {
