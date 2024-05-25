@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PATCH;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -18,8 +19,15 @@ import javax.ws.rs.core.Response;
 import com.api.app.misc.IgnoreType;
 import com.api.app.misc.MediaTypes;
 import com.api.app.patchImpl.ObjectPatch;
+
+import com.api.app.schemas.claims.ClaimsCreateDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
+import com.api.app.schemas.users.AnalistaDTO;
+import com.api.app.schemas.users.UserInDbDTO;
+import com.entities.Analista;
 import com.entities.Reclamo;
+import com.entities.Usuario;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.services.ReclamoBeanRemote;
@@ -77,4 +85,22 @@ public class ReclamosResource {
 		
 		return Response.ok(r).build();
 	}
+
+	@POST
+	@Path("new")
+	public Response createClaim(ClaimsCreateDTO newClaimDTO) {
+		ObjectMapper om = new ObjectMapper();
+		Reclamo newClaim = om.convertValue(newClaimDTO, Reclamo.class);
+		int exitCode = reclamoService.create(newClaim); 
+
+		if(exitCode != 0) {
+			return Response.status(Response.Status.BAD_REQUEST).build();
+		}
+		
+		
+		om.addMixIn(Set.class, IgnoreType.class);
+		ClaimInDbDTO claimInDbDTO = om.convertValue(newClaim, ClaimInDbDTO.class); 
+		return Response.status(Response.Status.CREATED).entity(claimInDbDTO).build();
+	}
+
 }

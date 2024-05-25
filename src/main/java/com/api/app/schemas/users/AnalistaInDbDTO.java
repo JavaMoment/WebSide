@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class AnalistaInDbDTO {
 	
+
+	private Long idAnalista;
 	private UserInDbDTO usuario;
 
 	public UserInDbDTO getUsuario() {
@@ -13,6 +15,15 @@ public class AnalistaInDbDTO {
 
 	public void setUsuario(UserInDbDTO usuario) {
 		this.usuario = usuario;
+	}
+
+
+	public Long getIdAnalista() {
+		return idAnalista;
+	}
+
+	public void setIdAnalista(Long idAnalista) {
+		this.idAnalista = idAnalista;
 	}
 
 }
