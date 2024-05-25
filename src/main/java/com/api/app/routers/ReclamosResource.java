@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import com.api.app.misc.IgnoreType;
 import com.api.app.misc.MediaTypes;
 import com.api.app.patchImpl.ObjectPatch;
+
 import com.api.app.schemas.claims.ClaimsCreateDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
 import com.api.app.schemas.users.AnalistaDTO;
@@ -26,6 +27,7 @@ import com.api.app.schemas.users.UserInDbDTO;
 import com.entities.Analista;
 import com.entities.Reclamo;
 import com.entities.Usuario;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.services.ReclamoBeanRemote;
@@ -83,7 +85,7 @@ public class ReclamosResource {
 		
 		return Response.ok(r).build();
 	}
-	
+
 	@POST
 	@Path("new")
 	public Response createClaim(ClaimsCreateDTO newClaimDTO) {

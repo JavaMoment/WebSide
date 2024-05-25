@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class EventInDbDTO {
-	
+
 	private Long idEvento;
 	private String titulo;
 	private TipoEventoDTO tiposEvento;
@@ -24,6 +24,7 @@ public class EventInDbDTO {
 	public void setTiposEvento(TipoEventoDTO tiposEvento) {
 		this.tiposEvento = tiposEvento;
 	}
+
 
 	public Long getIdEvento() {
 		return idEvento;
