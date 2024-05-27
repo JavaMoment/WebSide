@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 	<title>Login</title>
 </h:head>
@@ -73,7 +74,7 @@
                             <f:converter converterId="AreaConverter" />
 						    <p:ajax update="@this" process="@this"/>
 						  </p:selectOneMenu>
-            			</h:panelGrid>
+            			</h:panelGrid>	
 					</div>
 				</p:scrollPanel>
 				<p:commandButton value="Registrarme" update="msgs"
