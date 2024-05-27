@@ -25,7 +25,7 @@
 
 						<p:dataTable id="dt-events" widgetVar="dtEvents" var="evento"
 							value="#{eventView.events}" reflow="true"
-							tableStyle="width:100%;" rowKey="#{evento.titulo}"
+							tableStyle="width:100%;" rowKey="#{event.evento.titulo}"
 							paginator="true" rows="15" paginatorPosition="bottom"
 							resizableColumns="true" showGridlines="true" scrollable="true"
 							scrollWidth="100%" scrollHeight="100%" class="h-full">
@@ -64,42 +64,42 @@
 							</p:column>
 							<p:column headerText="Titulo del Evento"
 								sortBy="#{event.evento.titulo}" filterBy="#{evento.titulo}">
-								<h:outputText value="#{event.evento.titulo}" />
+								<h:outputText value="#{evento.titulo}" />
 							</p:column>
 
 							<p:column headerText="Tipo de evento"
 								sortBy="#{event.evento.tiposEvento.nombre}"
 								filterBy="#{evento.tiposEvento.nombre}">
-								<h:outputText value="#{event.evento.tiposEvento.nombre}" />
+								<h:outputText value="#{evento.tiposEvento.nombre}" />
 							</p:column>
 
 							<p:column headerText="Modalidad"
 								sortBy="#{event.evento.modalidad}"
 								filterBy="#{evento.modalidad}">
-								<h:outputText value="#{event.evento.modalidad}" />
+								<h:outputText value="#{evento.modalidad}" />
 							</p:column>
 
 							<p:column headerText="ITR" sortBy="#{event.evento.itr}"
 								filterBy="#{evento.itr}">
-								<h:outputText value="#{event.evento.itr}" />
+								<h:outputText value="#{evento.itr}" />
 							</p:column>
 
 							<p:column headerText="Fecha Inicio"
 								sortBy="#{event.evento.fechaHoraInicio}"
 								filterBy="#{evento.fechaHoraInicio}">
-								<h:outputText value="#{event.evento.fechaHoraInicio}" />
+								<h:outputText value="#{evento.fechaHoraInicio}" />
 							</p:column>
 
 							<p:column headerText="Fecha Final"
 								sortBy="#{event.evento.fechaHoraFinal}"
 								filterBy="#{evento.fechaHoraFinal}">
-								<h:outputText value="#{event.evento.fechaHoraFinal}" />
+								<h:outputText value="#{evento.fechaHoraFinal}" />
 							</p:column>
 
 							<p:column headerText="Estado"
 								sortBy="#{event.evento.statusEvento.nombre}"
 								filterBy="#{evento.statusEvento.nombre}">
-								<h:outputText value="#{event.evento.statusEvento.nombre}" />
+								<h:outputText value="#{evento.statusEvento.nombre}" />
 							</p:column>
 
 
