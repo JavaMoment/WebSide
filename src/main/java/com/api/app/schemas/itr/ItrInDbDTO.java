@@ -6,13 +6,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class ItrInDbDTO extends ItrDTO{
 
 	private Long idItr;
-	private Byte activo;
+	private Boolean activo;
 	private String nombre;
 	
-	public Byte getActivo() {
+	public Boolean getActivo() {
 		return activo;
 	}
-	public void setActivo(Byte activo) {
+	public void setActivo(Boolean activo) {
 		this.activo = activo;
 	}
 	public Long getIdItr() {

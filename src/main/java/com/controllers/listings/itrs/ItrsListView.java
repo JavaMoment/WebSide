@@ -6,7 +6,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
+import javax.faces.component.UIInput;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 
@@ -37,17 +40,17 @@ public class ItrsListView implements Serializable {
 	public void onToggleSwitchChangeActive(Itr itr) {
 		int exitCode;
 		String itrName = itr.getNombre();
-		if(itr.getActivo() == (byte) 1) {
-			itr.setActivo((byte) 0);
-			exitCode = itrBean.logicalDeleteBy(itrName);
-			if(exitCode == 0) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente dado de baja."));
-			}
-		} else {
+		if(itr.getActivo()) {
 			itr.setActivo((byte) 1);
 			exitCode = itrBean.activeItrBy(itrName);
 			if(exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente activado."));
+			}
+		} else {
+			itr.setActivo((byte) 0);
+			exitCode = itrBean.logicalDeleteBy(itrName);
+			if(exitCode == 0) {
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente dado de baja."));
 			}
 		}
 		if(exitCode != 0) {
