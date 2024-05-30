@@ -41,13 +41,13 @@ public class ItrsListView implements Serializable {
 		int exitCode;
 		String itrName = itr.getNombre();
 		if(itr.getActivo()) {
-			itr.setActivo((byte) 1);
+			itr.setActivo(true);
 			exitCode = itrBean.activeItrBy(itrName);
 			if(exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente activado."));
 			}
 		} else {
-			itr.setActivo((byte) 0);
+			itr.setActivo(false);
 			exitCode = itrBean.logicalDeleteBy(itrName);
 			if(exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El ITR " + itrName + " ha sido correctamente dado de baja."));
