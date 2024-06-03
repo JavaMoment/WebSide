@@ -59,6 +59,7 @@ public class EventView implements Serializable {
     private Long statusEventoID; 
     private Long tipoEventoId; 
     private TiposEvento tipoEvento;
+    private String titulo;
     private List<Evento> events;
     private List<StatusEvento> statusEventos; // List of StatusEvento for dropdown
     private List<TiposEvento> tiposEventos; // List of TiposEvento for dropdown
@@ -182,6 +183,79 @@ public class EventView implements Serializable {
         ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
     }
 
+//    public void save() {
+//        try {
+//            if (selectedTutores.length == 0) {
+//                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                        "Error", "Selecciona al menos un tutor"));
+//            } else {
+//                if (evento.getFechaHoraInicio().after(evento.getFechaHoraFinal())) {
+//                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                            "Error", "La fecha de inicio no puede ser mayor que la de finalización"));
+//                } else {
+//                	
+//                	//creo el evento primero
+//                	
+//                	
+//                    this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
+//                    this.evento.setItr(itrBeanRemote.selectById(itrId));
+//                    this.evento.setstatusEvento(estadoBeanRemote.selectById(statusEventoID));
+//                    this.evento.setTiposEvento(tiposEventoBeanRemote.selectById(tipoEventoId));
+//                    
+//                    
+//                    evento = eventBeanRemote.createEvento(evento);
+//                    System.out.println(evento);
+//                    System.out.println(evento.getIdEvento());
+//                    System.out.println("ID del evento creado: " + evento.getIdEvento());
+//                    System.out.println("Detalle del evento creado: " + evento.toString());  // Asegúrate de que Evento tiene un método toString() adecuado.
+//
+//                    
+//                    
+//                    if (evento == null || evento.getIdEvento() == null) {
+//                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                                "Error", "No se pudo crear el evento."));
+//                        return;
+//                    }
+//
+//                    System.out.println("Evento creado con ID: " + evento.getIdEvento());
+//           
+//                  
+//
+//                    boolean allTutorsAssigned = true;
+//                    for (Long tutorId : selectedTutores) {
+//                        if (!tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId))) {
+//                            allTutorsAssigned = false;
+//                            break;
+//                        }
+//                    }
+//
+//                    if (!allTutorsAssigned) {
+//                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                                "Error", "No se pudieron asignar todos los tutores"));
+//                        return;  
+//                    }
+//
+//                    
+////                    for (Long tutorId : selectedTutores) {
+////                        tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+////                    }
+//                    // Mensaje de éxito
+//                    FacesContext context = FacesContext.getCurrentInstance();
+//                    Flash flash = context.getExternalContext().getFlash();
+//                    flash.setKeepMessages(true);
+//
+//                    context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
+//
+//                   ExternalContext ec = context.getExternalContext();
+//                    ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+//                }
+//            }
+//        } catch (Exception e) {
+//            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+//                    "Error", "Excepción: " + e.getMessage()));
+//        }
+//    }
+    
     public void save() {
         try {
             if (selectedTutores.length == 0) {
@@ -192,14 +266,53 @@ public class EventView implements Serializable {
                     FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "Error", "La fecha de inicio no puede ser mayor que la de finalización"));
                 } else {
+                	
+                	
+ 
                     this.evento.setModalidad(modalidadBeanRemote.selectById(modalidadId));
                     this.evento.setItr(itrBeanRemote.selectById(itrId));
                     this.evento.setstatusEvento(estadoBeanRemote.selectById(statusEventoID));
                     this.evento.setTiposEvento(tiposEventoBeanRemote.selectById(tipoEventoId));
+                    
+                   
+                    
+                    //creo el evento
                     evento = eventBeanRemote.createEvento(evento);
-                    for (Long tutorId : selectedTutores) {
-                        tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+                    System.out.println(evento);
+                    System.out.println(evento.getIdEvento());
+                    System.out.println("ID del evento creado: " + evento.getIdEvento());
+                    System.out.println("Detalle del evento creado: " + evento.toString());  // Asegúrate de que Evento tiene un método toString() adecuado.
+
+                    
+                    
+                    if (evento == null || evento.getIdEvento() == null) {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                "Error", "No se pudo crear el evento."));
+                        return;
                     }
+
+                    System.out.println("Evento creado con ID: " + evento.getIdEvento());
+           
+                  
+
+                    boolean allTutorsAssigned = true;
+                    for (Long tutorId : selectedTutores) {
+                        if (!tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId))) {
+                            allTutorsAssigned = false;
+                            break;
+                        }
+                    }
+
+                    if (!allTutorsAssigned) {
+                        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                "Error", "No se pudieron asignar todos los tutores"));
+                        return;  
+                    }
+
+                    
+//                    for (Long tutorId : selectedTutores) {
+//                        tutorBeanRemote.asignarEventoTutor(evento, tutorBeanRemote.selectById(tutorId));
+//                    }
                     // Mensaje de éxito
                     FacesContext context = FacesContext.getCurrentInstance();
                     Flash flash = context.getExternalContext().getFlash();

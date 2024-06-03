@@ -77,8 +77,9 @@
             			</h:panelGrid>	
 					</div>
 				</p:scrollPanel>
-				<p:commandButton value="Registrarme" update="msgs"
-					style="margin-top: 2rem" />
+				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem" actionListener="#{signup.doSignup()}">
+				  <p:resetInput target="signUpForm" />
+				</p:commandButton>
 			</h:form>
 		</div>
 		<div class="form-container sign-in-container">
@@ -92,7 +93,7 @@
 						<div class="ui-inputgroup-addon">
 							<i class="pi pi-user"></i>
 						</div>
-						<p:inputText id="email" placeholder="Correo utec"
+						<p:inputText id="email" placeholder="Correo UTEC o nombre de usuario"
 							autocomplete="off"
 							style="padding-left: 6px;" required="true"
 							value="#{login.emailUtec}" validator="emailValidator">

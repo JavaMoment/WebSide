@@ -17,8 +17,11 @@ import javax.inject.Named;
 import org.primefaces.PrimeFaces;
 
 import com.entities.Evento;
+import com.entities.Itr;
+import com.entities.Modalidad;
 import com.entities.StatusEvento;
 import com.entities.TiposEvento;
+import com.entities.Tutor;
 import com.services.EstadoBeanRemote;
 import com.services.EventoBeanRemote;
 import com.services.ItrBeanRemote;
@@ -58,19 +61,29 @@ public class EventModificationView implements Serializable {
 	private Long tipoEventoId;
 	private TiposEvento tipoEvento;
 	private List<Evento> events;
+	private List<Itr> itrs;
+
 	private List<StatusEvento> statusEventos; // List of StatusEvento for dropdown
 	private List<TiposEvento> tiposEventos; // List of TiposEvento for dropdown
+	private List<Modalidad> modalidadEventos;
 
 	@PostConstruct
 	public void init() {
-		this.evento = new Evento();
+		evento = new Evento();
 		events = eventBeanRemote.selectAll();
-		statusEventos = estadoBeanRemote.selectAll(); // Initialize statusEventos list
-		tiposEventos = tiposEventoBeanRemote.selectAll(); // Initialize tiposEventos list
+		statusEventos = estadoBeanRemote.selectAll();
+		tiposEventos = tiposEventoBeanRemote.selectAll();
+		modalidadEventos = modalidadBeanRemote.selectAll();
+		itrs = itrBeanRemote.selectAll();
+
+		System.out.println("ITRs loaded: " + itrs.size());
+		// System.out.println("Modalidades loaded: " + modalidadEventos.size());
 	}
 
 	public void doUpdateEvent() {
 		try {
+		    System.out.println("doUpdateEvent se llama bien");
+
 			if (selectedTutores.length == 0) {
 				FacesContext.getCurrentInstance().addMessage(null,
 						new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Selecciona al menos un tutor"));
@@ -98,7 +111,6 @@ public class EventModificationView implements Serializable {
 					ExternalContext ec = context.getExternalContext();
 					ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
 
-					
 				}
 			}
 		} catch (Exception e) {
@@ -106,18 +118,18 @@ public class EventModificationView implements Serializable {
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Excepción: " + e.getMessage()));
 		}
 	}
-	
-	public void cancel() throws IOException {
-        FacesContext context = FacesContext.getCurrentInstance();
-        Flash flash = context.getExternalContext().getFlash();
-        flash.setKeepMessages(true); 
-        
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Modificación cancelada con éxito."));
-        
-        ExternalContext ec = context.getExternalContext();
-        ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
-    }
 
+	public void cancel() throws IOException {
+		FacesContext context = FacesContext.getCurrentInstance();
+		Flash flash = context.getExternalContext().getFlash();
+		flash.setKeepMessages(true);
+
+		context.addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Modificación cancelada con éxito."));
+
+		ExternalContext ec = context.getExternalContext();
+		ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+	}
 
 	public EventoBeanRemote getEventBeanRemote() {
 		return eventBeanRemote;
@@ -246,4 +258,37 @@ public class EventModificationView implements Serializable {
 	public void setTiposEventos(List<TiposEvento> tiposEventos) {
 		this.tiposEventos = tiposEventos;
 	}
+
+	public List<TiposEvento> getListaTiposEventos() {
+		return tiposEventoBeanRemote.selectAll();
+	}
+
+	public void setListaTiposEventos(List<TiposEvento> tiposEventos) {
+		this.tiposEventos = tiposEventos;
+	}
+
+	public List<Modalidad> getListaModalidad() {
+		return modalidadBeanRemote.selectAll();
+	}
+
+	public List<Itr> getListaItr() {
+		return itrBeanRemote.selectAll();
+	}
+
+	public List<Tutor> getListaTutor() {
+		return tutorBeanRemote.selectAll();
+	}
+
+	public List<StatusEvento> getListaStatusEvento() {
+		return estadoBeanRemote.selectAll();
+	}
+
+	public List<Modalidad> getListaModalidadEventos() {
+		return modalidadBeanRemote.selectAll();
+	}
+
+	public void setModalidadEventos(List<Modalidad> modalidadEventos) {
+		this.modalidadEventos = modalidadEventos;
+	}
+
 }
