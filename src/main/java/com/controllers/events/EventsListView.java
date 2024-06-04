@@ -63,7 +63,7 @@ public class EventsListView implements Serializable{
 	private String titulo;
 	private StatusEvento statusEvento;
 	private Long[] selectedTutores;
-	private int activo;
+	private Byte activo;
 	private Evento evento;
 	private long modalidadId;
 	private long itrId;
@@ -81,14 +81,14 @@ public class EventsListView implements Serializable{
 		int exitCode;
 		String eventName = evento.getTitulo();
 		Long eventId = event.getIdEvento();
-		if(event.getActivo() == (byte) 1) {
-			event.setActivo((byte) 0);
+		if(event.getActivo() == true) {
+			event.setActivo(false);
 			exitCode = eventBeanRemote.logicalDeleteBy(eventId);
 			if(exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El Evento: " + eventName + " ha sido correctamente dado de baja."));
 			}
 		} else {
-			event.setActivo((byte) 1);
+			event.setActivo(true);
 			exitCode = eventBeanRemote.activeEventBy(eventId);
 			if(exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El Evento: " + eventName + " ha sido correctamente activado."));
@@ -152,11 +152,11 @@ public class EventsListView implements Serializable{
 		this.statusEvento = statusEvento;
 	}
 
-	public int getActivo() {
+	public Byte getActivo() {
 		return activo;
 	}
 
-	public void setActivo(int activo) {
+	public void setActivo(Byte activo) {
 		this.activo = activo;
 	}
 
