@@ -13,7 +13,7 @@ import com.entities.Itr;
 import com.entities.Modalidad;
 import com.entities.TiposEvento;
 import com.entities.Tutor;
-import com.services.EstadoBeanRemote;
+import com.services.StatusEventoBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.ModalidadBeanRemote;
 import com.services.TiposEventoBeanRemote;
@@ -28,7 +28,7 @@ public class test {
 		ModalidadBeanRemote mbr = (ModalidadBeanRemote)Utils.getBean(ModalidadBeanRemote.class);
 		ItrBeanRemote ibr = (ItrBeanRemote)Utils.getBean(ItrBeanRemote.class);
 		TutorBeanRemote tbr = (TutorBeanRemote)Utils.getBean(TutorBeanRemote.class);
-		EstadoBeanRemote esbr = (EstadoBeanRemote)Utils.getBean(EstadoBeanRemote.class);
+		StatusEventoBeanRemote esbr = (StatusEventoBeanRemote)Utils.getBean(StatusEventoBeanRemote.class);
 		TiposEventoBeanRemote tebr = (TiposEventoBeanRemote)Utils.getBean(TiposEventoBeanRemote.class);
 		
 		Evento evento = new Evento ("PFT", tebr.selectById(1L), new Date(System.currentTimeMillis()),  new Date(System.currentTimeMillis() + 1L ),

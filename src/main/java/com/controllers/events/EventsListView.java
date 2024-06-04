@@ -24,7 +24,7 @@ import com.entities.Modalidad;
 import com.entities.StatusEvento;
 import com.entities.TiposEvento;
 import com.entities.Tutor;
-import com.services.EstadoBeanRemote;
+import com.services.StatusEventoBeanRemote;
 import com.services.EventoBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.ModalidadBeanRemote;
@@ -50,7 +50,7 @@ public class EventsListView implements Serializable{
 	private TutorBeanRemote tutorBeanRemote;
 
 	@EJB
-	private EstadoBeanRemote estadoBeanRemote;
+	private StatusEventoBeanRemote estadoBeanRemote;
 	
 	@EJB
 	private TiposEventoBeanRemote tiposEventoBeanRemote;

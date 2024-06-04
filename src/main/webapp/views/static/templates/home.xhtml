@@ -46,6 +46,17 @@
 			</li>
 			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 			<li>
+				<a href="/WebSide/views/static/events/aux_status_eventos.xhtml">
+					<i class='bx bx-list-ul'></i>
+					<span class="links_name">Mantenimiento de lista auxiliar de Estados de los
+		Eventos</span>
+				</a>
+				<span class="tooltip">Mantenimiento de lista auxiliar de Estados de los
+		Eventos</span>
+			</li>
+			</ui:fragment>
+			<ui:fragment rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+			<li>
 				<a href="/WebSide/views/static/listings/itrsList.xhtml">
 					<i class='bx bx-buildings'></i>
 					<span class="links_name">Listado de ITRs</span>

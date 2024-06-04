@@ -9,14 +9,14 @@ import javax.faces.convert.FacesConverter;
 
 import com.entities.StatusEvento;
 import com.resources.utils.Utils;
-import com.services.EstadoBeanRemote;
+import com.services.StatusEventoBeanRemote;
 import java.util.logging.Logger;
 
 @FacesConverter("EstadoConverter")
 public class StatusEventoConverter implements Converter {
 
     private static final Logger LOGGER = Logger.getLogger(StatusEventoConverter.class.getName());
-    private EstadoBeanRemote estadoBean = Utils.getBean(EstadoBeanRemote.class);
+    private StatusEventoBeanRemote estadoBean = Utils.getBean(StatusEventoBeanRemote.class);
 
     @Override
     public Object getAsObject(FacesContext arg0, UIComponent arg1, String arg2) {
