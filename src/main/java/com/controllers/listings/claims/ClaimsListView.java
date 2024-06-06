@@ -54,7 +54,7 @@ public class ClaimsListView implements Serializable {
 		Usuario userLogged = (Usuario) session.getAttribute("userLogged");
 		try {
 			if(userLogged.getTipoUsuario().toUpperCase().equals("ESTUDIANTE")) {
-				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos", userLogged.getNombreUsuario())));
+				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos", "estudiante", userLogged.getNombreUsuario())));
 				setClaims(objectMapper.readValue(resp.body().toString(), new TypeReference<List<Reclamo>>(){}));
 			} else {
 				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos")));
