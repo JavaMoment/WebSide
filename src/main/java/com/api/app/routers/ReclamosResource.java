@@ -21,16 +21,19 @@ import com.api.app.misc.MediaTypes;
 import com.api.app.patchImpl.ObjectPatch;
 
 import com.api.app.schemas.claims.ClaimsCreateDTO;
+import com.api.app.schemas.claims.StatusReclamoDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
 import com.api.app.schemas.users.AnalistaDTO;
 import com.api.app.schemas.users.UserInDbDTO;
 import com.entities.Analista;
 import com.entities.Reclamo;
+import com.entities.StatusReclamo;
 import com.entities.Usuario;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.services.ReclamoBeanRemote;
+import com.services.StatusReclamoBeanRemote;
 
 @Path("reclamos")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -39,6 +42,8 @@ public class ReclamosResource {
 
 	@EJB
 	protected ReclamoBeanRemote reclamoService;
+	@EJB
+	protected StatusReclamoBeanRemote statusReclamoService;
 	
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -54,7 +59,7 @@ public class ReclamosResource {
 	}
 	
 	@GET
-	@Path("{username}")
+	@Path("estudiante/{username}")
 	public Response getClaimsBy(@PathParam("username") String username) {
 		objectMapper.addMixIn(Set.class, IgnoreType.class);
 		objectMapper.addMixIn(List.class, IgnoreType.class);
@@ -101,6 +106,30 @@ public class ReclamosResource {
 		om.addMixIn(Set.class, IgnoreType.class);
 		ClaimInDbDTO claimInDbDTO = om.convertValue(newClaim, ClaimInDbDTO.class); 
 		return Response.status(Response.Status.CREATED).entity(claimInDbDTO).build();
+	}
+	
+	@GET
+	@Path("statuses")
+	public Response getStatusReclamo() {
+		objectMapper.addMixIn(Set.class, IgnoreType.class);
+		objectMapper.addMixIn(List.class, IgnoreType.class);
+		
+		List<StatusReclamo> statusReclamo = statusReclamoService.selectAll();
+		List<StatusReclamoDTO> status = objectMapper.convertValue(statusReclamo, new TypeReference<List<StatusReclamoDTO>>(){});
+		
+		return Response.ok(status).build();
+	}
+	
+	@GET
+	@Path("{idReclamo}")
+	public Response getClaimBy(@PathParam("idReclamo") Long idReclamo) {
+		objectMapper.addMixIn(Set.class, IgnoreType.class);
+		objectMapper.addMixIn(List.class, IgnoreType.class);
+		
+		Reclamo claim = reclamoService.selectById(idReclamo);
+		ClaimInDbDTO claimInDb = objectMapper.convertValue(claim, ClaimInDbDTO.class);
+		
+		return Response.ok(claimInDb).build();
 	}
 
 }
