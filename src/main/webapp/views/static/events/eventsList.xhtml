@@ -41,6 +41,30 @@
 										process="@this" value="Añadir evento">
 										<p:resetInput target=":new-event-form:new-event-dialog" />
 									</p:commandButton>
+									<ui:fragment
+										rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+										<p:commandButton icon="bx bx-list-ul"
+											action="window.location.href='/WebSide/views/static/events/aux_status_eventos.xhtml'"
+											onclick="window.location.href='/WebSide/views/static/events/aux_status_eventos.xhtml'; return false;"
+											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
+											styleClass="ui-button-success"
+											value="Estados">
+											
+										</p:commandButton>
+									</ui:fragment>
+									<ui:fragment
+										rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+										<p:commandButton icon="bx bx-list-ul"
+											action="window.location.href='/WebSide/views/static/events/aux_modalidades_eventos.xhtml'"
+											onclick="window.location.href='/WebSide/views/static/events/aux_modalidades_eventos.xhtml'; return false;"
+											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
+											styleClass="ui-button-success"
+											value="Modalidades">
+										
+										</p:commandButton>
+									</ui:fragment>
+
+
 								</div>
 
 							</f:facet>
@@ -51,8 +75,7 @@
 									update=":manage-event-form:manage-event-content"
 									oncomplete="PF('manageEventDialog').show()"
 									class="ui-button-warning rounded-button ml-1"
-									action="#{eventModification.doUpdateEvent()}"
-									process="@this">
+									action="#{eventModification.doUpdateEvent()}" process="@this">
 									<f:setPropertyActionListener value="#{evento}"
 										target="#{eventModification.evento}" />
 									<p:resetInput target=":manage-event-form:manage-event-content" />
@@ -61,46 +84,45 @@
 								<br />
 								<p:toggleSwitch value="#{evento.activo}" onIcon="pi pi-check"
 									offIcon="pi pi-times" class="mt-2">
-									<p:ajax
-										listener="#{event.onToggleSwitchChangeActive(evento)}" />
+									<p:ajax listener="#{event.onToggleSwitchChangeActive(evento)}" />
 								</p:toggleSwitch>
 							</p:column>
 							<p:column headerText="Titulo del Evento"
-								sortBy="#{event.evento.titulo}" filterBy="#{evento.titulo}">
+								sortBy="#{evento.titulo}" filterBy="#{evento.titulo}">
 								<h:outputText value="#{evento.titulo}" />
 							</p:column>
 
 							<p:column headerText="Tipo de evento"
-								sortBy="#{event.evento.tiposEvento.nombre}"
+								sortBy="#{evento.tiposEvento.nombre}"
 								filterBy="#{evento.tiposEvento.nombre}">
 								<h:outputText value="#{evento.tiposEvento.nombre}" />
 							</p:column>
 
 							<p:column headerText="Modalidad"
-								sortBy="#{event.evento.modalidad}"
-								filterBy="#{evento.modalidad}">
-								<h:outputText value="#{evento.modalidad}" />
+								sortBy="#{evento.modalidad.nombre}"
+								filterBy="#{evento.modalidad.nombre}">
+								<h:outputText value="#{evento.modalidad.nombre}" />
 							</p:column>
 
-							<p:column headerText="ITR" sortBy="#{event.evento.itr}"
-								filterBy="#{evento.itr}">
-								<h:outputText value="#{evento.itr}" />
+							<p:column headerText="ITR" sortBy="#{evento.itr}"
+								filterBy="#{evento.itr.nombre}">
+								<h:outputText value="#{evento.itr.nombre}" />
 							</p:column>
 
 							<p:column headerText="Fecha Inicio"
-								sortBy="#{event.evento.fechaHoraInicio}"
+								sortBy="#{evento.fechaHoraInicio}"
 								filterBy="#{evento.fechaHoraInicio}">
 								<h:outputText value="#{evento.fechaHoraInicio}" />
 							</p:column>
 
 							<p:column headerText="Fecha Final"
-								sortBy="#{event.evento.fechaHoraFinal}"
+								sortBy="#{evento.fechaHoraFinal}"
 								filterBy="#{evento.fechaHoraFinal}">
 								<h:outputText value="#{evento.fechaHoraFinal}" />
 							</p:column>
 
 							<p:column headerText="Estado"
-								sortBy="#{event.evento.statusEvento.nombre}"
+								sortBy="#{evento.statusEvento.nombre}"
 								filterBy="#{evento.statusEvento.nombre}">
 								<h:outputText value="#{evento.statusEvento.nombre}" />
 							</p:column>
@@ -314,7 +336,8 @@
 
 								<h:outputLabel for="localización" value="Localización:"
 									class="event-registration-label" />
-								<p:inputText id="localidad" value="#{eventModification.evento.localizacion}"
+								<p:inputText id="localidad"
+									value="#{eventModification.evento.localizacion}"
 									styleClass="event-registration-input" />
 
 
@@ -340,9 +363,8 @@
 							styleClass="ui-button-update" />
 
 						<p:commandButton value="Guardar modificaciones"
-                 action="#{eventModification.doUpdateEvent()}"
-                 update="msgs"
-                 styleClass="ui-button-update" />
+							action="#{eventModification.doUpdateEvent()}" update="msgs"
+							styleClass="ui-button-update" />
 
 
 

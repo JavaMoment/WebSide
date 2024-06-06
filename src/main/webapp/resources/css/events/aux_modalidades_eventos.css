@@ -43,7 +43,7 @@ table {
     margin-bottom: 2rem;
 }
 
-.status-list .ui-datatable {
+.modaldiades-list .ui-datatable {
     margin-top: 1rem;
 }
 
@@ -73,7 +73,7 @@ body .ui-datatable .ui-datatable-header {
     border-top-right-radius: 6px;
 }
 
-.status-list .status-table-header {
+.modalidades-list .modalidades-table-header {
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;

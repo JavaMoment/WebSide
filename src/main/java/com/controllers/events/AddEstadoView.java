@@ -34,38 +34,7 @@ public class AddEstadoView implements Serializable {
 		
 	}
 
-//	
-//	public void doAddEstado() {
-//	    FacesContext context = FacesContext.getCurrentInstance();
-//
-//	    // Intentar crear el nuevo Estado
-//	    StatusEvento newEstado = new StatusEvento(name);
-//	    int exitCode = estadoBean.create(newEstado);
-//
-//	    if (exitCode != 0) {
-//	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Estado no pudo ser creado."));
-//	        return; // Retorno anticipado si la creación falla
-//	    }
-//
-//	    // Intentar seleccionar el Estado recién creado
-//	    newEstado = estadoBean.selectEstadoBy(newEstado.getNombre());
-//	    if (newEstado == null) {
-//	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Estado creado no encontrado en la base de datos."));
-//	        return; // Retorno anticipado si la entidad no se encuentra
-//	    }
-//
-//	    // Intentar actualizar el Estado
-//	    exitCode = estadoBean.update(newEstado);
-//	    if (exitCode == 0) {
-//	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "¡Bien!", "El Estado " + newEstado.getNombre() + " ha sido correctamente añadido."));
-//	    } else {
-//	        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "El Estado no ha podido ser actualizado."));
-//	    }
-//
-//	    // Actualizar componentes de la UI y cerrar el diálogo
-//	    PrimeFaces.current().ajax().update("form:messages", "form:dt-estados");
-//	    PrimeFaces.current().executeScript("PF('addEstadoDialog').hide()");
-//	}
+
 
 	public void doAddEstado() {
 	    FacesContext context = FacesContext.getCurrentInstance();
