@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
@@ -22,16 +21,15 @@ import com.api.app.patchImpl.ObjectPatch;
 
 import com.api.app.schemas.claims.ClaimsCreateDTO;
 import com.api.app.schemas.claims.StatusReclamoDTO;
+import com.api.app.schemas.events.EventInDbDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
-import com.api.app.schemas.users.AnalistaDTO;
-import com.api.app.schemas.users.UserInDbDTO;
-import com.entities.Analista;
+import com.entities.Evento;
 import com.entities.Reclamo;
 import com.entities.StatusReclamo;
-import com.entities.Usuario;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.services.EventoBeanRemote;
 import com.services.ReclamoBeanRemote;
 import com.services.StatusReclamoBeanRemote;
 
@@ -44,6 +42,8 @@ public class ReclamosResource {
 	protected ReclamoBeanRemote reclamoService;
 	@EJB
 	protected StatusReclamoBeanRemote statusReclamoService;
+	@EJB
+	protected EventoBeanRemote eventoService;
 	
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -130,6 +130,19 @@ public class ReclamosResource {
 		ClaimInDbDTO claimInDb = objectMapper.convertValue(claim, ClaimInDbDTO.class);
 		
 		return Response.ok(claimInDb).build();
+	}
+	
+	@GET
+	@Path("eventos")
+	public Response getEvents() {
+		objectMapper.addMixIn(Set.class, IgnoreType.class);
+		objectMapper.addMixIn(List.class, IgnoreType.class);
+
+		List<Evento> eventos =  eventoService.selectAll();
+		List<EventInDbDTO> eventosInDb = objectMapper.convertValue(eventos, new TypeReference<List<EventInDbDTO>>() {});
+
+
+		return Response.ok(eventosInDb).build();
 	}
 
 }
