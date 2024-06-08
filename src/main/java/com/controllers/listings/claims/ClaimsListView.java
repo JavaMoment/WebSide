@@ -40,6 +40,8 @@ public class ClaimsListView implements Serializable {
 	private StatusReclamo actualStatus;
 	private List<StatusReclamo> statuses;
 	private HttpSession session;
+	private Usuario userLogged;
+	private StatusReclamo status;
 	protected HttpRequestDispatcher dispatcher;
 	protected ObjectMapper objectMapper;
 	
@@ -51,7 +53,7 @@ public class ClaimsListView implements Serializable {
 		
 		FacesContext context = FacesContext.getCurrentInstance();
 		session = (HttpSession) context.getExternalContext().getSession(true);
-		Usuario userLogged = (Usuario) session.getAttribute("userLogged");
+		userLogged = (Usuario) session.getAttribute("userLogged");
 		try {
 			if(userLogged.getTipoUsuario().toUpperCase().equals("ESTUDIANTE")) {
 				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos", "estudiante", userLogged.getNombreUsuario())));
@@ -101,6 +103,22 @@ public class ClaimsListView implements Serializable {
 		PrimeFaces.current().executeScript("PF('manageDetailClaimDialog').hide()");
 	}
 
+	public void reloadClaims() {
+		HttpResponse resp = null;
+		try {
+			if(userLogged.getTipoUsuario().toUpperCase().equals("ESTUDIANTE")) {
+				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos", "estudiante", userLogged.getNombreUsuario())));
+				setClaims(objectMapper.readValue(resp.body().toString(), new TypeReference<List<Reclamo>>(){}));
+			} else {
+				resp = dispatcher.sendGet(new ArrayList<String>(List.of("reclamos")));
+				setClaims(objectMapper.readValue(resp.body().toString(), new TypeReference<List<Reclamo>>(){}));
+			}
+		} catch(IOException | InterruptedException e) {
+			// TODO: Si la api esta caida, avisar con algun dialogo.
+			e.printStackTrace();
+		}
+	}
+	
 	public List<Reclamo> getClaims() {
 		return claims;
 	}
