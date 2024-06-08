@@ -45,7 +45,7 @@ public class LoginService {
                 .build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED)
-                .entity(new LoginResponseDTO("¡Oh no! Oh no no no", "El usuario o contraseña no es correcto", null, null)) // respondemos con un error si las credenciales son incorrectas
+                .entity(new LoginResponseDTO("¡Oh no! Oh no no no", "El usuario o contraseña no es correcto", null, "")) // respondemos con un error si las credenciales son incorrectas
                 .build();
         }
     }
