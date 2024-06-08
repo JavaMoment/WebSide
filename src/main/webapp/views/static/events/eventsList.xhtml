@@ -38,7 +38,8 @@
 										update=":new-event-form:new-event-content"
 										oncomplete="PF('newEventDialog').show()"
 										class="ui-button-success rounded-button flex-shrink-1"
-										process="@this" value="Añadir evento">
+										process="@this" value="Añadir evento"
+										rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 										<p:resetInput target=":new-event-form:new-event-dialog" />
 									</p:commandButton>
 									<ui:fragment
@@ -47,9 +48,8 @@
 											action="window.location.href='/WebSide/views/static/events/aux_status_eventos.xhtml'"
 											onclick="window.location.href='/WebSide/views/static/events/aux_status_eventos.xhtml'; return false;"
 											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
-											styleClass="ui-button-success"
-											value="Estados">
-											
+											styleClass="ui-button-success" value="Estados">
+
 										</p:commandButton>
 									</ui:fragment>
 									<ui:fragment
@@ -58,9 +58,8 @@
 											action="window.location.href='/WebSide/views/static/events/aux_modalidades_eventos.xhtml'"
 											onclick="window.location.href='/WebSide/views/static/events/aux_modalidades_eventos.xhtml'; return false;"
 											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
-											styleClass="ui-button-success"
-											value="Modalidades">
-										
+											styleClass="ui-button-success" value="Modalidades">
+
 										</p:commandButton>
 									</ui:fragment>
 
@@ -69,24 +68,35 @@
 
 							</f:facet>
 
+
 							<p:column exportable="false" class="text-center"
 								style="width:3%;">
-								<p:commandButton icon="pi pi-pencil"
-									update=":manage-event-form:manage-event-content"
-									oncomplete="PF('manageEventDialog').show()"
-									class="ui-button-warning rounded-button ml-1"
-									action="#{eventModification.doUpdateEvent()}" process="@this">
-									<f:setPropertyActionListener value="#{evento}"
-										target="#{eventModification.evento}" />
-									<p:resetInput target=":manage-event-form:manage-event-content" />
-								</p:commandButton>
+								<ui:fragment
+									rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+									<p:commandButton icon="pi pi-pencil"
+										update=":manage-event-form:manage-event-content"
+										oncomplete="PF('manageEventDialog').show()"
+										class="ui-button-warning rounded-button ml-1"
+										action="#{eventModification.doUpdateEvent()}" process="@this">
+										<f:setPropertyActionListener value="#{evento}"
+											target="#{eventModification.evento}" />
+										<p:resetInput target=":manage-event-form:manage-event-content" />
+
+									</p:commandButton>
+
+								</ui:fragment>
 
 								<br />
-								<p:toggleSwitch value="#{evento.activo}" onIcon="pi pi-check"
-									offIcon="pi pi-times" class="mt-2">
-									<p:ajax listener="#{event.onToggleSwitchChangeActive(evento)}" />
-								</p:toggleSwitch>
+								<ui:fragment
+									rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+									<p:toggleSwitch value="#{evento.activo}" onIcon="pi pi-check"
+										offIcon="pi pi-times" class="mt-2">
+										<p:ajax listener="#{event.onToggleSwitchChangeActive(evento)}" />
+									</p:toggleSwitch>
+								</ui:fragment>
+
 							</p:column>
+
 							<p:column headerText="Titulo del Evento"
 								sortBy="#{evento.titulo}" filterBy="#{evento.titulo}">
 								<h:outputText value="#{evento.titulo}" />
