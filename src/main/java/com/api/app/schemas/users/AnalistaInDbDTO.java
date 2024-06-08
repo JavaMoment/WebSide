@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
 public class AnalistaInDbDTO {
-	
 
 	private Long idAnalista;
 	private UserInDbDTO usuario;

@@ -9,7 +9,7 @@ public class EstudianteInDbDTO {
 	private Long idEstudiante;
 	private UserInDbDTO usuario;
 	private String generacion;
-	
+
 	public UserInDbDTO getUsuario() {
 		return usuario;
 	}

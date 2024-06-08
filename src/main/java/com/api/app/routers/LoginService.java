@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.api.app.schemas.LoginCreateDTO;
-import com.api.app.schemas.TokenDTO;
+import com.api.app.schemas.LoginResponseDTO;
 import com.entities.Usuario;
 import com.services.JWTservice;
 import com.services.UsuarioBeanRemote;
@@ -41,11 +41,11 @@ public class LoginService {
             session.setAttribute("token", jwt); // guardamos el token en la sesión
 
             return Response.ok()
-                .entity(new TokenDTO("¡Bienvenido!", jwt)) // respondemos con un mensaje de bienvenida y el token
+                .entity(new LoginResponseDTO("¡Bienvenido!", jwt, user.getNombreUsuario(), user.getTipoUsuario())) // respondemos con un mensaje de bienvenida y el token
                 .build();
         } else {
             return Response.status(Response.Status.UNAUTHORIZED)
-                .entity(new TokenDTO("¡Oh no! Oh no no no", "El usuario o contraseña no es correcto")) // respondemos con un error si las credenciales son incorrectas
+                .entity(new LoginResponseDTO("¡Oh no! Oh no no no", "El usuario o contraseña no es correcto", null, null)) // respondemos con un error si las credenciales son incorrectas
                 .build();
         }
     }

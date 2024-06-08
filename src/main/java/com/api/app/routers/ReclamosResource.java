@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,6 +23,7 @@ import com.api.app.patchImpl.ObjectPatch;
 import com.api.app.schemas.claims.ClaimsCreateDTO;
 import com.api.app.schemas.claims.StatusReclamoDTO;
 import com.api.app.schemas.events.EventInDbDTO;
+import com.api.app.schemas.claims.ClaimDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
 import com.entities.Evento;
 import com.entities.Reclamo;
@@ -143,6 +145,24 @@ public class ReclamosResource {
 
 
 		return Response.ok(eventosInDb).build();
+	}
+	
+	@PUT
+	public Response updateClaim(ClaimDTO claim) {
+		objectMapper.addMixIn(Set.class, IgnoreType.class);
+		objectMapper.addMixIn(List.class, IgnoreType.class);
+		
+		Reclamo bddClaimToUpdate = objectMapper.convertValue(claim, Reclamo.class);
+		int exitCode = reclamoService.update(bddClaimToUpdate);
+		
+		Reclamo bddClaim = reclamoService.selectById(bddClaimToUpdate.getIdReclamo());
+		
+		if(exitCode != 0 | bddClaim == null) {
+			return Response.status(Response.Status.NOT_MODIFIED).build();
+		}
+		
+		ClaimDTO updatedClaim = objectMapper.convertValue(bddClaim, ClaimDTO.class);
+		return Response.ok(updatedClaim).build();
 	}
 
 }

@@ -8,7 +8,7 @@ public class EventInDbDTO {
 	private Long idEvento;
 	private String titulo;
 	private TipoEventoDTO tiposEvento;
-
+	
 	public String getTitulo() {
 		return titulo;
 	}
