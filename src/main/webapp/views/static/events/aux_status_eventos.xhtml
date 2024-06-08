@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<title>Mantenimiento de lista auxiliar de Estados de los
+		Eventos</title>
+</h:head>
+<ui:composition template="../templates/home.xhtml">
+	<ui:define name="content">
+		<h:body>
+			<h:outputStylesheet name="css/events/aux_status_eventos.css" />
+			<div class="layout-main">
+				<div class="layout-content">
+					<div class="card estados-list">
+						<h:form id="form">
+							<p:toolbar>
+								<p:toolbarGroup>
+									<p:commandButton value="Añadir Estado"
+										update=":dialogs:add-estado-content"
+										oncomplete="PF('addEstadoDialog').show()"
+										style="display: block"
+										class="ui-button-warning rounded-button" process="@this">
+										<p:resetInput target=":dialogs:manage-estado-content" />
+									</p:commandButton>
+								</p:toolbarGroup>
+							</p:toolbar>
+							<p:growl id="messages" showDetail="true" />
+							<p:dataTable id="dt-estados" widgetVar="dtEstados" var="estado"
+								value="#{dtEstadosView.estados}" reflow="true"
+								selection="#{dtEstadosView.selectedEstados}"
+								tableStyle="-webkit-fill-available" rowKey="#{estado.nombre}"
+								paginator="true" rows="15" paginatorPosition="bottom"
+								resizableColumns="true" showGridlines="true" resizeMode="expand">
+								<f:facet name="header">
+									<div class="estados-table-header">
+										<span style="font-weight: bold">Listado de Estados</span> <span
+											class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtEstados').filter()" placeholder="Buscar..." />
+										</span>
+									</div>
+								</f:facet>
+								<p:column exportable="false">
+									<p:commandButton icon="pi pi-pencil"
+										update=":dialogs:manage-estado-content"
+										oncomplete="PF('manageEstadoDialog').show()"
+										class="ui-button-warning rounded-button" process="@this">
+										<f:setPropertyActionListener value="#{estado}"
+											target="#{estadoModification.selectedEstado}" />
+										<p:resetInput target=":dialogs:manage-estado-content" />
+									</p:commandButton>
+									<p:toggleSwitch value="#{estado.activo}" onIcon="pi pi-check"
+										offIcon="pi pi-times">
+										<p:ajax
+											listener="#{dtEstadosView.onToggleSwitchChangeActive(estado)}" />
+									</p:toggleSwitch>
+								</p:column>
+								<p:column headerText="Activo"
+									sortBy="#{estado.activo ? 'Activo' : 'Inactivo'}"
+									filterBy="#{estado.activo ? 'Activo' : 'Inactivo'}">
+									<f:facet name="filter">
+										<p:selectOneMenu onchange="PF('dtEstados').filter()"
+											styleClass="ui-custom-filter">
+											<f:selectItem itemLabel="Todos" itemValue="#{null}"
+												noSelectionOption="true" />
+											<f:selectItems value="#{dtEstadosView.estadoStatus}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{estado.activo ? 'Activo' : 'Inactivo'}" />
+								</p:column>
+								<p:column headerText="Nombre" sortBy="#{estado.nombre}"
+									filterBy="#{estado.nombre}">
+									<h:outputText value="#{estado.nombre}" />
+								</p:column>
+							</p:dataTable>
+						</h:form>
+						
+			
+
+				<h:form id="dialogs">
+					<p:growl id="messages" showDetail="true" />
+					<p:dialog id="manage-estado-dialog" header="Modificar Estado"
+						showEffect="fade" widgetVar="manageEstadoDialog" responsive="true"
+						appendToBody="true" resizable="true" width="800" height="600">
+						<p:outputPanel id="manage-estado-content" class="ui-fluid">
+							<p:outputPanel
+								rendered="#{not empty estadoModification.selectedEstado}">
+								<div class="field">
+									<p:outputLabel for="name">Nombre</p:outputLabel>
+									<p:inputText id="name"
+										value="#{estadoModification.selectedEstado.nombre}"
+										required="true" validator="nameValidator" />
+								</div>
+							</p:outputPanel>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:commandButton value="Guardar" icon="pi pi-check"
+								actionListener="#{estadoModification.doUpdateEstado()}"
+								update=":form:dt-estados"
+								action="#{dtEstadosView.reloadEstados()}"
+								process="manage-estado-content @this">
+							</p:commandButton>
+							<p:commandButton value="Cancelar" icon="pi pi-times"
+								onclick="PF('manageEstadoDialog').hide()"
+								class="ui-button-secondary" type="button" />
+						</f:facet>
+					</p:dialog>
+					<p:dialog header="Añadir Estado" showEffect="fade"
+						widgetVar="addEstadoDialog" responsive="true" appendToBody="true"
+						resizable="true" width="800" height="600">
+						<p:outputPanel id="add-estado-content" class="ui-fluid">
+							<p:outputPanel>
+								<div class="field">
+									<p:outputLabel for="addName">Nombre</p:outputLabel>
+									<p:inputText id="addName" value="#{addEstado.name}"
+										required="true" validator="nameValidator" />
+								</div>
+							</p:outputPanel>
+						</p:outputPanel>
+
+						<f:facet name="footer">
+							<p:commandButton value="Añadir" icon="pi pi-check"
+								actionListener="#{addEstado.doAddEstado()}"
+								update=":form:dt-estados"
+								action="#{dtEstadosView.reloadEstados()}"
+								process="add-estado-content @this" />
+							<p:commandButton value="Cancelar" icon="pi pi-times"
+								onclick="PF('addEstadoDialog').hide()"
+								class="ui-button-secondary" type="button" />
+						</f:facet>
+					</p:dialog>
+				</h:form>
+			</div>
+			</div>
+			</div>
+		</h:body>
+	</ui:define>
+</ui:composition>
+</html>

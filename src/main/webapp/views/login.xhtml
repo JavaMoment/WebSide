@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	xmlns:ui="http://java.sun.com/jsf/facelets">
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
 <h:head>
 	<title>Login</title>
 </h:head>
@@ -74,7 +74,7 @@
                             <f:converter converterId="AreaConverter" />
 						    <p:ajax update="@this" process="@this"/>
 						  </p:selectOneMenu>
-            			</h:panelGrid>
+            			</h:panelGrid>	
 					</div>
 				</p:scrollPanel>
 				<p:commandButton value="Registrarme" update="msgs" style="margin-top: 2rem" actionListener="#{signup.doSignup()}">
@@ -93,7 +93,8 @@
 						<div class="ui-inputgroup-addon">
 							<i class="pi pi-user"></i>
 						</div>
-						<p:inputText id="email" placeholder="Correo UTEC o nombre de usuario" autocomplete="off"
+						<p:inputText id="email" placeholder="Correo UTEC o nombre de usuario"
+							autocomplete="off"
 							style="padding-left: 6px;" required="true"
 							value="#{login.emailUtec}" validator="emailValidator">
 						</p:inputText>

@@ -2,6 +2,7 @@ package com.controllers.events;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.EnumSet;
@@ -15,16 +16,23 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.Flash;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.PrimeFaces;
 
-import com.entities.Estado;
 import com.entities.Evento;
 import com.entities.Itr;
 import com.entities.Modalidad;
+import com.entities.Reclamo;
+import com.entities.StatusEvento;
 import com.entities.TiposEvento;
 import com.entities.Tutor;
-import com.services.EstadoBeanRemote;
+import com.entities.Usuario;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.services.HttpRequestDispatcher;
+import com.services.StatusEventoBeanRemote;
 import com.services.EventoBeanRemote;
 import com.services.ItrBeanRemote;
 import com.services.ModalidadBeanRemote;
@@ -33,8 +41,8 @@ import com.services.TutorBeanRemote;
 
 @Named("eventView")
 @ViewScoped
-public class EventsListView implements Serializable{
-	
+public class EventsListView implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
 	@EJB
@@ -50,56 +58,83 @@ public class EventsListView implements Serializable{
 	private TutorBeanRemote tutorBeanRemote;
 
 	@EJB
-	private EstadoBeanRemote estadoBeanRemote;
-	
+	private StatusEventoBeanRemote estadoBeanRemote;
+
 	@EJB
 	private TiposEventoBeanRemote tiposEventoBeanRemote;
-
-
 
 	private long idEvento;
 	private Date fechaHoraFinal;
 	private Date fechaHoraInicio;
 	private String titulo;
-	private Estado estado;
+	private StatusEvento statusEvento;
 	private Long[] selectedTutores;
-	private int activo;
+	private Byte activo;
 	private Evento evento;
 	private long modalidadId;
 	private long itrId;
 	private long estadoId;
 	private TiposEvento tipoEvento;
 	private List<Evento> events;
-	
+	private HttpSession session;
+	protected HttpRequestDispatcher dispatcher;
+	protected ObjectMapper objectMapper;
+
 	@PostConstruct
 	public void init() {
-		this.evento = new Evento();
-		events = eventBeanRemote.selectAll();
+		FacesContext facesContext = FacesContext.getCurrentInstance();
+		ExternalContext externalContext = facesContext.getExternalContext();
+		HttpSession session = (HttpSession) externalContext.getSession(false); // Cambio aquí: `false` para no crear una
+																				// nueva si no existe
+
+		Usuario userLogged = (Usuario) session.getAttribute("userLogged");
+		if (userLogged == null) {
+
+			System.out.println("no agarra usuario");
+		}
+
+		String tipoUsuario = userLogged.getTipoUsuario().toUpperCase();
+		switch (tipoUsuario) {
+		case "ANALISTA":
+			events = eventBeanRemote.todos();
+			break;
+		case "TUTOR":
+			Long idTutor = tutorBeanRemote.buscarIdPorUsuario(userLogged.getNombreUsuario());
+			events = (idTutor != null) ? eventBeanRemote.selectEventosByTutor(idTutor) : new ArrayList<>();
+			break;
+		default:
+			events = new ArrayList<>(); // Por defecto, no se muestra ningún evento
+			break;
+		}
+		this.evento = new Evento(); // Asegurar que el objeto evento esté inicializado
 	}
-	
+
 	public void onToggleSwitchChangeActive(Evento event) {
 		int exitCode;
 		String eventName = evento.getTitulo();
 		Long eventId = event.getIdEvento();
-		if(event.getActivo() == (byte) 1) {
-			event.setActivo((byte) 0);
+		if (event.getActivo() == true) {
+			event.setActivo(false);
 			exitCode = eventBeanRemote.logicalDeleteBy(eventId);
-			if(exitCode == 0) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El Evento: " + eventName + " ha sido correctamente dado de baja."));
+			if (exitCode == 0) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage("¡Bien!", "El Evento: " + eventName + " ha sido correctamente dado de baja."));
 			}
 		} else {
-			event.setActivo((byte) 1);
+			event.setActivo(true);
 			exitCode = eventBeanRemote.activeEventBy(eventId);
-			if(exitCode == 0) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El Evento: " + eventName + " ha sido correctamente activado."));
+			if (exitCode == 0) {
+				FacesContext.getCurrentInstance().addMessage(null,
+						new FacesMessage("¡Bien!", "El Evento: " + eventName + " ha sido correctamente activado."));
 			}
 		}
-		if(exitCode != 0) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el estado del ITR no ha podido ser modificado."));
+		if (exitCode != 0) {
+			FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage("Ha ocurrido un error y el estado del ITR no ha podido ser modificado."));
 		}
 
 	}
-	
+
 	public Evento getEvento() {
 		return evento;
 	}
@@ -144,19 +179,19 @@ public class EventsListView implements Serializable{
 		this.titulo = titulo;
 	}
 
-	public Estado getEstado() {
-		return estado;
+	public StatusEvento getEstado() {
+		return statusEvento;
 	}
 
-	public void setEstado(Estado estado) {
-		this.estado = estado;
+	public void setEstado(StatusEvento statusEvento) {
+		this.statusEvento = statusEvento;
 	}
 
-	public int getActivo() {
+	public Byte getActivo() {
 		return activo;
 	}
 
-	public void setActivo(int activo) {
+	public void setActivo(Byte activo) {
 		this.activo = activo;
 	}
 
@@ -188,10 +223,10 @@ public class EventsListView implements Serializable{
 		return tutorBeanRemote.selectAll();
 	}
 
-	public List<Estado> getListaEstado() {
+	public List<StatusEvento> getListaEstado() {
 		return estadoBeanRemote.selectAll();
 	}
-	
+
 	public List<TiposEvento> getListaTiposEvento() {
 		return tiposEventoBeanRemote.selectAll();
 	}
@@ -199,7 +234,6 @@ public class EventsListView implements Serializable{
 	public TiposEvento getTipoEvento() {
 		return tipoEvento;
 	}
-
 
 	public void setTipoEvento(TiposEvento tipoEvento) {
 		this.tipoEvento = tipoEvento;
@@ -224,7 +258,7 @@ public class EventsListView implements Serializable{
 	public void setSelectedTutores(Long[] selectedTutores) {
 		this.selectedTutores = selectedTutores;
 	}
-	
+
 	public List<Evento> getEvents() {
 		return events;
 	}
@@ -233,5 +267,4 @@ public class EventsListView implements Serializable{
 		this.events = events;
 	}
 
-	
 }

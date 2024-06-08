@@ -1,0 +1,221 @@
+@charset "ISO-8859-1";
+
+form {
+    display: block;
+    margin-top: 0em;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(41, 50, 65, 0.8);
+    padding: 0;
+    margin: 0;
+    min-height: 100%;
+    background-color: #F2F4F6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -0.5rem;
+    margin-left: -0.5rem;
+    margin-top: -0.5rem;
+}
+
+table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+.layout-content .card {
+    background: var(--surface-e);
+    padding: 2rem;
+    box-shadow: 0 2px 1px -1px rgb(0 0 0 / 20%), 0 1px 1px 0 rgb(0 0 0 / 14%), 0 1px 3px 0 rgb(0 0 0 / 12%);
+    border-radius: 4px;
+    margin-bottom: 2rem;
+}
+
+.status-list .ui-datatable {
+    margin-top: 1rem;
+}
+
+body .ui-widget {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+.ui-datatable-reflow .ui-reflow-label, .ui-datatable-reflow .ui-reflow-dropdown {
+    margin-bottom: 10px;
+    display: none;
+}
+
+body .ui-datatable .ui-datatable-header {
+    text-align: left;
+}
+
+body .ui-datatable .ui-datatable-header {
+    background: #FCFCFC;
+    border: 1px solid rgba(70, 77, 242, 0.2);
+    border-width: 1px 0 1px 0;
+    color: #69707A;
+    padding: 1rem 1rem;
+    font-weight: 600;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.status-list .status-table-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+body .ui-input-icon-left > .ui-inputfield {
+    padding-left: 2rem;
+}
+
+.filter-container .ui-inputtext {
+    width: 400px;
+}
+
+.ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+    font-weight: normal;
+}
+
+body .ui-inputfield {
+    color: #69707A;
+    background: #ffffff;
+    padding: 0.5rem 0.5rem;
+    border: 1px solid #D4D6D9;
+    outline: 0 none;
+    font-size: 1rem;
+    border-radius: 6px;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.ui-inputfield {
+    margin: 0;
+}
+
+.ui-datatable-tablewrapper {
+    overflow: auto;
+}
+
+body .ui-datatable .ui-paginator.ui-paginator-bottom {
+    border-width: 0 0 1px 0;
+    border-radius: 0;
+}
+
+body .ui-datatable .ui-paginator {
+    padding: 1rem;
+}
+
+.ui-paginator.ui-paginator-bottom {
+    border-top: 0 none;
+}
+
+body .ui-paginator {
+    background: #ffffff;
+    border: solid rgba(70, 77, 242, 0.2);
+    border-width: 0;
+    padding: 1rem;
+}
+
+.ui-paginator {
+    margin: 0;
+    text-align: center;
+}
+
+thead {
+    display: table-header-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+.ui-datatable table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+body .ui-datatable thead th .ui-column-title {
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+body .ui-datatable thead th .ui-sortable-column-icon.ui-icon-carat-2-n-s {
+    font-family: "primeicons" !important;
+    font-style: normal;
+    font-weight: normal;
+    display: inherit;
+    background: none;
+    vertical-align: middle;
+}
+
+body .ui-datatable thead th .ui-sortable-column-icon {
+    margin: 0 0 0 0.5rem;
+}
+
+.ui-datatable .ui-sortable-column {
+    cursor: pointer;
+    user-select: none;
+}
+
+body .ui-datatable thead th {
+    background: #FCFCFC;
+    color: #69707A;
+    padding: 1rem 1rem;
+    border: 1px solid rgba(70, 77, 242, 0.2);
+    border-width: 0 0 1px 0;
+    text-align: left;
+    box-sizing: content-box;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.ui-datatable .ui-column-filter {
+    display: none;
+    box-sizing: border-box;
+    width: 100%;
+    margin: .5rem auto auto auto;
+}
+
+body .ui-button.rounded-button.ui-button-icon-only {
+    border-radius: 50%;
+    height: 2.357rem;
+    padding: 16px;
+    left: 4px;
+}
+
+body .ui-toggleswitch {
+    position: relative;
+    display: block;
+    width: 3rem;
+    height: 1.75rem;
+}
+
+.ui-filter-column .ui-column-customfilter .custom-filter {
+	width: 100%;
+	box-sizing: border-box;
+}
