@@ -322,7 +322,7 @@
             <f:facet name="footer">
                 <p:commandButton value="Añadir" icon="pi pi-check" actionListener="#{addClaimView.doCreateClaim()}"
                     update=":form:dt-claims" process="add-claim-content @this" action="#{dtClaimsView.reloadClaims()}"/>
-                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addItrDialog').hide()"
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addClaimDialog').hide()"
                     class="ui-button-secondary" type="button" />
             </f:facet>
         </p:dialog>
