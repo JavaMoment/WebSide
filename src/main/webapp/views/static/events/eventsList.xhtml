@@ -21,6 +21,7 @@
 		<h:body>
 			<div class="card">
 				<h:form id="form">
+
 					<div class="w-11 ml-5 mt-5">
 
 						<p:dataTable id="dt-events" widgetVar="dtEvents" var="evento"
@@ -37,8 +38,8 @@
 									<p:commandButton icon="pi pi-plus"
 										update=":new-event-form:new-event-content"
 										oncomplete="PF('newEventDialog').show()"
-										class="ui-button-success rounded-button flex-shrink-1"
-										process="@this" value="Añadir evento"
+										class="ui-button-warning rounded-button" process="@this"
+										value="Añadir evento"
 										rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 										<p:resetInput target=":new-event-form:new-event-dialog" />
 									</p:commandButton>
@@ -47,8 +48,7 @@
 										<p:commandButton icon="bx bx-list-ul"
 											action="window.location.href='/WebSide/views/static/events/aux_status_eventos.xhtml'"
 											onclick="window.location.href='/WebSide/views/static/events/aux_status_eventos.xhtml'; return false;"
-											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
-											styleClass="ui-button-success" value="Estados">
+											class="ui-button-warning rounded-button" value="Estados">
 
 										</p:commandButton>
 									</ui:fragment>
@@ -57,8 +57,7 @@
 										<p:commandButton icon="bx bx-list-ul"
 											action="window.location.href='/WebSide/views/static/events/aux_modalidades_eventos.xhtml'"
 											onclick="window.location.href='/WebSide/views/static/events/aux_modalidades_eventos.xhtml'; return false;"
-											class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left"
-											styleClass="ui-button-success" value="Modalidades">
+											class="ui-button-warning rounded-button" value="Modalidades">
 
 										</p:commandButton>
 									</ui:fragment>
@@ -89,9 +88,12 @@
 								<br />
 								<ui:fragment
 									rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+									<p:growl id="growl" life="3000" />
+
 									<p:toggleSwitch value="#{evento.activo}" onIcon="pi pi-check"
 										offIcon="pi pi-times" class="mt-2">
-										<p:ajax listener="#{event.onToggleSwitchChangeActive(evento)}" />
+										<p:ajax listener="#{event.onToggleSwitchChangeActive(evento)}"
+											update="growl" />
 									</p:toggleSwitch>
 								</ui:fragment>
 
@@ -114,7 +116,7 @@
 								<h:outputText value="#{evento.modalidad.nombre}" />
 							</p:column>
 
-							<p:column headerText="ITR" sortBy="#{evento.itr}"
+							<p:column headerText="ITR" sortBy="#{evento.itr.nombre}"
 								filterBy="#{evento.itr.nombre}">
 								<h:outputText value="#{evento.itr.nombre}" />
 							</p:column>
@@ -163,7 +165,8 @@
 								<h:outputLabel for="tipoEvento" value="Tipo de Evento:"
 									class="event-registration-label" />
 								<p:selectOneMenu id="tipoEvento" value="#{event.tipoEventoId}"
-									styleClass="event-registration-select">
+									styleClass="event-registration-select" required="true"
+									requiredMessage="La selección de un tipo de evento es obligatoria.">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
 									<f:selectItems value="#{event.listaTiposEventos}" var="tipo"
@@ -191,7 +194,8 @@
 
 								<label class="event-registration-label">Modalidad:</label>
 								<p:selectOneMenu id="modalidad" value="#{event.modalidadId}"
-									class="event-registration-input">
+									class="event-registration-input" required="true"
+									requiredMessage="La selección de una modalidad es obligatoria.">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
 									<f:selectItems value="#{event.listaModalidad}" var="modalidad"
@@ -201,7 +205,8 @@
 
 
 								<label class="event-registration-label">ITR responsable:</label>
-								<p:selectOneMenu id="itr" value="#{event.itrId}">
+								<p:selectOneMenu id="itr" value="#{event.itrId}" required="true"
+									requiredMessage="La selección de un ITR es obligatoria.">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
 									<f:selectItems value="#{event.listaItr}" var="itr"
@@ -211,7 +216,8 @@
 
 								<label class="event-registration-label">Estado:</label>
 								<h:selectOneMenu id="estado" value="#{event.statusEventoID}"
-									class="event-registration-input">
+									class="event-registration-input" required="true"
+									requiredMessage="La selección de un estado es obligatoria.">
 									<f:selectItem itemLabel="Seleccione uno" itemValue=""
 										noSelectionOption="true" />
 									<f:selectItems value="#{event.listaStatusEvento}" var="estado"
