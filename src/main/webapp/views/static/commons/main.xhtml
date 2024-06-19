@@ -6,6 +6,18 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<style>
+	  .flex {
+	    flex-direction: column;
+	  }
+	  a.text-0 {
+	    text-decoration:none;
+	    display: inline-block;
+	  }
+	  i {
+	    margin-left: 0.25rem !important
+	  }
+	</style>
 	<link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css'
 		rel='stylesheet' />
 	<link rel="stylesheet"
@@ -19,77 +31,80 @@ body {
 	overflow-x: hidden;
 }
 </style>
-	<h:form>
-		<p:commandLink action="#{home.logout()}">
-			<i class='bx bx-log-out'></i>
-		</p:commandLink>
-	</h:form>
-	<div
-		class="flex flex-column justify-content-center align-items-center w-full mt-7"
-		style="font-family: arial;">
-		<img src="../../../resources/images/icons/utec_icon.png" />
-		<h1 class="text-7xl mt-5">Bienvenido a UTEC</h1>
-
-		<div class="flex flex-wrap h-auto w-6 ml-5 mt-5 text-6xl">
-
+	<div class="flex flex-column justify-content-center align-items-center" style="font-family:arial;">
+      <img src="../../../resources/images/icons/utec_icon.png"></img>
+      <h1 class="text-7xl mt-5">Bienvenido a UTEC</h1>
+	</div>
+	<div class="flex flex-column justify-content-center align-items-center w-full" style="font-family: arial">
+		<div class="flex flex-wrap h-auto w-6 text-6xl align-items-center">
 			<ui:fragment
 				rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 				<div
-					class="flex justify-content-center align-items-center m-4 w-3 h-7rem  border-round-lg bg-primary">
+					class="flex justify-content-center align-items-left w-7 h-7rem border-round-lg bg-primary">
 					<a href="/WebSide/views/static/dashboard/dashboard.xhtml"
-						class="text-0"> <!--dashboard --> <i class="bx bx-grid-alt"></i>
+						class="text-0">
+				      <i class="bx bx-grid-alt"></i>
+					  <span class="links_name">Dashboard</span>
 					</a>
 				</div>
 			</ui:fragment>
-
 			<ui:fragment
 				rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 				<div
-					class="flex justify-content-center align-items-center m-4 w-3 h-7rem  border-round-lg bg-primary">
+					class="flex justify-content-center align-items-left mt-3 w-7 h-7rem border-round-lg bg-primary">
 					<a href="/WebSide/views/static/listings/usersList.xhtml"
-						class="text-0"> <!--listado usuarios --> <i class="bx bx-user"></i>
+						class="text-0">
+					  <i class="bx bx-user"></i>
+					  <span class="links_name">Listado de usuarios</span>
 					</a>
 				</div>
 			</ui:fragment>
 			<ui:fragment
 				rendered="#{!session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
 				<div
-					class="flex justify-content-center align-items-center m-4 w-3 h-7rem  border-round-lg bg-primary">
+					class="flex justify-content-center align-items-left mt-3 w-7 h-7rem border-round-lg bg-primary">
 					<a href="/WebSide/views/static/events/eventsList.xhtml"
-						class="text-0"> <!--listado evenos --> <i
-						class="bx bxs-bookmarks"></i>
+						class="text-0">
+					  <i class="bx bxs-bookmarks"></i>
+					  <span class="links_name">Listado de eventos</span>
 					</a>
 				</div>
 			</ui:fragment>
-
 			<ui:fragment
 				rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
 				<div
-					class="flex justify-content-center align-items-center m-4 w-3 h-7rem  border-round-lg bg-primary">
+					class="flex justify-content-center align-items-left mt-3 w-7 h-7rem border-round-lg bg-primary">
 					<a href="/WebSide/views/static/listings/itrsList.xhtml"
-						class="text-0"> <!--listado itrs --> <i
-						class="bx bx-buildings"></i>
+						class="text-0"> 
+						<i class="bx bx-buildings"></i>
+						<span class="links_name">Listado de ITRs</span>
 					</a>
 				</div>
 			</ui:fragment>
-
 			<ui:fragment
 				rendered="#{!session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('TUTOR')}">
 				<div
-					class="flex justify-content-center align-items-center m-4 w-3 h-7rem  border-round-lg bg-primary">
+					class="flex justify-content-center align-items-left mt-3 w-7 h-7rem border-round-lg bg-primary" style="font-size: 98%;">
 					<a href="/WebSide/views/static/listings/claimsList.xhtml"
-						class="text-0"> <!--listado reclamos --> <i class="bx bx-box"></i>
+						class="text-0">
+					  <i class="bx bx-box"></i>
+					  <span class="links_name">Listado de reclamos</span>
 					</a>
 				</div>
 			</ui:fragment>
-
 			<div
-				class="flex justify-content-center align-items-center m-4 w-3 h-7rem  border-round-lg bg-primary">
+				class="flex justify-content-center align-items-left mt-3 w-7 h-7rem border-round-lg bg-primary">
 				<a href="/WebSide/views/static/profile/profile.xhtml" class="text-0">
-					<!--Mi usuario --> <i class="bx bxs-user-account"></i>
+				  <i class="bx bxs-user-account"></i>
+				  <span class="links_name">Mi perfil</span>
 				</a>
 			</div>
-
+			<h:form>
+			  <p:commandLink action="#{home.logout()}">
+				<i class='bx bx-log-out'></i>
+				<span class="links_name">Cerrar sesión</span>
+			  </p:commandLink>
+			</h:form>
 		</div>
 	</div>
 </h:body>
