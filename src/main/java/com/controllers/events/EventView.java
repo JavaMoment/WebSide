@@ -256,14 +256,14 @@ public class EventView implements Serializable {
 			exitCode = eventBeanRemote.activeEventBy(eventoID);
 			if (exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage("¡Bien!", "El evento " + eventoID + " ha sido correctamente activado."));
+						new FacesMessage( "El evento" + " ha sido correctamente activado."));
 			}
 		} else {
 			evento.setActivo(false);
 			exitCode = eventBeanRemote.logicalDeleteBy(eventoID);
 			if (exitCode == 0) {
 				FacesContext.getCurrentInstance().addMessage(null,
-						new FacesMessage("¡Bien!", "El evento " + eventoID + " ha sido correctamente dado de baja."));
+						new FacesMessage("El evento" +  " ha sido correctamente dado de baja."));
 			}
 		}
 		if (exitCode != 0) {
