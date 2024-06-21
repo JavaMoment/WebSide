@@ -20,17 +20,21 @@ import com.api.app.misc.IgnoreType;
 import com.api.app.misc.MediaTypes;
 import com.api.app.patchImpl.ObjectPatch;
 
-import com.api.app.schemas.claims.ClaimsCreateDTO;
+import com.api.app.schemas.claims.ClaimCreateDTO;
 import com.api.app.schemas.claims.StatusReclamoDTO;
 import com.api.app.schemas.events.EventInDbDTO;
 import com.api.app.schemas.claims.ClaimDTO;
 import com.api.app.schemas.claims.ClaimInDbDTO;
+import com.entities.Estudiante;
 import com.entities.Evento;
 import com.entities.Reclamo;
 import com.entities.StatusReclamo;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.services.EstudianteBeanRemote;
 import com.services.EventoBeanRemote;
 import com.services.ReclamoBeanRemote;
 import com.services.StatusReclamoBeanRemote;
@@ -46,6 +50,8 @@ public class ReclamosResource {
 	protected StatusReclamoBeanRemote statusReclamoService;
 	@EJB
 	protected EventoBeanRemote eventoService;
+	@EJB
+	protected EstudianteBeanRemote estudianteService;
 	
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	
@@ -94,19 +100,26 @@ public class ReclamosResource {
 	}
 
 	@POST
-	@Path("new")
-	public Response createClaim(ClaimsCreateDTO newClaimDTO) {
+	public Response createClaim(ClaimCreateDTO newClaimDTO) {
 		ObjectMapper om = new ObjectMapper();
+		om.configure(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES, false);
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        om.addMixIn(Set.class, IgnoreType.class);
+        om.addMixIn(List.class, IgnoreType.class);
+        
+        Estudiante estud = estudianteService.selectUserBy(newClaimDTO.getNombreUsuario());
+        StatusReclamo status = statusReclamoService.selectById(1L); 
 		Reclamo newClaim = om.convertValue(newClaimDTO, Reclamo.class);
-		int exitCode = reclamoService.create(newClaim); 
-
-		if(exitCode != 0) {
-			return Response.status(Response.Status.BAD_REQUEST).build();
+		newClaim.setEstudiante(estud);
+		newClaim.setStatusReclamo(status);
+		
+		Reclamo persistedClaim = reclamoService.insert(newClaim); 
+		if(persistedClaim == null) {
+			return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
 		}
 		
-		
-		om.addMixIn(Set.class, IgnoreType.class);
-		ClaimInDbDTO claimInDbDTO = om.convertValue(newClaim, ClaimInDbDTO.class); 
+		Reclamo claimInDb = reclamoService.selectById(persistedClaim.getIdReclamo());
+		ClaimInDbDTO claimInDbDTO = om.convertValue(claimInDb, ClaimInDbDTO.class); 
 		return Response.status(Response.Status.CREATED).entity(claimInDbDTO).build();
 	}
 	
