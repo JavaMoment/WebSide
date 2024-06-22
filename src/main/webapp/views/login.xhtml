@@ -18,47 +18,47 @@
 					skipDetailIfEqualsSummary="true" />
 				<p:scrollPanel mode="native" id="signUpScrollPane">
 					<div class="grid ui-fluid">
-						<p:inputText id="emailPersonal" value="#{signup.newUser.mailPersonal}" placeholder="Correo personal" validator="personalEmailValidator" required="true"> </p:inputText>
-						<p:inputText id="emailInstitucional" value="#{signup.newUser.mailInstitucional}" placeholder="Correo institucional" validator="emailValidator" required="true"> </p:inputText>
-						<p:password  id="password1" value="#{signup.newUser.contrasenia}" placeholder="Contraseña" toggleMask="true" redisplay="true" match="password2" required="true" validator="passwordValidator"/>
-						<p:password  id="password2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" validator="passwordValidator"/>
-						<p:inputText id="primerNombre" placeholder="Primer nombre" validator="nameValidator" required="true" value="#{signup.newUser.nombre1}"/>
+						<p:inputText id="emailPersonal" value="#{signup.newUser.mailPersonal}" placeholder="Correo personal"  requiredMessage="El mail personal es obligatorio" validator="personalEmailValidator" required="true"> </p:inputText>
+						<p:inputText id="emailInstitucional" value="#{signup.newUser.mailInstitucional}" placeholder="Correo institucional" validator="emailValidator"  requiredMessage="El correo institucional es obligatorio" required="true"> </p:inputText>
+						<p:password  id="password1" value="#{signup.newUser.contrasenia}" placeholder="Contraseña" toggleMask="true" redisplay="true" match="password2" required="true"  requiredMessage="La contraseña es obligatoria" validator="passwordValidator"/>
+						<p:password  id="password2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" requiredMessage="La confirmación de la contraseña es obligatoria" validator="passwordValidator"/>
+						<p:inputText id="primerNombre" placeholder="Primer nombre" validator="nameValidator" required="true" requiredMessage="El nombre es obligatorio" value="#{signup.newUser.nombre1}"/>
 						<p:inputText id="segundoNombre" placeholder="Segundo nombre" value="#{signup.newUser.nombre2}"> </p:inputText>
-						<p:inputText id="primerApellido" placeholder="Primer apellido" required="true" validator="lastnameValidator" value="#{signup.newUser.apellido1}"/>
-						<p:inputText id="segundoApellido" placeholder="Segundo apellido" required="true" validator="lastnameValidator" value="#{signup.newUser.apellido2}"> </p:inputText>
-						<p:datePicker id="birthdate" value="#{signup.newUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true" />
-						<p:inputText id="documento" placeholder="Cédula de identidad" validator="ciValidator" required="true" value="#{signup.newUser.documento}"/>
+						<p:inputText id="primerApellido" placeholder="Primer apellido" required="true" requiredMessage="El primer apellido es obligatorio" validator="lastnameValidator" value="#{signup.newUser.apellido1}"/>
+						<p:inputText id="segundoApellido" placeholder="Segundo apellido" required="true" requiredMessage="El segundo apellido es obligatorio" validator="lastnameValidator" value="#{signup.newUser.apellido2}"> </p:inputText>
+						<p:datePicker id="birthdate" value="#{signup.newUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" requiredMessage="La fecha de nacimiento es obligatoria" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true" />
+						<p:inputText id="documento" placeholder="Cédula de identidad" validator="ciValidator" required="true" requiredMessage="La cédula es obligatoria" value="#{signup.newUser.documento}"/>
 						<p:inputText id="telefono" placeholder="Telefono" validator="phoneValidator" value="#{signup.newUser.telefono}"> </p:inputText>
-						<p:selectOneMenu id="departamento" value="#{signup.selectedDepaName}" required="true" hideNoSelectionOption="#{not empty signup.selectedDepaName}" >
+						<p:selectOneMenu id="departamento" value="#{signup.selectedDepaName}" required="true" requiredMessage="La elección de departamento es obligatoria" hideNoSelectionOption="#{not empty signup.selectedDepaName}" >
 						  <p:ajax listener="#{signup.onDepartamentoChanged}" update="ciudad,@this" process="@this"/>
 						  <f:selectItem itemLabel="Departamento de residencia" itemValue="#{null}" noSelectionOption="true" />
                           <f:selectItems value="#{signup.depas}" />
 						</p:selectOneMenu>
-						<p:selectOneMenu id="ciudad" value="#{signup.newUser.localidad}" required="true" hideNoSelectionOption="#{not empty signup.newUser.localidad}">
+						<p:selectOneMenu id="ciudad" value="#{signup.newUser.localidad}" requiredMessage="La elección de la ciudad es obligatoria" required="true" hideNoSelectionOption="#{not empty signup.newUser.localidad}">
 						  <f:converter converterId="LocalidadConverter" />
 						  <p:ajax update="@this" process="@this"/>
 						  <f:selectItem itemLabel="Ciudad de residencia" itemValue="#{null}" noSelectionOption="true" />
                           <f:selectItems value="#{signup.cities}" />
 						</p:selectOneMenu>
-						<p:selectOneMenu id="genero" label="Género" value="#{signup.selectedGenreName}" hideNoSelectionOption="#{not empty signup.selectedGenreName}" required="true">
-                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione el genero" noSelectionOption="true" />
+						<p:selectOneMenu id="genero" label="Género" value="#{signup.selectedGenreName}" requiredMessage="La elección de género es obligatoria" hideNoSelectionOption="#{not empty signup.selectedGenreName}" required="true">
+                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione el género" noSelectionOption="true" />
                           <f:selectItems value="#{signup.genres}" />
                           <p:ajax update="@this" process="@this" listener="#{signup.onGenreChanged()}" />
                         </p:selectOneMenu>
-						<p:selectOneMenu id="itr" value="#{signup.newUser.itr}" required="true" hideNoSelectionOption="#{not empty signup.newUser.itr}">
+						<p:selectOneMenu id="itr" value="#{signup.newUser.itr}" required="true" requiredMessage="La elección de itr es obligatoria" hideNoSelectionOption="#{not empty signup.newUser.itr}">
 						  <f:converter converterId="ItrConverter" />
 						  <f:selectItem itemLabel="ITR al que pertenece" itemValue="#{null}" noSelectionOption="true" />
                           <f:selectItems value="#{signup.itrs}" />
                           <p:ajax update="@this" process="@this"/>
 						</p:selectOneMenu>
-						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" value="#{signup.userType}" required="true" hideNoSelectionOption="#{not empty signup.userType}">
+						<p:selectOneMenu id="tipoUsuario" label="Tipo de usuario" value="#{signup.userType}" required="true" requiredMessage="La elección de tipo de usuario es obligatoria" hideNoSelectionOption="#{not empty signup.userType}">
 						  <f:selectItem itemLabel="Seleccione su tipo de usuario" itemValue="#{null}"  noSelectionOption="true" />
 						  <f:selectItems value="#{signup.userTypes}" />
 						  <p:ajax update="genWrapper,@this" process="@this" />
 						</p:selectOneMenu>
 						<h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
 						  <p:outputLabel for="generacionText" rendered="#{signup.userType eq 'Estudiante'}">Generación de ingreso:</p:outputLabel>
-						  <p:inputText id="generacionText" value="#{signup.newStudent.generacion}" rendered="#{signup.userType eq 'Estudiante'}" required="true" />
+						  <p:inputText id="generacionText" value="#{signup.newStudent.generacion}" rendered="#{signup.userType eq 'Estudiante'}" required="true" readonly="true" />
             			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{signup.currentYear}" range="max" rendered="#{signup.userType eq 'Estudiante'}">
             			    <p:ajax event="slideEnd" process="@form"/>
             			  </p:slider>
@@ -95,7 +95,7 @@
 						</div>
 						<p:inputText id="email" placeholder="Correo UTEC o nombre de usuario"
 							autocomplete="off"
-							style="padding-left: 6px;" required="true"
+							style="padding-left: 6px;" required="true"  requiredMessage="El correo UTEC o nombre de usuario es obligatorio"
 							value="#{login.emailUtec}" validator="emailValidator">
 						</p:inputText>
 					</div>
@@ -105,7 +105,7 @@
 						</div>
 						<p:password placeholder="Contraseña" toggleMask="true" id="password"
 							autocomplete="off"
-							redisplay="true" required="true" inline="true" weakLabel="true"
+							redisplay="true" required="true"  requiredMessage="La contraseña es obligatoria" inline="true" weakLabel="true"
 							goodLabel="true" strongLabel="true" value="#{login.password}"
 							validator="passwordValidator">
 						</p:password>

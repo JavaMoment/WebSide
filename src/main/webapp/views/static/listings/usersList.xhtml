@@ -41,7 +41,7 @@
 	                <p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
 	               </p:toggleSwitch>
 	           </p:column>
-	           <p:column headerText="Activo" sortBy="#{user.activo}" filterBy="#{user.activo == 1 ? 'Activo' : 'Inactivo'}">
+	           <p:column headerText="Estado" sortBy="#{user.activo}" filterBy="#{user.activo == 1 ? 'Activo' : 'Inactivo'}">
 	               <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
                         <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
@@ -212,9 +212,11 @@
                     <div class="field">
                       <h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
 						  <p:outputLabel for="generacionText" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">Seleccione la nueva generación de ingreso:</p:outputLabel>
-						  <p:inputText id="generacionText" value="#{userModification.selectedGeneracion}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}" />
+						  <p:inputText id="generacionText" value="#{userModification.selectedGeneracion}" validatorMessage="El valor debe ser menor al año actual y mayor a 2010" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
+						    <f:validateDoubleRange minimum = "2010" maximum = "#{userModification.currentYear}"/>
+						  </p:inputText>
             			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{userModification.currentYear}" range="max" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
-            			    <p:ajax event="slideEnd" process="@form"/>
+            			    <p:ajax event="slideEnd" process="@this"/>
             			  </p:slider>
             			  <p:outputLabel for="roles" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Rol:</p:outputLabel>
             			  <p:selectOneMenu id="roles" value="#{userModification.selectedRolName}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
