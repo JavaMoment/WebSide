@@ -245,8 +245,8 @@
 							<div class="event-registration-actions">
 								<div class="event-registration-actions">
 
-									<p:commandButton value="Cancelar" action="#{event.cancel}"
-										update="msgs" styleClass="ui-button-update" />
+									<p:commandButton value="Cancelar" action="#{event.cancel()}"
+										update="msgs" styleClass="ui-button-update" process="@this"/>
 
 									<p:commandButton value="Registrar Evento"
 										action="#{event.save()}" update="msgs"
@@ -375,11 +375,12 @@
 					<div class="event-registration-actions">
 
 						<p:commandButton value="Cancelar"
-							action="#{eventModification.cancel()}" update="msgs"
+							action="#{eventModification.cancel()}" update="msgs" process="@this"
 							styleClass="ui-button-update" />
 
+		
 						<p:commandButton value="Guardar modificaciones"
-							action="#{eventModification.doUpdateEvent()}" update="msgs"
+							action="#{eventModification.doUpdateEvent()}" update="msgs" 
 							styleClass="ui-button-update" />
 
 
