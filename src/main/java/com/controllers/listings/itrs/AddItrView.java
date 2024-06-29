@@ -34,7 +34,7 @@ public class AddItrView implements Serializable {
 	
 	@PostConstruct
 	public void init() {
-		departamentos = depaBean.selectAll().stream().map(d -> d.getNombre()).toList();
+		departamentos = depaBean.getDepartamentosWithoutItr().stream().map(d -> d.getNombre()).toList();
 	}
 
 	public void onItemUnselect(UnselectEvent event) {

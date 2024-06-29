@@ -159,11 +159,12 @@
         </p:dialog>
         <p:dialog header="Modificar el reclamo:" showEffect="fade" widgetVar="manageClaimDialog"
               responsive="true" appendToBody="true" resizable="true" width="800" height="600" id="manage-claim-dialog">
+              <p:growl id="dialog-messages" showDetail="true" />
             <p:outputPanel id="manage-claim-content" class="ui-fluid">
                 <p:outputPanel rendered="#{not empty claimModificationView.selectedClaim}">
                     <div class="field">
                         <p:outputLabel for="titulo">Titulo:</p:outputLabel>
-                        <p:inputText id="titulo" value="#{claimModificationView.selectedClaim.titulo}" required="true"/>
+                        <p:inputText id="titulo" value="#{claimModificationView.selectedClaim.titulo}" required="true" requiredMessage="El titulo es obligatorio."/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="descripcion">Descripción:</p:outputLabel>
@@ -172,6 +173,7 @@
                         	value="#{claimModificationView.selectedClaim.descripcion}"
                         	required="true"
                         	maxlength="240"
+                        	requiredMessage="La descripción es obligatoria."
                         >
                         </p:inputText>
                     </div>
@@ -237,7 +239,7 @@
 
             <f:facet name="footer">
                 <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{claimModificationView.doUpdateClaim()}"
-                    update="manage-claim-content" process="manage-claim-content @this" />
+                    update="manage-claim-content,dialogs:dialog-messages" process="manage-claim-content @this" />
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageClaimDialog').hide()"
                     class="ui-button-secondary" type="button" />
             </f:facet>
@@ -248,7 +250,7 @@
                 <p:outputPanel>
                     <div class="field">
                         <p:outputLabel for="new-titulo">Titulo:</p:outputLabel>
-                        <p:inputText id="new-titulo" value="#{addClaimView.newClaim.titulo}" required="true"/>
+                        <p:inputText id="new-titulo" value="#{addClaimView.newClaim.titulo}" required="true" requiredMessage="El titulo es obligatorio."/>
                     </div>
                     <div class="field">
                         <p:outputLabel for="descripcion">Descripción:</p:outputLabel>
@@ -257,6 +259,7 @@
                         	value="#{addClaimView.newClaim.descripcion}"
                         	required="true"
                         	maxlength="240"
+                        	requiredMessage="La descripción es obligatoria."
                         >
                         </p:inputText>
                     </div>
@@ -321,7 +324,7 @@
 
             <f:facet name="footer">
                 <p:commandButton value="Añadir" icon="pi pi-check" actionListener="#{addClaimView.doCreateClaim()}"
-                    update=":form:dt-claims" process="add-claim-content @this" action="#{dtClaimsView.reloadClaims()}"/>
+                    update=":form:messages,:form:dt-claims" process="add-claim-content @this" action="#{dtClaimsView.reloadClaims()}"/>
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addClaimDialog').hide()"
                     class="ui-button-secondary" type="button" />
             </f:facet>
