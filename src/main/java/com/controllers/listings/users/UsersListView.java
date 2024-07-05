@@ -69,7 +69,6 @@ public class UsersListView implements Serializable {
 	public void revertUserActiveState() {
 	    if (selectedUser != null) {
 	        // esto simplemente revertirá el cambio visual ya que el cambio no debería haber sido guardado aún
-	        selectedUser.setActivo(selectedUser.isActive() ? (byte) 0 : (byte) 1);
 	        PrimeFaces.current().ajax().update("form:dt-users"); // Actualiza los componentes necesarios en la UI
 	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "Acción cancelada con éxito."));
 	        System.out.println("RevertUserActiveState funciona");
