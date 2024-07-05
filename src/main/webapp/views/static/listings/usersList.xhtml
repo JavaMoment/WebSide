@@ -37,12 +37,33 @@
                       <f:setPropertyActionListener value="#{user}" target="#{userModification.selectedUser}" />
                       <p:resetInput target=":dialogs:manage-user-content" />
                    </p:commandButton>
-	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" >
-	                <p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
-	               </p:toggleSwitch>
+                   
+                   
+	              	<p:toggleSwitch value="#{user.active}" onIcon="pi pi-check"
+										offIcon="pi pi-times">
+										<p:ajax event="change"
+											listener="#{dtUsersView.setselectedUser(user)}"
+											onstart="PF('confirmation').show()" />
+									</p:toggleSwitch>
+
+									<p:confirmDialog widgetVar="confirmation"
+										message="¿Estás seguro que deseas cambiar el estado del usuario?"
+										header="Confirmación" severity="alert" style="z-index: 9999;"
+										modal="true" appendTo="@(body)">
+										<p:commandButton value="Sí"
+											oncomplete="PF('confirmation').hide()" update="@form"
+											actionListener="#{dtUsersView.onToggleSwitchChangeActive}" />
+										<p:commandButton value="No"
+											actionListener="#{dtUsersView.revertUserActiveState}"
+											onclick="PF('confirmation').hide();" update="@form"
+											type="button" />
+
+									</p:confirmDialog>
+	               
+	               
 	           </p:column>
 	           <p:column headerText="Estado" sortBy="#{user.activo}" filterBy="#{user.activo == 1 ? 'Activo' : 'Inactivo'}">
-	               <f:facet name="filter">
+	               	<f:facet name="filter">
                     <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
                         <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{dtUsersView.usersStatus}" />
