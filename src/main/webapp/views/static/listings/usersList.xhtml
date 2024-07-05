@@ -1,250 +1,353 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-	  xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-	  xmlns:f="http://java.sun.com/jsf/core"
-	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
-	  xmlns:ui="http://java.sun.com/jsf/facelets"
-	  >
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
 <h:head>
 	<title>Administración de usuarios</title>
 </h:head>
 <ui:composition template="../templates/home.xhtml">
-<ui:define name="content">
-<h:body>
-  <h:outputStylesheet name="css/listings/usersList.css" />
-  <div class = "layout-main">
-    <div class = "layout-content">
-      <div class = "card users-list">
-	     <h:form id="form">
-	        <p:growl id="messages" showDetail="true" />
-	        <p:dataTable id="dt-users" widgetVar="dtUsers" var="user" value="#{dtUsersView.users}"
-	           reflow="true" selection="#{dtUsersView.selectedUsers}" tableStyle="width:auto"
-	           rowKey="#{user.nombreUsuario}" paginator="true" rows="15" paginatorPosition="bottom"
-	           resizableColumns="true" showGridlines="true" resizeMode="expand" >
-	           <f:facet name="header">
-	               <div class="users-table-header">
-	                   <span style="font-weight: bold">Listado de usuarios</span>
-	                   <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
-	                       <p:inputText id="globalFilter" onkeyup="PF('dtUsers').filter()" placeholder="Buscar..." />
-	                   </span>
-	               </div>
-	           </f:facet>
-	           <p:column exportable="false">
-	               <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-user-content"
-                      oncomplete="PF('manageUserDialog').show()"
-                      class="ui-button-warning rounded-button" process="@this">
-                      <f:setPropertyActionListener value="#{user}" target="#{userModification.selectedUser}" />
-                      <p:resetInput target=":dialogs:manage-user-content" />
-                   </p:commandButton>
-	               <p:toggleSwitch value="#{user.active}" onIcon="pi pi-check" offIcon="pi pi-times" >
-	                <p:ajax listener="#{dtUsersView.onToggleSwitchChangeActive(user)}" />
-	               </p:toggleSwitch>
-	           </p:column>
-	           <p:column headerText="Estado" sortBy="#{user.activo}" filterBy="#{user.activo == 1 ? 'Activo' : 'Inactivo'}">
-	               <f:facet name="filter">
-                    <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
-                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{dtUsersView.usersStatus}" />
-                    </p:selectOneMenu>
-                   </f:facet>
-	               <h:outputText value="#{user.activo == 1 ? 'Activo' : 'Inactivo'}" />
-	           </p:column>
-	           <p:column headerText="Tipo de usuario" sortBy="#{user.tipoUsuario}" 
-	               filterMatchMode="exact" filterBy="#{user.tipoUsuario}">
-	               <f:facet name="filter">
-                    <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
-                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{dtUsersView.userTypes}" />
-                    </p:selectOneMenu>
-                   </f:facet>
-	               <h:outputText value="#{user.tipoUsuario}" />
-	           </p:column>
-	           <p:column headerText="Nombre de usuario" sortBy="#{user.nombreUsuario}" filterBy="#{user.nombreUsuario}">
-	               <h:outputText value="#{user.nombreUsuario}" />
-	           </p:column>
-	           <p:column headerText="Correo institucional" sortBy="#{user.mailInstitucional}"
-	               filterBy="#{user.mailInstitucional}">
-	               <h:outputText value="#{user.mailInstitucional}" />
-	           </p:column>
-	           <p:column headerText="Primer nombre" sortBy="#{user.nombre1}" filterBy="#{user.nombre1}">
-	               <h:outputText value="#{user.nombre1}" />
-	           </p:column>
-	           <p:column headerText="Segundo nombre" sortBy="#{user.nombre2}" filterBy="#{user.nombre2}">
-	               <h:outputText value="#{user.nombre2}" />
-	           </p:column>
-	           <p:column headerText="Primer apellido" sortBy="#{user.apellido1}" filterBy="#{user.apellido1}">
-	               <h:outputText value="#{user.apellido1}" />
-	           </p:column>
-	           <p:column headerText="Segundo apellido" sortBy="#{user.apellido2}"
-	               filterBy="#{user.apellido2}">
-	               <h:outputText value="#{user.apellido2}" />
-	           </p:column>
-	           <p:column headerText="CI" sortBy="#{user.documento}"
-	               filterBy="#{user.documento}">
-	               <h:outputText value="#{user.documento}" />
-	           </p:column>
-	           <p:column headerText="Fecha de nacimiento" sortBy="#{user.fechaNacimiento}"
-	               filterBy="#{user.fechaNacimiento}">
-	               <h:outputText value="#{user.fechaNacimiento.toString()}" />
-	           </p:column>
-	           <p:column headerText="Genero" sortBy="#{user.genero}"
-	               filterBy="#{user.genero}">
-	               <h:outputText value="#{user.genero}" />
-	           </p:column>
-	           <p:column headerText="Correo personal" sortBy="#{user.mailPersonal}"
-	               filterBy="#{user.mailPersonal}">
-	               <h:outputText value="#{user.mailPersonal}" />
-	           </p:column>
-	           <p:column headerText="Telefono" sortBy="#{user.telefono}"
-	               filterBy="#{user.telefono}">
-	               <h:outputText value="#{user.telefono}" />
-	           </p:column>
-	           <p:column headerText="Departamento de residencia" sortBy="#{user.localidad.departamento.nombre}"
-	               filterBy="#{user.localidad.departamento.nombre}">
-	               <h:outputText value="#{user.localidad.departamento.nombre}" />
-	           </p:column>
-	           <p:column headerText="Ciudad de residencia" sortBy="#{user.localidad.nombre}"
-	               filterBy="#{user.localidad.nombre}">
-	               <h:outputText value="#{user.localidad.nombre}" />
-	           </p:column>
-	           <p:column headerText="ITR al que pertenece" sortBy="#{user.itr.nombre}"
-	               filterBy="#{user.itr.nombre}" filterMatchMode="exact">
-	               <f:facet name="filter">
-                    <p:selectOneMenu onchange="PF('dtUsers').filter()" styleClass="ui-custom-filter">
-                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{dtUsersView.itrs}" />
-                    </p:selectOneMenu>
-                   </f:facet>
-	               <h:outputText value="#{user.itr.nombre}" />
-	           </p:column>
-	           <!-- <p:column headerText="Image" exportable="false">
+	<ui:define name="content">
+		<h:body>
+			<h:outputStylesheet name="css/listings/usersList.css" />
+			<div class="layout-main">
+				<div class="layout-content">
+					<div class="card users-list">
+						<h:form id="form">
+							<p:growl id="messages" showDetail="true" />
+							<p:dataTable id="dt-users" widgetVar="dtUsers" var="user"
+								value="#{dtUsersView.users}" reflow="true"
+								selection="#{dtUsersView.selectedUsers}" tableStyle="width:auto"
+								rowKey="#{user.nombreUsuario}" paginator="true" rows="15"
+								paginatorPosition="bottom" resizableColumns="true"
+								showGridlines="true" resizeMode="expand">
+								<f:facet name="header">
+									<div class="users-table-header">
+										<span style="font-weight: bold">Listado de usuarios</span> <span
+											class="filter-container ui-input-icon-left"> <i
+											class="pi pi-search"></i> <p:inputText id="globalFilter"
+												onkeyup="PF('dtUsers').filter()" placeholder="Buscar..." />
+										</span>
+									</div>
+								</f:facet>
+								<p:column exportable="false">
+									<p:commandButton icon="pi pi-pencil"
+										update=":dialogs:manage-user-content"
+										oncomplete="PF('manageUserDialog').show()"
+										class="ui-button-warning rounded-button" process="@this">
+										<f:setPropertyActionListener value="#{user}"
+											target="#{userModification.selectedUser}" />
+										<p:resetInput target=":dialogs:manage-user-content" />
+									</p:commandButton>
+
+
+									<p:toggleSwitch value="#{user.active}" onIcon="pi pi-check"
+										offIcon="pi pi-times">
+										<p:ajax event="change"
+											listener="#{dtUsersView.setselectedUser(user)}"
+											onstart="PF('confirmation').show()" />
+									</p:toggleSwitch>
+
+									<p:confirmDialog widgetVar="confirmation"
+										message="¿Estás seguro que deseas cambiar el estado del usuario?"
+										header="Confirmación" severity="alert" style="z-index: 9999;"
+										modal="true" appendTo="@(body)">
+										<p:commandButton value="Sí"
+											oncomplete="PF('confirmation').hide()" update="@form"
+											actionListener="#{dtUsersView.onToggleSwitchChangeActive}" />
+										<p:commandButton value="No"
+											actionListener="#{dtUsersView.revertUserActiveState}"
+											onclick="PF('confirmation').hide();" update="@form"
+											type="button" />
+
+									</p:confirmDialog>
+
+
+
+
+
+
+								</p:column>
+								<p:column headerText="Estado" sortBy="#{user.activo}"
+									filterBy="#{user.activo == 1 ? 'Activo' : 'Inactivo'}">
+									<f:facet name="filter">
+										<p:selectOneMenu onchange="PF('dtUsers').filter()"
+											styleClass="ui-custom-filter">
+											<f:selectItem itemLabel="Todos" itemValue="#{null}"
+												noSelectionOption="true" />
+											<f:selectItems value="#{dtUsersView.usersStatus}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<h:outputText
+										value="#{user.activo == 1 ? 'Activo' : 'Inactivo'}" />
+								</p:column>
+								<p:column headerText="Tipo de usuario"
+									sortBy="#{user.tipoUsuario}" filterMatchMode="exact"
+									filterBy="#{user.tipoUsuario}">
+									<f:facet name="filter">
+										<p:selectOneMenu onchange="PF('dtUsers').filter()"
+											styleClass="ui-custom-filter">
+											<f:selectItem itemLabel="Todos" itemValue="#{null}"
+												noSelectionOption="true" />
+											<f:selectItems value="#{dtUsersView.userTypes}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{user.tipoUsuario}" />
+								</p:column>
+								<p:column headerText="Nombre de usuario"
+									sortBy="#{user.nombreUsuario}" filterBy="#{user.nombreUsuario}">
+									<h:outputText value="#{user.nombreUsuario}" />
+								</p:column>
+								<p:column headerText="Correo institucional"
+									sortBy="#{user.mailInstitucional}"
+									filterBy="#{user.mailInstitucional}">
+									<h:outputText value="#{user.mailInstitucional}" />
+								</p:column>
+								<p:column headerText="Primer nombre" sortBy="#{user.nombre1}"
+									filterBy="#{user.nombre1}">
+									<h:outputText value="#{user.nombre1}" />
+								</p:column>
+								<p:column headerText="Segundo nombre" sortBy="#{user.nombre2}"
+									filterBy="#{user.nombre2}">
+									<h:outputText value="#{user.nombre2}" />
+								</p:column>
+								<p:column headerText="Primer apellido"
+									sortBy="#{user.apellido1}" filterBy="#{user.apellido1}">
+									<h:outputText value="#{user.apellido1}" />
+								</p:column>
+								<p:column headerText="Segundo apellido"
+									sortBy="#{user.apellido2}" filterBy="#{user.apellido2}">
+									<h:outputText value="#{user.apellido2}" />
+								</p:column>
+								<p:column headerText="CI" sortBy="#{user.documento}"
+									filterBy="#{user.documento}">
+									<h:outputText value="#{user.documento}" />
+								</p:column>
+								<p:column headerText="Fecha de nacimiento"
+									sortBy="#{user.fechaNacimiento}"
+									filterBy="#{user.fechaNacimiento}">
+									<h:outputText value="#{user.fechaNacimiento.toString()}" />
+								</p:column>
+								<p:column headerText="Genero" sortBy="#{user.genero}"
+									filterBy="#{user.genero}">
+									<h:outputText value="#{user.genero}" />
+								</p:column>
+								<p:column headerText="Correo personal"
+									sortBy="#{user.mailPersonal}" filterBy="#{user.mailPersonal}">
+									<h:outputText value="#{user.mailPersonal}" />
+								</p:column>
+								<p:column headerText="Telefono" sortBy="#{user.telefono}"
+									filterBy="#{user.telefono}">
+									<h:outputText value="#{user.telefono}" />
+								</p:column>
+								<p:column headerText="Departamento de residencia"
+									sortBy="#{user.localidad.departamento.nombre}"
+									filterBy="#{user.localidad.departamento.nombre}">
+									<h:outputText value="#{user.localidad.departamento.nombre}" />
+								</p:column>
+								<p:column headerText="Ciudad de residencia"
+									sortBy="#{user.localidad.nombre}"
+									filterBy="#{user.localidad.nombre}">
+									<h:outputText value="#{user.localidad.nombre}" />
+								</p:column>
+								<p:column headerText="ITR al que pertenece"
+									sortBy="#{user.itr.nombre}" filterBy="#{user.itr.nombre}"
+									filterMatchMode="exact">
+									<f:facet name="filter">
+										<p:selectOneMenu onchange="PF('dtUsers').filter()"
+											styleClass="ui-custom-filter">
+											<f:selectItem itemLabel="Todos" itemValue="#{null}"
+												noSelectionOption="true" />
+											<f:selectItems value="#{dtUsersView.itrs}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<h:outputText value="#{user.itr.nombre}" />
+								</p:column>
+								<!-- <p:column headerText="Image" exportable="false">
 	               <p:graphicImage name="images/user/#{user.image}" library="demo" styleCluseroduct-image" />
 	           </p:column> -->
-	       </p:dataTable>
-	     </h:form>
-	     
-	     <h:form id="dialogs">
-           <p:dialog header="Modificar usuario" showEffect="fade" widgetVar="manageUserDialog"
-              responsive="true" appendToBody="true" resizable="true" width="800" height="600">
-            <p:outputPanel id="manage-user-content" class="ui-fluid">
-                <p:outputPanel rendered="#{not empty userModification.selectedUser}">
-                <p:growl id="messages" showDetail="true" />
-                    <div class="field">
-                        <p:outputLabel for="emailPersonal">Correo personal</p:outputLabel>
-                        <p:inputText id="emailPersonal" value="#{userModification.selectedUser.mailPersonal}" required="true" validator="personalEmailValidator"/>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="pwd1">Nueva contraseña</p:outputLabel>
-                        <p:password value="#{userModification.newPwd}" style="width: 100%;" id="pwd1" toggleMask="true" redisplay="true" match="pwd2" validator="passwordValidator"/>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="pwd2">Re-ingrese su nueva contraseña</p:outputLabel>
-                        <p:password style="width: 100%;" id="pwd2" toggleMask="true" redisplay="true" validator="passwordValidator"/>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="name">Primer nombre</p:outputLabel>
-                        <p:inputText id="name" value="#{userModification.selectedUser.nombre1}" required="true" validator="nameValidator"/>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="name2">Segundo nombre</p:outputLabel>
-                        <p:inputText id="name2" value="#{userModification.selectedUser.nombre2}" />
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="lastname">Primer apellido</p:outputLabel>
-                        <p:inputText id="lastname" value="#{userModification.selectedUser.apellido1}" required="true" validator="lastnameValidator"/>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="name">Segundo apellido</p:outputLabel>
-                        <p:inputText id="lastname2" value="#{userModification.selectedUser.apellido2}" required="true" validator="lastnameValidator" />
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="birthdate">Fecha de nacimiento</p:outputLabel>
-                        <p:datePicker id="birthdate" value="#{userModification.selectedUser.fechaNacimiento}" showIcon="true" validator="birthdateValidator" yearNavigator="true" monthNavigator="true" yearRange="1900:2100" required="true"/>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="ci">Cédula de identidad</p:outputLabel>
-                        <p:inputText id="ci" value="#{userModification.selectedUser.documento}" validator="ciValidator" required="true" />
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="phone">Teléfono</p:outputLabel>
-                        <p:inputText id="phone" validator="phoneValidator" value="#{userModification.selectedUser.telefono}"/>
-                    </div>
-                    <div class="field">
-                    <div class="field">
-                        <p:outputLabel for="departamentos">Departamento de residencia</p:outputLabel>
-                        <p:selectOneMenu id="departamentos"  value="#{userModification.selectedDepaName}" >
-                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione un nuevo departamento" />
-                          <f:selectItems value="#{userModification.depas}" var="d" itemValue="#{d.nombre}" itemLabel="#{d.nombre}" />
-                            <p:ajax listener="#{userModification.onDepartamentoChanged()}" />
-                        </p:selectOneMenu>
-                    </div>
-                        <p:outputLabel for="ciudades">Ciudad de residencia</p:outputLabel>
-                        <p:selectOneMenu id="ciudades" value="#{userModification.selectedCityName}">
-                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione una nueva ciudad" />
-                          <f:selectItems value="#{userModification.cities}" var="c" itemValue="#{c.nombre}" itemLabel="#{c.nombre}"  />
-                          <p:ajax listener="#{userModification.onCityChanged()}" />
-						</p:selectOneMenu>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="itr">ITR al que pertenece</p:outputLabel>
-                        <p:selectOneMenu id="itr" value="#{userModification.selectedItrName}">
-                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione su nueva ITR" />
-                          <f:selectItems value="#{userModification.itrs}" var="i" itemValue="#{i.nombre}" itemLabel="#{i.nombre}" />
-                          <p:ajax listener="#{userModification.onItrChanged()}" />
-						</p:selectOneMenu>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="genero">Genero</p:outputLabel>
-                        <p:selectOneMenu id="genero" value="#{userModification.selectedGenreName}">
-                          <f:selectItem itemValue="#{null}" itemLabel="Seleccione el genero" />
-                          <f:selectItems value="#{userModification.genres}" />
-                          <p:ajax listener="#{userModification.onGenreChanged()}" />
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="field">
-                        <p:outputLabel for="userType">Tipo de usuario</p:outputLabel>
-                        <p:selectOneMenu id="userType" value = "#{userModification.selectedUser.tipoUsuario}">
-                          <f:selectItems value="#{userModification.userTypes}" noSelectionOption="false"/>
-                          <p:ajax update="genWrapper" />
-                        </p:selectOneMenu>
-                    </div>
-                    <div class="field">
-                      <h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
-						  <p:outputLabel for="generacionText" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">Seleccione la nueva generación de ingreso:</p:outputLabel>
-						  <p:inputText id="generacionText" value="#{userModification.selectedGeneracion}" validatorMessage="El valor debe ser menor al año actual y mayor a 2010" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
-						    <f:validateDoubleRange minimum = "2010" maximum = "#{userModification.currentYear}"/>
-						  </p:inputText>
-            			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{userModification.currentYear}" range="max" rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
-            			    <p:ajax event="slideEnd" process="@this"/>
-            			  </p:slider>
-            			  <p:outputLabel for="roles" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Rol:</p:outputLabel>
-            			  <p:selectOneMenu id="roles" value="#{userModification.selectedRolName}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
-						    <f:selectItem itemLabel="Seleccione su nuevo rol" itemValue="#{null}" noSelectionOption="false" />
-                            <f:selectItems value="#{userModification.roles}" />
-						  </p:selectOneMenu>
-						  <p:outputLabel for="area" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Area:</p:outputLabel>
-            			  <p:selectOneMenu id="area" value="#{userModification.selectedAreaName}" rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
-						    <f:selectItem itemLabel="Seleccione la nueva área a la que pertenece" itemValue="#{null}" noSelectionOption="false" />
-                            <f:selectItems value="#{userModification.areas}" />
-						  </p:selectOneMenu>
-            			</h:panelGrid>
-                    </div>
-              </p:outputPanel>
-            </p:outputPanel>
+							</p:dataTable>
+						</h:form>
 
-            <f:facet name="footer">
-                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{userModification.doUpdateUser()}"
-                    update="manage-user-content" process="manage-user-content @this" />
-                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageUserDialog').hide()"
-                    class="ui-button-secondary" type="button" />
-            </f:facet>
-        </p:dialog>
-      </h:form>
-      </div>
-    </div>
-  </div>
-</h:body>
-</ui:define>
+						<h:form id="dialogs">
+							<p:dialog header="Modificar usuario" showEffect="fade"
+								widgetVar="manageUserDialog" responsive="true"
+								appendToBody="true" resizable="true" width="800" height="600">
+								<p:outputPanel id="manage-user-content" class="ui-fluid">
+									<p:outputPanel
+										rendered="#{not empty userModification.selectedUser}">
+										<p:growl id="messages" showDetail="true" />
+										<div class="field">
+											<p:outputLabel for="emailPersonal">Correo personal</p:outputLabel>
+											<p:inputText id="emailPersonal"
+												value="#{userModification.selectedUser.mailPersonal}"
+												required="true" validator="personalEmailValidator" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="pwd1">Nueva contraseña</p:outputLabel>
+											<p:password value="#{userModification.newPwd}"
+												style="width: 100%;" id="pwd1" toggleMask="true"
+												redisplay="true" match="pwd2" validator="passwordValidator" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="pwd2">Re-ingrese su nueva contraseña</p:outputLabel>
+											<p:password style="width: 100%;" id="pwd2" toggleMask="true"
+												redisplay="true" validator="passwordValidator" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="name">Primer nombre</p:outputLabel>
+											<p:inputText id="name"
+												value="#{userModification.selectedUser.nombre1}"
+												required="true" validator="nameValidator" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="name2">Segundo nombre</p:outputLabel>
+											<p:inputText id="name2"
+												value="#{userModification.selectedUser.nombre2}" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="lastname">Primer apellido</p:outputLabel>
+											<p:inputText id="lastname"
+												value="#{userModification.selectedUser.apellido1}"
+												required="true" validator="lastnameValidator" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="name">Segundo apellido</p:outputLabel>
+											<p:inputText id="lastname2"
+												value="#{userModification.selectedUser.apellido2}"
+												required="true" validator="lastnameValidator" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="birthdate">Fecha de nacimiento</p:outputLabel>
+											<p:datePicker id="birthdate"
+												value="#{userModification.selectedUser.fechaNacimiento}"
+												showIcon="true" validator="birthdateValidator"
+												yearNavigator="true" monthNavigator="true"
+												yearRange="1900:2100" required="true" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="ci">Cédula de identidad</p:outputLabel>
+											<p:inputText id="ci"
+												value="#{userModification.selectedUser.documento}"
+												validator="ciValidator" required="true" />
+										</div>
+										<div class="field">
+											<p:outputLabel for="phone">Teléfono</p:outputLabel>
+											<p:inputText id="phone" validator="phoneValidator"
+												value="#{userModification.selectedUser.telefono}" />
+										</div>
+										<div class="field">
+											<div class="field">
+												<p:outputLabel for="departamentos">Departamento de residencia</p:outputLabel>
+												<p:selectOneMenu id="departamentos"
+													value="#{userModification.selectedDepaName}">
+													<f:selectItem itemValue="#{null}"
+														itemLabel="Seleccione un nuevo departamento" />
+													<f:selectItems value="#{userModification.depas}" var="d"
+														itemValue="#{d.nombre}" itemLabel="#{d.nombre}" />
+													<p:ajax
+														listener="#{userModification.onDepartamentoChanged()}" />
+												</p:selectOneMenu>
+											</div>
+											<p:outputLabel for="ciudades">Ciudad de residencia</p:outputLabel>
+											<p:selectOneMenu id="ciudades"
+												value="#{userModification.selectedCityName}">
+												<f:selectItem itemValue="#{null}"
+													itemLabel="Seleccione una nueva ciudad" />
+												<f:selectItems value="#{userModification.cities}" var="c"
+													itemValue="#{c.nombre}" itemLabel="#{c.nombre}" />
+												<p:ajax listener="#{userModification.onCityChanged()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field">
+											<p:outputLabel for="itr">ITR al que pertenece</p:outputLabel>
+											<p:selectOneMenu id="itr"
+												value="#{userModification.selectedItrName}">
+												<f:selectItem itemValue="#{null}"
+													itemLabel="Seleccione su nueva ITR" />
+												<f:selectItems value="#{userModification.itrs}" var="i"
+													itemValue="#{i.nombre}" itemLabel="#{i.nombre}" />
+												<p:ajax listener="#{userModification.onItrChanged()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field">
+											<p:outputLabel for="genero">Genero</p:outputLabel>
+											<p:selectOneMenu id="genero"
+												value="#{userModification.selectedGenreName}">
+												<f:selectItem itemValue="#{null}"
+													itemLabel="Seleccione el genero" />
+												<f:selectItems value="#{userModification.genres}" />
+												<p:ajax listener="#{userModification.onGenreChanged()}" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field">
+											<p:outputLabel for="userType">Tipo de usuario</p:outputLabel>
+											<p:selectOneMenu id="userType"
+												value="#{userModification.selectedUser.tipoUsuario}">
+												<f:selectItems value="#{userModification.userTypes}"
+													noSelectionOption="false" />
+												<p:ajax update="genWrapper" />
+											</p:selectOneMenu>
+										</div>
+										<div class="field">
+											<h:panelGrid id="genWrapper" columns="1"
+												style="margin-bottom: 10px; width: 100%">
+												<p:outputLabel for="generacionText"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">Seleccione la nueva generación de ingreso:</p:outputLabel>
+												<p:inputText id="generacionText"
+													value="#{userModification.selectedGeneracion}"
+													validatorMessage="El valor debe ser menor al año actual y mayor a 2010"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
+													<f:validateDoubleRange minimum="2010"
+														maximum="#{userModification.currentYear}" />
+												</p:inputText>
+												<p:slider id="generacion" for="generacionText"
+													minValue="2010" maxValue="#{userModification.currentYear}"
+													range="max"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Estudiante'}">
+													<p:ajax event="slideEnd" process="@this" />
+												</p:slider>
+												<p:outputLabel for="roles"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Rol:</p:outputLabel>
+												<p:selectOneMenu id="roles"
+													value="#{userModification.selectedRolName}"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
+													<f:selectItem itemLabel="Seleccione su nuevo rol"
+														itemValue="#{null}" noSelectionOption="false" />
+													<f:selectItems value="#{userModification.roles}" />
+												</p:selectOneMenu>
+												<p:outputLabel for="area"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">Area:</p:outputLabel>
+												<p:selectOneMenu id="area"
+													value="#{userModification.selectedAreaName}"
+													rendered="#{userModification.selectedUser.tipoUsuario eq 'Tutor'}">
+													<f:selectItem
+														itemLabel="Seleccione la nueva área a la que pertenece"
+														itemValue="#{null}" noSelectionOption="false" />
+													<f:selectItems value="#{userModification.areas}" />
+												</p:selectOneMenu>
+											</h:panelGrid>
+										</div>
+									</p:outputPanel>
+								</p:outputPanel>
+
+								<f:facet name="footer">
+									<p:commandButton value="Guardar" icon="pi pi-check"
+										actionListener="#{userModification.doUpdateUser()}"
+										update="manage-user-content"
+										process="manage-user-content @this" />
+									<p:commandButton value="Cancelar" icon="pi pi-times"
+										onclick="PF('manageUserDialog').hide()"
+										class="ui-button-secondary" type="button" />
+								</f:facet>
+							</p:dialog>
+						</h:form>
+					</div>
+				</div>
+			</div>
+		</h:body>
+	</ui:define>
 </ui:composition>
 </html>

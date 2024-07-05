@@ -174,7 +174,7 @@ public class EventView implements Serializable {
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Evento cancelado con éxito."));
 
 		ExternalContext ec = context.getExternalContext();
-		ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+		ec.redirect("/WebSide/views/static/events/eventsList.xhtml");
 	}
 
 
@@ -237,7 +237,7 @@ public class EventView implements Serializable {
 							new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento creado con éxito."));
 
 					ExternalContext ec = context.getExternalContext();
-					ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+					ec.redirect("/WebSide/views/static/events/eventsList.xhtml");
 				}
 			}
 		} catch (Exception e) {
