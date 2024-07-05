@@ -47,22 +47,37 @@ public class UsersListView implements Serializable {
 		itrs = itrBeanRemote.selectAll();
 	}
 	
-	public void onToggleSwitchChangeActive(Usuario user) {
-		int exitCode;
-		String username = user.getNombreUsuario();
-		if(user.isActive()) {
-			user.setActivo((byte) 0);
-			exitCode = usuarioBeanRemote.logicalDeleteByUsername(username);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El usuario " + username + " ha sido correctamente dado de baja."));
-		} else {
-			user.setActivo((byte) 1);
-			exitCode = usuarioBeanRemote.activeUserBy(username);
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El usuario " + username + " ha sido correctamente activado."));
-		}
-		if(exitCode != 0) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ha ocurrido un error y el estado del usuario no ha podido ser modificado."));
-		}
-		PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+	public void onToggleSwitchChangeActive() {
+	    Usuario user = getselectedUser(); // Asegúrate de que el usuario seleccionado se esté pasando correctamente.
+	    String username = user.getNombreUsuario();
+	    int exitCode;
+	    if (user.isActive()) {
+	        user.setActivo((byte) 0); // Cambia el estado
+	        exitCode = usuarioBeanRemote.logicalDeleteByUsername(username);
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El usuario " + username + " ha sido correctamente dado de baja."));
+	    } else {
+	        user.setActivo((byte) 1); // Cambia el estado
+	        exitCode = usuarioBeanRemote.activeUserBy(username);
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "El usuario " + username + " ha sido correctamente activado."));
+	    }
+	    if (exitCode != 0) {
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "Ha ocurrido un error y el estado del usuario no ha podido ser modificado."));
+	    }
+	    PrimeFaces.current().ajax().update("form:messages", "form:dt-users");
+	}
+	
+	public void revertUserActiveState() {
+	    if (selectedUser != null) {
+	        // esto simplemente revertirá el cambio visual ya que el cambio no debería haber sido guardado aún
+	        selectedUser.setActivo(selectedUser.isActive() ? (byte) 0 : (byte) 1);
+	        PrimeFaces.current().ajax().update("form:dt-users"); // Actualiza los componentes necesarios en la UI
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Bien!", "Acción cancelada con éxito."));
+	        System.out.println("RevertUserActiveState funciona");
+
+
+	    } else {
+	        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Error", "No se ha seleccionado ningún usuario."));
+	    }
 	}
 	
 	public List<Usuario> getUsers() {
