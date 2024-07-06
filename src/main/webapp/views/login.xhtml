@@ -58,7 +58,7 @@
 						</p:selectOneMenu>
 						<h:panelGrid id="genWrapper" columns="1" style="margin-bottom: 10px; width: 100%" >
 						  <p:outputLabel for="generacionText" rendered="#{signup.userType eq 'Estudiante'}">Generación de ingreso:</p:outputLabel>
-						  <p:inputText id="generacionText" value="#{signup.newStudent.generacion}" rendered="#{signup.userType eq 'Estudiante'}" required="true" readonly="true" />
+						  <p:inputText id="generacionText" value="#{signup.newStudent.generacion}" rendered="#{signup.userType eq 'Estudiante'}" required="true" />
             			  <p:slider id="generacion" for="generacionText" minValue="2010" maxValue="#{signup.currentYear}" range="max" rendered="#{signup.userType eq 'Estudiante'}">
             			    <p:ajax event="slideEnd" process="@form"/>
             			  </p:slider>
