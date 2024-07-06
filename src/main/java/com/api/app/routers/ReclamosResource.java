@@ -65,7 +65,7 @@ public class ReclamosResource {
 		if(searchText == null || searchText.isEmpty()) {
 			claims = reclamoService.selectAll();
 		} else {
-			claims = reclamoService.getReclamosByTitleLike(searchText);
+			claims = reclamoService.getReclamosBy(searchText);
 		}
 	
 		List<ClaimInDbDTO> claimsInDb = objectMapper.convertValue(claims, new TypeReference<List<ClaimInDbDTO>>(){});
