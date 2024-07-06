@@ -13,6 +13,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -56,11 +57,17 @@ public class ReclamosResource {
 	protected final ObjectMapper objectMapper = new ObjectMapper();
 	
 	@GET
-	public Response getClaims() {
+	public Response getClaims(@QueryParam("searchText") String searchText) {
 		objectMapper.addMixIn(Set.class, IgnoreType.class);
 		objectMapper.addMixIn(List.class, IgnoreType.class);
 		
-		List<Reclamo> claims = reclamoService.selectAll();
+		List<Reclamo> claims;
+		if(searchText == null || searchText.isEmpty()) {
+			claims = reclamoService.selectAll();
+		} else {
+			claims = reclamoService.getReclamosByTitleLike(searchText);
+		}
+	
 		List<ClaimInDbDTO> claimsInDb = objectMapper.convertValue(claims, new TypeReference<List<ClaimInDbDTO>>(){});
 		
 		return Response.ok(claimsInDb).build();
@@ -68,11 +75,16 @@ public class ReclamosResource {
 	
 	@GET
 	@Path("estudiante/{username}")
-	public Response getClaimsBy(@PathParam("username") String username) {
+	public Response getClaimsBy(@PathParam("username") String username, @QueryParam("searchText") String searchText) {
 		objectMapper.addMixIn(Set.class, IgnoreType.class);
 		objectMapper.addMixIn(List.class, IgnoreType.class);
 		
-		List<Reclamo> claims = reclamoService.selectAllBy(username);
+		List<Reclamo> claims;
+		if(searchText == null || searchText.isEmpty()) {
+			claims = reclamoService.selectAllBy(username);
+		} else {
+			claims = reclamoService.selectAllBy(username, searchText);
+		}
 		List<ClaimInDbDTO> claimsInDb = objectMapper.convertValue(claims, new TypeReference<List<ClaimInDbDTO>>(){});
 		
 		return Response.ok(claimsInDb).build();
