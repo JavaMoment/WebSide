@@ -20,7 +20,7 @@
 					<div class="grid ui-fluid">
 						<p:inputText id="emailPersonal" value="#{signup.newUser.mailPersonal}" placeholder="Correo personal"  requiredMessage="El mail personal es obligatorio" validator="personalEmailValidator" required="true"> </p:inputText>
 						<p:inputText id="emailInstitucional" value="#{signup.newUser.mailInstitucional}" placeholder="Correo institucional" validator="emailValidator"  requiredMessage="El correo institucional es obligatorio" required="true"> </p:inputText>
-						<p:password  id="password1" value="#{signup.newUser.contrasenia}" placeholder="Contraseña" toggleMask="true" redisplay="true" match="password2" required="true"  requiredMessage="La contraseña es obligatoria" validator="passwordValidator"/>
+						<p:password  id="password1" value="#{signup.newUser.contrasenia}" placeholder="Contraseña" toggleMask="true" redisplay="true" match="password2" validatorMessage="¡Ojo! Las contraseñas deben de coincidir." required="true"  requiredMessage="La contraseña es obligatoria" validator="passwordValidator"/>
 						<p:password  id="password2" placeholder="Re-ingrese su contraseña" toggleMask="true" redisplay="true" required="true" requiredMessage="La confirmación de la contraseña es obligatoria" validator="passwordValidator"/>
 						<p:inputText id="primerNombre" placeholder="Primer nombre" validator="nameValidator" required="true" requiredMessage="El nombre es obligatorio" value="#{signup.newUser.nombre1}"/>
 						<p:inputText id="segundoNombre" placeholder="Segundo nombre" value="#{signup.newUser.nombre2}"> </p:inputText>

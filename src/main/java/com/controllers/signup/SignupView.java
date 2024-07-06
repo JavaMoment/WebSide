@@ -33,12 +33,15 @@ import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.services.AnalistaBeanRemote;
 import com.services.AreaBeanRemote;
 import com.services.DepartamentoBeanRemote;
+import com.services.EstudianteBeanRemote;
 import com.services.HttpRequestDispatcher;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBeanRemote;
 import com.services.TiposTutorBeanRemote;
+import com.services.TutorBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 @Named("signup")
@@ -47,6 +50,12 @@ public class SignupView implements Serializable {
 
 	@EJB
 	private UsuarioBeanRemote userBeanRemote;
+	@EJB
+	private AnalistaBeanRemote analistaBeanRemote;
+	@EJB
+	private EstudianteBeanRemote estudianteBeanRemote;
+	@EJB
+	private TutorBeanRemote tutorBeanRemote;
 	@EJB
 	private ItrBeanRemote itrBeanRemote;
 	@EJB
@@ -96,34 +105,24 @@ public class SignupView implements Serializable {
 	
 	public void doSignup() {
 		// Ruta a donde esta el post de usuarios
-		final ArrayList<String> routeCtxEndpoint = new ArrayList<String>(List.of("signup"));
-		HttpResponse resp = null;
-		HttpRequestDispatcher dispatcher = new HttpRequestDispatcher();
-		// Clase mapper a cargo de transformar de entidad a dto para enviar al endpoint de la api
-		ObjectMapper objectMapper = new ObjectMapper();
-		// Ignoramos los objetos relacionales entre entidades al momento de mappear para la creación
-		objectMapper.addMixIn(Set.class, IgnoreType.class);
-		objectMapper.addMixIn(List.class, IgnoreType.class);
+		int exitCode = -1;
+		newUser.setNombreUsuario(newUser.getMailInstitucional().split("@")[0]);
+		exitCode = userBeanRemote.create(newUser);
+		Usuario userInDb = userBeanRemote.selectUserBy(newUser.getNombreUsuario());
 		try {
 			// Creamos el DTO para mandar como JSON dependiendo del tipo de usuario a crear.
 			switch(userType.toUpperCase()) {
 			case "ANALISTA":
-				AnalistaDTO newAnalystDTO = objectMapper.convertValue(newAnalyst, AnalistaDTO.class);
-				Map<String, Object> newAnalystDTOMapped = objectMapper.convertValue(newAnalystDTO, Map.class);
-				routeCtxEndpoint.add("analista");
-				resp = dispatcher.sendPost(routeCtxEndpoint, newAnalystDTOMapped);
+				newAnalyst.setUsuario(userInDb);
+				exitCode = analistaBeanRemote.create(newAnalyst);
 				break;
 			case "TUTOR":
-				TutorDTO newTeacherDTO = objectMapper.convertValue(newTeacher, TutorDTO.class);
-				Map<String, Object> newTeacherDTOMapped = objectMapper.convertValue(newTeacherDTO, Map.class);
-				routeCtxEndpoint.add("tutor");
-				resp = dispatcher.sendPost(routeCtxEndpoint, newTeacherDTOMapped);
+				newTeacher.setUsuario(userInDb);
+				tutorBeanRemote.create(newTeacher);
 				break;
 			case "ESTUDIANTE":
-				EstudianteDTO newStudentDTO = objectMapper.convertValue(newStudent, EstudianteDTO.class);
-				Map<String, Object> newStudentDTOMapped = objectMapper.convertValue(newStudentDTO, Map.class);
-				routeCtxEndpoint.add("estudiante");
-				resp = dispatcher.sendPost(routeCtxEndpoint, newStudentDTOMapped);
+				newStudent.setUsuario(userInDb);
+				estudianteBeanRemote.create(newStudent);
 				break;
 			default:
 				break;
@@ -131,7 +130,7 @@ public class SignupView implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if(resp != null && resp.statusCode() == 201) {
+		if(exitCode == 0) {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Felicidades!", "El usuario ha sido correctamente creado. Espere la habilitación del analista para poder ingresar."));
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Oh no!", "Ha ocurrido un error mientras se intentaba crear el usuario. Por favor, intente de nuevo."));
