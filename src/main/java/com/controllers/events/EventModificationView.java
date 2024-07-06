@@ -109,7 +109,7 @@ public class EventModificationView implements Serializable {
 							new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", "Evento actualizado con éxito."));
 
 					ExternalContext ec = context.getExternalContext();
-					ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+					ec.redirect("/WebSide/views/static/events/eventsList.xhtml");
 
 				}
 			}
@@ -128,7 +128,7 @@ public class EventModificationView implements Serializable {
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Cancelación", "Modificación cancelada con éxito."));
 
 		ExternalContext ec = context.getExternalContext();
-		ec.redirect("/WebSide/views/static/dashboard/dashboard.xhtml");
+		ec.redirect("/WebSide/views/static/events/eventsList.xhtml");
 	}
 
 	public EventoBeanRemote getEventBeanRemote() {
