@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  >
+<h:head>
+	<title>Mantenimiento de lista auxiliar de Modalidades de los Eventos</title>
+</h:head>
+<ui:composition template="../templates/home.xhtml">
+<ui:define name="content">
+<h:body>
+  <h:outputStylesheet name="css/events/aux_modalidades_eventos.css" />
+  <div class = "layout-main">
+    <div class = "layout-content">
+      <div class = "card modalidades-list">
+	     <h:form id="form">
+	       <p:toolbar>
+            <p:toolbarGroup>
+                <p:commandButton value="Añadir Modalidad" update=":dialogs:add-modalidad-content"
+	                             oncomplete="PF('addModalidadDialog').show()" style="display: block"
+	                             class="ui-button-warning rounded-button" process="@this">
+                    <p:resetInput target=":dialogs:manage-modalidad-content" />
+                </p:commandButton>
+            </p:toolbarGroup>
+          </p:toolbar>
+	        <p:growl id="messages" showDetail="true" />
+	        <p:dataTable id="dt-modalidades" widgetVar="dtModalidades" var="modalidad" value="#{dtModalidadesView.modalidades}"
+	           reflow="true" selection="#{dtModalidadesView.selectedModalidades}" tableStyle="-webkit-fill-available"
+	           rowKey="#{modalidad.nombre}" paginator="true" rows="15" paginatorPosition="bottom"
+	           resizableColumns="true" showGridlines="true" resizeMode="expand" >
+	           <f:facet name="header">
+	               <div class="modalidades-table-header">
+	                   <span style="font-weight: bold">Listado de Modalidades</span>
+	                   <span class="filter-container ui-input-icon-left"> <i class="pi pi-search"></i>
+	                       <p:inputText id="globalFilter" onkeyup="PF('dtModalidades').filter()" placeholder="Buscar..." />
+	                   </span>
+	               </div>
+	           </f:facet>
+	           <p:column exportable="false">
+	               <p:commandButton icon="pi pi-pencil" update=":dialogs:manage-modalidad-content"
+	                                oncomplete="PF('manageModalidadDialog').show()" 
+	                                class="ui-button-warning rounded-button" process="@this">
+	                   <f:setPropertyActionListener value="#{modalidad}" target="#{modalidadModification.selectedModalidad}" />
+	                   <p:resetInput target=":dialogs:manage-modalidad-content" />
+	               </p:commandButton>
+	               <p:toggleSwitch value="#{modalidad.activo}" onIcon="pi pi-check" offIcon="pi pi-times" >
+	                 <p:ajax listener="#{dtModalidadesView.onToggleSwitchChangeActive(modalidad)}" />
+	               </p:toggleSwitch>
+	           </p:column>
+	           <p:column headerText="Activo" sortBy="#{modalidad.activo ? 'Activo' : 'Inactivo'}" filterBy="#{modalidad.activo ? 'Activo' : 'Inactivo'}" >
+	               <f:facet name="filter">
+                    <p:selectOneMenu onchange="PF('dtModalidades').filter()" styleClass="ui-custom-filter">
+                        <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
+                        <f:selectItems value="#{dtModalidadesView.modalidadStatus}" />
+                    </p:selectOneMenu>
+                   </f:facet>
+	               <h:outputText value="#{modalidad.activo ? 'Activo' : 'Inactivo'}" />
+	           </p:column>
+	           <p:column headerText="Nombre" sortBy="#{modalidad.nombre}" filterBy="#{modalidad.nombre}" >
+	               <h:outputText value="#{modalidad.nombre}" />
+	           </p:column>
+	    
+	       </p:dataTable>
+	     </h:form>
+	     
+	     <h:form id="dialogs">
+           <p:growl id="messages" showDetail="true" />
+           <p:dialog id="manage-modalidad-dialog" header="Modificar Modalidad" showEffect="fade" widgetVar="manageModalidadDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600" >
+            <p:outputPanel id="manage-modalidad-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty modalidadModification.selectedModalidad}">
+                    <div class="field">
+                        <p:outputLabel for="name">Nombre</p:outputLabel>
+                        <p:inputText id="name" value="#{modalidadModification.selectedModalidad.nombre}" required="true" validator="nameValidator"/>
+                    </div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{modalidadModification.doUpdateModalidad()}"
+                    update=":form:dt-modalidades" action="#{dtModalidadesView.reloadModalidades()}" process="manage-modalidad-content @this" >
+                 </p:commandButton>
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageModalidadDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+        <p:dialog header="Añadir Modalidad" showEffect="fade" widgetVar="addModalidadDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+            <p:outputPanel id="add-modalidad-content" class="ui-fluid">
+                <p:outputPanel>
+                    <div class="field">
+                        <p:outputLabel for="addName">Nombre</p:outputLabel>
+                        <p:inputText id="addName" value="#{addModalidad.name}" required="true" validator="nameValidator"/>
+                    </div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Añadir" icon="pi pi-check" actionListener="#{addModalidad.doAddModalidad()}"
+                    update=":form:dt-modalidades" action="#{dtModalidadesView.reloadModalidades()}" process="add-modalidad-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addModalidadDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+      </h:form>
+      </div>
+    </div>
+  </div>
+</h:body>
+</ui:define>
+</ui:composition>
+</html>

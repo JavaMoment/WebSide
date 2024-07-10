@@ -46,18 +46,18 @@
 	                   <f:setPropertyActionListener value="#{itr}" target="#{itrModification.selectedItr}" />
 	                   <p:resetInput target=":dialogs:manage-itr-content" />
 	               </p:commandButton>
-	               <p:toggleSwitch value="#{itr.active}" onIcon="pi pi-check" offIcon="pi pi-times" >
+	               <p:toggleSwitch value="#{itr.activo}" onIcon="pi pi-check" offIcon="pi pi-times" >
 	                 <p:ajax listener="#{dtItrsView.onToggleSwitchChangeActive(itr)}" />
 	               </p:toggleSwitch>
 	           </p:column>
-	           <p:column headerText="Activo" sortBy="#{itr.activo}" filterBy="#{itr.activo}" >
+	           <p:column headerText="Activo" sortBy="#{itr.activo ? 'Activo' : 'Inactivo'}" filterBy="#{itr.activo ? 'Activo' : 'Inactivo'}" >
 	               <f:facet name="filter">
                     <p:selectOneMenu onchange="PF('dtItrs').filter()" styleClass="ui-custom-filter">
                         <f:selectItem itemLabel="Todos" itemValue="#{null}" noSelectionOption="true" />
                         <f:selectItems value="#{dtItrsView.itrStatus}" />
                     </p:selectOneMenu>
                    </f:facet>
-	               <h:outputText value="#{itr.activo}" />
+	               <h:outputText value="#{itr.activo ? 'Activo' : 'Inactivo'}" />
 	           </p:column>
 	           <p:column headerText="ID" sortBy="#{itr.idItr}" >
 	               <h:outputText value="#{itr.idItr }" />

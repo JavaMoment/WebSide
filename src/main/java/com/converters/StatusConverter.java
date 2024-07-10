@@ -28,7 +28,7 @@ public class StatusConverter implements Converter {
 		if (o instanceof StatusReclamo) {
             StatusReclamo sr = (StatusReclamo) o;
             r = String.valueOf(sr.getNombre());
-        }else if (o instanceof String) {
+        } else if (o instanceof String) {
            r = (String) o;
         }
 		return r;

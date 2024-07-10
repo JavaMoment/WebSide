@@ -17,6 +17,22 @@
     <div class = "layout-content">
       <div class = "card claims-list">
 	     <h:form id="form">
+	      <p:toolbar rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
+            <p:toolbarGroup>
+                <p:commandButton value="Añadir reclamo" update=":dialogs:add-claim-content"
+	                             oncomplete="PF('addClaimDialog').show()" style=
+	                             "
+	                             display: block;
+    							 background: #1BC640;
+    							 border: #1BC640;
+    							 color: red;
+    							 "
+	                             class="ui-button-warning rounded-button" process="@this"
+	                             >
+                    <p:resetInput target=":new-claim-dialog:add-claim-content" />
+                </p:commandButton>
+            </p:toolbarGroup>
+          </p:toolbar>
 	        <p:growl id="messages" showDetail="true" />
 	        <p:dataTable id="dt-claims" widgetVar="dtClaims" var="claim" value="#{dtClaimsView.claims}"
 	           reflow="true" tableStyle="-webkit-fill-available"
@@ -38,9 +54,11 @@
 	               		icon="pi pi-pencil"
 	               		class="ui-button-warning rounded-button"
 	               		rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}"
+	               		update=":dialogs:manage-claim-content"
+	               		oncomplete="PF('manageClaimDialog').show()"
+	               		process="@this"
 	               	>
-	               		<!-- update=":dialogs:manage-claim-content" oncomplete="PF('manageClaimDialog').show()" process="@this"> --> <!-- TODO: Crear manageClaimDialog @federico.martinez -->
-                      <f:setPropertyActionListener value="#{claim}" target="#{dtClaimsView.selectedClaim}" />
+                      <f:setPropertyActionListener value="#{claim}" target="#{claimModificationView.selectedClaim}" />
                       <p:resetInput target=":dialogs:manage-claim-content" />
                    </p:commandButton>
                    <p:commandButton 
@@ -79,6 +97,10 @@
 	           <p:column headerText="#ID" sortBy="#{claim.idReclamo}">
 	               <h:outputText value="#{claim.idReclamo}" />
 	           </p:column>
+	           <p:column headerText="Detalle actual" sortBy="#{claim.detalle}"
+	               filterBy="#{claim.detalle}">
+	               <h:outputText value="#{claim.detalle}" />
+	           </p:column>
 	           <p:column headerText="Titulo" sortBy="#{claim.titulo}"
 	               filterBy="#{claim.titulo}">
 	               <h:outputText value="#{claim.titulo}" />
@@ -89,25 +111,29 @@
 	           <p:column headerText="Fecha y hora de creación" sortBy="#{claim.auditDate}">
 	               <h:outputText value="#{claim.auditDate}" />
 	           </p:column>
-	           <p:column headerText="Estudiante asociado" sortBy="#{claim.estudiante}" filterBy="#{claim.estudiante}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
-	               <h:outputText value="#{claim.estudiante.nombreUsuario}" />
+	           <p:column headerText="Estudiante asociado" sortBy="#{claim.estudiante.usuario.nombreUsuario}" filterBy="#{claim.estudiante.usuario.nombreUsuario}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ANALISTA')}">
+	               <h:outputText value="#{claim.estudiante.usuario.nombreUsuario}" />
 	           </p:column>
-	           <p:column headerText="Evento asociado" sortBy="#{claim.evento}"
-	               filterBy="#{claim.evento}">
+	           <p:column headerText="Evento asociado" sortBy="#{claim.evento.titulo}"
+	               filterBy="#{claim.evento.titulo}">
 	               <h:outputText value="#{claim.evento.titulo}" />
 	           </p:column>
-	           <p:column headerText="Detalle actual" sortBy="#{claim.detalle}"
-	               filterBy="#{claim.detalle}">
-	               <h:outputText value="#{claim.detalle}" />
-	           </p:column>
-	           <p:column headerText="Analista a cargo" sortBy="#{claim.analista}"
-	               filterBy="#{claim.analista}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
+	           <p:column headerText="Analista a cargo" sortBy="#{claim.analista.usuario.nombreUsuario}"
+	               filterBy="#{claim.analista.usuario.nombreUsuario}" rendered="#{session.getAttribute('userLogged').tipoUsuario.toUpperCase().equals('ESTUDIANTE')}">
 	               <h:outputText value="#{claim.analista.usuario.nombreUsuario}" />
+	           </p:column>
+	           <p:column headerText="Semestre" sortBy="#{claim.semestre}"
+	               filterBy="#{claim.semestre}">
+	               <h:outputText value="#{claim.semestre == null ? 'No aplica' : claim.semestre}" />
+	           </p:column>
+	           <p:column headerText="Créditos solicitados" sortBy="#{claim.creditos}"
+	               filterBy="#{claim.creditos}">
+	               <h:outputText value="#{claim.creditos == null ? 'No aplica' : claim.creditos}" />
 	           </p:column>
 	       </p:dataTable>
       </h:form>
       <h:form id="dialogs">
-           <p:growl id="messages" showDetail="true" />
+           <p:growl id="dialogs-messages" showDetail="true" />
            <p:dialog id="manage-detail-dialog" header="Editar el detalle del reclamo" showEffect="fade" widgetVar="manageDetailClaimDialog"
               responsive="true" appendToBody="true" resizable="true" width="800" height="600" >
             <p:outputPanel id="manage-detail-claim-content" class="ui-fluid">
@@ -128,6 +154,178 @@
                  >
                  </p:commandButton>
                 <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageDetailClaimDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+        <p:dialog header="Modificar el reclamo:" showEffect="fade" widgetVar="manageClaimDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600" id="manage-claim-dialog">
+              <p:growl id="dialog-messages" showDetail="true" />
+            <p:outputPanel id="manage-claim-content" class="ui-fluid">
+                <p:outputPanel rendered="#{not empty claimModificationView.selectedClaim}">
+                    <div class="field">
+                        <p:outputLabel for="titulo">Titulo:</p:outputLabel>
+                        <p:inputText id="titulo" value="#{claimModificationView.selectedClaim.titulo}" required="true" requiredMessage="El titulo es obligatorio."/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="descripcion">Descripción:</p:outputLabel>
+                        <p:inputText 
+                        	id="descripcion"
+                        	value="#{claimModificationView.selectedClaim.descripcion}"
+                        	required="true"
+                        	maxlength="240"
+                        	requiredMessage="La descripción es obligatoria."
+                        >
+                        </p:inputText>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="eventoAsociado">Evento asociado:</p:outputLabel>
+                        <p:selectOneMenu 
+                        	id="eventoAsociado"
+                        	value="#{claimModificationView.selectedClaim.evento}"
+                        	required="true">
+                        	<f:converter converterId="EventoConverter">
+                        	</f:converter>
+                       		<p:ajax update="conditionalWrapper" >
+                       		</p:ajax>
+                        	<f:selectItems value="#{claimModificationView.eventos}" noSelectionOption="false" >
+                        	</f:selectItems>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                    
+                    	<h:panelGrid 
+                    		id="conditionalWrapper" 
+                    		columns="1" 
+                    		style="margin-bottom: 10px; width: 100%"
+                    		>
+	                        <p:outputLabel 
+	                        	for="semestreSpinner"
+	                        	rendered="#{claimModificationView.selectedClaim.evento.tiposEvento ne null and claimModificationView.constants.CREDITS_BEARING_EVENTS.contains(claimModificationView.selectedClaim.evento.tiposEvento.nombre.toUpperCase())}"
+	                        	>Semestre:
+	                        </p:outputLabel>
+	                		<p:spinner 
+	                			id="semestreSpinner"
+	                			value="#{claimModificationView.selectedClaim.semestre}"
+	                			buttons="horizontal-after"
+	                           	upButtonStyleClass="ui-button-success"
+	                           	downButtonStyleClass="ui-button-danger"
+	                           	min="1"
+	                           	max="8"
+	                           	rotate="true"
+	                           	required="true"
+	                           	rendered="#{claimModificationView.selectedClaim.evento.tiposEvento ne null and claimModificationView.constants.CREDITS_BEARING_EVENTS.contains(claimModificationView.selectedClaim.evento.tiposEvento.nombre.toUpperCase())}" 
+	                           	>
+	                        </p:spinner>
+	                        <p:outputLabel 
+	                        	for="creditosSpinner"
+	                        	rendered="#{claimModificationView.selectedClaim.evento.tiposEvento ne null and claimModificationView.constants.CREDITS_BEARING_EVENTS.contains(claimModificationView.selectedClaim.evento.tiposEvento.nombre.toUpperCase())}"
+	                        	>Cantidad de créditos solicitados:
+                        	</p:outputLabel>
+	                		<p:spinner 
+	                			id="creditosSpinner"
+	                			value="#{claimModificationView.selectedClaim.creditos}"
+	                			buttons="horizontal-after"
+	                           	upButtonStyleClass="ui-button-success"
+	                           	downButtonStyleClass="ui-button-danger"
+	                           	min="1"
+	                           	required="true" 
+	                           	rendered="#{claimModificationView.selectedClaim.evento.tiposEvento ne null and claimModificationView.constants.CREDITS_BEARING_EVENTS.contains(claimModificationView.selectedClaim.evento.tiposEvento.nombre.toUpperCase())}"
+	                           	>
+	                        </p:spinner>
+                    	</h:panelGrid>
+                   	</div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Guardar" icon="pi pi-check" actionListener="#{claimModificationView.doUpdateClaim()}"
+                    update="manage-claim-content,dialogs:dialog-messages" process="manage-claim-content @this" />
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('manageClaimDialog').hide()"
+                    class="ui-button-secondary" type="button" />
+            </f:facet>
+        </p:dialog>
+        <p:dialog id="new-claim-dialog" header="Ingrese su nuevo reclamo" showEffect="fade" widgetVar="addClaimDialog"
+              responsive="true" appendToBody="true" resizable="true" width="800" height="600">
+            <p:outputPanel id="add-claim-content" class="ui-fluid">
+                <p:outputPanel>
+                    <div class="field">
+                        <p:outputLabel for="new-titulo">Titulo:</p:outputLabel>
+                        <p:inputText id="new-titulo" value="#{addClaimView.newClaim.titulo}" required="true" requiredMessage="El titulo es obligatorio."/>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="descripcion">Descripción:</p:outputLabel>
+                        <p:inputText 
+                        	id="new-descripcion"
+                        	value="#{addClaimView.newClaim.descripcion}"
+                        	required="true"
+                        	maxlength="240"
+                        	requiredMessage="La descripción es obligatoria."
+                        >
+                        </p:inputText>
+                    </div>
+                    <div class="field">
+                        <p:outputLabel for="new-eventoAsociado">Evento asociado:</p:outputLabel>
+                        <p:selectOneMenu 
+                        	id="new-eventoAsociado"
+                        	value="#{addClaimView.newClaim.evento}"
+                        	required="true">
+                        	<f:converter converterId="EventoConverter">
+                        	</f:converter>
+                       		<p:ajax update="new-conditionalWrapper" >
+                       		</p:ajax>
+                        	<f:selectItems value="#{claimModificationView.eventos}" noSelectionOption="false" >
+                        	</f:selectItems>
+                        </p:selectOneMenu>
+                    </div>
+                    <div class="field">
+                    	<h:panelGrid 
+                    		id="new-conditionalWrapper" 
+                    		columns="1" 
+                    		style="margin-bottom: 10px; width: 100%"
+                    		>
+	                        <p:outputLabel 
+	                        	for="new-semestreSpinner"
+	                        	rendered="#{addClaimView.newClaim.evento.tiposEvento ne null and addClaimView.constants.CREDITS_BEARING_EVENTS.contains(addClaimView.newClaim.evento.tiposEvento.nombre.toUpperCase())}"
+	                        	>Semestre:
+	                        </p:outputLabel>
+	                		<p:spinner 
+	                			id="new-semestreSpinner"
+	                			value="#{addClaimView.newClaim.semestre}"
+	                			buttons="horizontal-after"
+	                           	upButtonStyleClass="ui-button-success"
+	                           	downButtonStyleClass="ui-button-danger"
+	                           	min="1"
+	                           	max="8"
+	                           	rotate="true"
+	                           	required="true"
+	                           	rendered="#{addClaimView.newClaim.evento.tiposEvento ne null and addClaimView.constants.CREDITS_BEARING_EVENTS.contains(addClaimView.newClaim.evento.tiposEvento.nombre.toUpperCase())}" 
+	                           	>
+	                        </p:spinner>
+	                        <p:outputLabel 
+	                        	for="new-creditosSpinner"
+	                        	rendered="#{addClaimView.newClaim.evento.tiposEvento ne null and addClaimView.constants.CREDITS_BEARING_EVENTS.contains(addClaimView.newClaim.evento.tiposEvento.nombre.toUpperCase())}"
+	                        	>Cantidad de créditos solicitados:
+                        	</p:outputLabel>
+	                		<p:spinner 
+	                			id="new-creditosSpinner"
+	                			value="#{addClaimView.newClaim.creditos}"
+	                			buttons="horizontal-after"
+	                           	upButtonStyleClass="ui-button-success"
+	                           	downButtonStyleClass="ui-button-danger"
+	                           	min="1"
+	                           	required="true" 
+	                           	rendered="#{addClaimView.newClaim.evento.tiposEvento ne null and addClaimView.constants.CREDITS_BEARING_EVENTS.contains(addClaimView.newClaim.evento.tiposEvento.nombre.toUpperCase())}"
+	                           	>
+	                        </p:spinner>
+                    	</h:panelGrid>
+                   	</div>
+              </p:outputPanel>
+            </p:outputPanel>
+
+            <f:facet name="footer">
+                <p:commandButton value="Añadir" icon="pi pi-check" actionListener="#{addClaimView.doCreateClaim()}"
+                    update=":form:messages,:form:dt-claims" process="add-claim-content @this" action="#{dtClaimsView.reloadClaims()}"/>
+                <p:commandButton value="Cancelar" icon="pi pi-times" onclick="PF('addClaimDialog').hide()"
                     class="ui-button-secondary" type="button" />
             </f:facet>
         </p:dialog>

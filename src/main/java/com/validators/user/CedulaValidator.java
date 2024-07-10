@@ -16,8 +16,12 @@ public class CedulaValidator implements Validator {
 		String digitsOnly = ci.replaceAll("\\D", "");
 
 	    // Paso 2: Chequear largo de la cedula
-	    if (digitsOnly.length() != 8) {
-	    	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ojo con la cédula ;)", "La cedula ingresada no es válida y/o no contiene 8 digitos de largo."));
+	    if (digitsOnly.length() > 8) {
+	    	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ojo con la cédula ;)", "La cedula ingresada no es válida y/o contiene más de 8 digitos de largo."));
+	    }
+	    if(digitsOnly.length() < 8) {
+	    	String preAppendZeros = "0".repeat(8 - digitsOnly.length());
+	    	digitsOnly = preAppendZeros + digitsOnly; 
 	    }
 
 	    // Paso 3: Separar digito verificador de los demas digitos
@@ -39,7 +43,7 @@ public class CedulaValidator implements Validator {
 	    
 	    // Paso 6: ¿Es el modulo de la operacion igual al digito verificador?
 	    if(mod != Integer.parseInt(checkerDigit)) {
-	    	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ojo con la cédula ;)", "La cedula ingresada no es válida y/o no contiene 8 digitos de largo."));
+	    	throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ojo con la cédula ;)", "La cedula ingresada no es válida y/o contiene más de 8 digitos de largo."));
 	    }
 	}
 

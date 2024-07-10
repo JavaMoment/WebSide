@@ -4,6 +4,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 	  xmlns:ui="http://java.sun.com/jsf/facelets"
+	  xmlns:f="http://java.sun.com/jsf/core"
       >
   <h:head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -28,7 +29,7 @@
                       <div class="card overview-box white">
                         <div class="overview-info">
                           <h6>Número de usuarios</h6>
-                          <h1><h:outputText value = "#{chartsView.totalUsers}" /></h1>
+                          <h1><h:outputText value = "#{dashboardView.totalUsers}" /></h1>
                         </div>
                       </div>
                     </div>
@@ -36,7 +37,7 @@
                       <div class="card overview-box blue">
                           <div class="overview-info">
                               <h6>Número de ITRs</h6>
-                              <h1><h:outputText value = "#{chartsView.itrsCount}" /></h1>
+                              <h1><h:outputText value = "#{dashboardView.itrsCount}" /></h1>
                           </div>
                       </div>
                     </div>
@@ -44,7 +45,7 @@
                        <div class="card overview-box gray">
                            <div class="overview-info">
                                <h6>ITRs activos</h6>
-                               <h1><h:outputText value = "#{chartsView.itrsActiveCount}" /></h1>
+                               <h1><h:outputText value = "#{dashboardView.itrsActiveCount}" /></h1>
                            </div>
                        </div>
                     </div>
@@ -52,7 +53,7 @@
                        <div class="card overview-box darkgray">
                            <div class="overview-info">
                                <h6>ITRs inactivos</h6>
-                               <h1><h:outputText value = "#{chartsView.itrsInactiveCount}" /></h1>
+                               <h1><h:outputText value = "#{dashboardView.itrsInactiveCount}" /></h1>
                            </div>
                        </div>
                     </div>
@@ -60,13 +61,83 @@
                 </div>
               </div>
               <div class="col-12 xl:col-4">
+              	<div class="card eventosSeriesChart">
+              	   <h:form>
+              	      <p:outputLabel for="itrs">ITRs disponibles:</p:outputLabel>
+                      <p:selectOneMenu
+                        	id="itrs"
+                        	value="#{dashboardView.selectedItr}"
+                        	style="margin-left: 5px; margin-right: 10px;"
+                      >
+                        <f:converter converterId="dtItrConverter"></f:converter>
+                        <f:selectItems value="#{dashboardView.itrs}" var="dtItr" itemValue="#{dtItr}"></f:selectItems>
+                        <p:ajax event="itemSelect" update="eventosChart" process="@this" listener="#{dashboardView.refreshEventosCharts}"></p:ajax>
+                      </p:selectOneMenu>
+                      <p:outputLabel for="years">Años disponibles:</p:outputLabel>
+                      <p:selectOneMenu
+                      	 id="years"
+                       	 value="#{dashboardView.selectedYear}"
+                       	 style="margin-left: 5px; margin-right: 10px;"
+                       	 required="true"
+                      >
+                        <p:ajax event="itemSelect" update="eventosChart" process="@this" listener="#{dashboardView.refreshEventosCharts}"></p:ajax>
+                        <f:selectItems value="#{dashboardView.availableYears}" noSelectionOption="false"></f:selectItems>
+                      </p:selectOneMenu>
+                    <p:selectBooleanCheckbox value="#{dashboardView.groupBySemester}" itemLabel="Agrupar por semestre">
+            		  <p:ajax update="eventosChart" process="@this" listener="#{dashboardView.refreshEventosCharts}"/>
+        			</p:selectBooleanCheckbox>
+        			<h:panelGroup id="eventosChart">
+    			      <p:lineChart id="eventosSeriesChart" rendered="#{!dashboardView.groupBySemester}" model="#{dashboardView.eventosSeriesModel}" style="width: 100%; height: 600px;"/>
+    			      <p:barChart id="eventosBarChart" rendered="#{dashboardView.groupBySemester}" model="#{dashboardView.eventosBarModel}" style="width: 100%; height: 600px;"/>
+    			    </h:panelGroup>
+                    </h:form>
+			  	</div>
+			  </div>
+			  <div class="col-12 xl:col-4">
+			    <div class="card reclamosSeriesChart">
+			    <h:form id="reclamoChartForm">
+			      <p:outputLabel for="student">Estudiante:</p:outputLabel>
+                  <p:selectOneMenu
+                       	id="student"
+                       	value="#{dashboardView.selectedEstudiante}"
+                       	style="margin-left: 5px; margin-right: 10px;"
+                   >
+                     <f:converter converterId="EstudianteConverter"></f:converter>
+                     <f:selectItems value="#{dashboardView.estudiantes}" var="estudiante" itemValue="#{estudiante}"></f:selectItems>
+                     <p:ajax process="@this" update="reclamosChart" listener="#{dashboardView.createReclamosHistoricalLine}"></p:ajax>
+                  </p:selectOneMenu>
+                  <p:outputLabel for="month">Mes:</p:outputLabel>
+                  <p:selectOneMenu
+                    	id="month"
+                       	value="#{dashboardView.selectedMonth}"
+                       	style="margin-left: 5px; margin-right: 10px;"
+                    >
+                     <p:ajax update="reclamosChart" process="@this" listener="#{dashboardView.createReclamosHistoricalLine}"></p:ajax>
+                     <f:selectItems value="#{dashboardView.availableReclamosMonths}" var="month" itemValue="#{month}" noSelectionOption="false"></f:selectItems>
+                  </p:selectOneMenu>
+                  <p:outputLabel for="year">Año:</p:outputLabel>
+                  <p:selectOneMenu
+                    	id="year"
+                       	value="#{dashboardView.selectedReclamosYear}"
+                       	style="margin-left: 5px; margin-right: 10px;"
+                    >
+                     <p:ajax update="reclamosChart" process="@this" listener="#{dashboardView.createReclamosHistoricalLine}"></p:ajax>
+                     <f:selectItems value="#{dashboardView.availableReclamosYears}" var="year" itemValue="#{year}" noSelectionOption="false"></f:selectItems>
+                  </p:selectOneMenu>
+                  <h:panelGroup id="reclamosChart">
+                    <p:lineChart id="cantReclamosByEstudianteChart" model="#{dashboardView.reclamosSeriesModel}" style="width: 100%; height: 600px;"/>
+			      </h:panelGroup>
+			    </h:form>
+			    </div>
+			  </div>
+              <div class="col-12 xl:col-4">
                 <div class="card usersTypeChart">
-                  <p:barChart model="#{chartsView.hbarModel}" style="width: 100%; height: 600px;"/>
+                  <p:barChart model="#{dashboardView.hbarModel}" style="width: 100%; height: 600px;"/>
                 </div>
               </div>
               <div class="col-12 xl:col-4">
                 <div class="card activeInactiveChart">
-                  <p:pieChart model="#{chartsView.pieModel}" style="width: 100%; height: 600px;"/>
+                  <p:pieChart model="#{dashboardView.pieModel}" style="width: 100%; height: 600px;"/>
                 </div>
               </div>
             </div>

@@ -52,7 +52,7 @@ public class ItrModificationView implements Serializable {
 	}
 	
 	public void loadDepartamentos() {
-		departamentosSource = depaBean.selectAll().stream().map(d -> d.getNombre()).toList();
+		departamentosSource = depaBean.getDepartamentosWithoutItr().stream().map(d -> d.getNombre()).toList();
 		departamentosTarget = new ArrayList<>(selectedItr.getDepartamentos().stream().map(d -> d.getNombre()).toList());
 		departamentos = new DualListModel<>(departamentosSource, departamentosTarget);
 	}

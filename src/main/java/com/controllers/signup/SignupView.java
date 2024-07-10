@@ -1,9 +1,12 @@
 package com.controllers.signup;
 
 import java.io.Serializable;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +18,10 @@ import javax.inject.Named;
 
 import org.primefaces.PrimeFaces;
 
+import com.api.app.misc.IgnoreType;
+import com.api.app.schemas.users.AnalistaDTO;
+import com.api.app.schemas.users.EstudianteDTO;
+import com.api.app.schemas.users.TutorDTO;
 import com.entities.Analista;
 import com.entities.Area;
 import com.entities.Departamento;
@@ -25,11 +32,16 @@ import com.entities.TiposTutor;
 import com.entities.Tutor;
 import com.entities.Usuario;
 import com.enums.Genres;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.services.AnalistaBeanRemote;
 import com.services.AreaBeanRemote;
 import com.services.DepartamentoBeanRemote;
+import com.services.EstudianteBeanRemote;
+import com.services.HttpRequestDispatcher;
 import com.services.ItrBeanRemote;
 import com.services.LocalidadBeanRemote;
 import com.services.TiposTutorBeanRemote;
+import com.services.TutorBeanRemote;
 import com.services.UsuarioBeanRemote;
 
 @Named("signup")
@@ -38,6 +50,12 @@ public class SignupView implements Serializable {
 
 	@EJB
 	private UsuarioBeanRemote userBeanRemote;
+	@EJB
+	private AnalistaBeanRemote analistaBeanRemote;
+	@EJB
+	private EstudianteBeanRemote estudianteBeanRemote;
+	@EJB
+	private TutorBeanRemote tutorBeanRemote;
 	@EJB
 	private ItrBeanRemote itrBeanRemote;
 	@EJB
@@ -51,6 +69,8 @@ public class SignupView implements Serializable {
 	
 	private Usuario newUser;
 	private Estudiante newStudent;
+	private Tutor newTeacher;
+	private Analista newAnalyst;
 	
 	private List<Itr> itrs;
 	private List<Departamento> depas;
@@ -62,10 +82,6 @@ public class SignupView implements Serializable {
 	
 	private String selectedGenreName;
 	private String selectedDepaName;
-	private String selectedCityName;
-	private String selectedItrName;
-	private String selectedAreaName;
-	private String selectedRolName;
 	private Departamento selectedDepa;
 	private Character selectedGenre;
 	private String userType;
@@ -80,59 +96,44 @@ public class SignupView implements Serializable {
 		
 		newUser = new Usuario();
 		newStudent = new Estudiante();
+		newTeacher = new Tutor();
+		newAnalyst = new Analista();
+		newStudent.setUsuario(newUser);
+		newTeacher.setUsuario(newUser);
+		newAnalyst.setUsuario(newUser);
 	}
 	
 	public void doSignup() {
-		String defaultMessage = "No se ha seleccionado: "; 
-		if(selectedDepaName == null || selectedDepaName.trim().isBlank()) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "un departamento."));
-		}
-		else if(selectedCityName == null || selectedCityName.trim().isBlank()) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "una ciudad de residencia."));
-		}
-		else if(selectedItrName == null || selectedItrName.trim().isBlank()) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el ITR al que pertenece."));
-		}
-		else if(selectedGenre == null || (selectedGenreName.trim().isBlank() || selectedGenreName == null)) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "su genero."));
-		}
-		else if(userType.equals("Tutor") && (selectedAreaName == null || selectedAreaName.trim().isBlank())) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el area al que pertenece."));
-		}
-		else if(userType.equals("Tutor") && (selectedRolName == null || selectedRolName.trim().isBlank())) {
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Ojo!", defaultMessage + "el rol que le corresponde."));
-		}
-		else {
-			newUser.setNombreUsuario(newUser.getMailInstitucional().split("@")[0]);
-			newUser.setLocalidad(cityBeanRemote.selectBy(selectedCityName));
-			newUser.setItr(itrBeanRemote.selectBy(selectedItrName));
-			newUser.setGenero(selectedGenre);
-			switch(userType) {
-				case "Analista":
-					Analista newAnalyst = new Analista(newUser);
-					newUser.setAnalistas(Set.of(newAnalyst));
-					break;
-				case "Estudiante":
-					newStudent.setUsuario(newUser);
-					newUser.setEstudiantes(Set.of(newStudent));
-					break;
-				case "Tutor":
-					Tutor newTeacher = new Tutor(
-							newUser,
-							areaBean.selectBy(selectedAreaName),
-							tiposTutorBeanRemote.selectBy(selectedRolName)
-							);
-					newUser.setTutores(Set.of(newTeacher));
-					break;
-				default:
-					break;
+		// Ruta a donde esta el post de usuarios
+		int exitCode = -1;
+		newUser.setNombreUsuario(newUser.getMailInstitucional().split("@")[0]);
+		exitCode = userBeanRemote.create(newUser);
+		Usuario userInDb = userBeanRemote.selectUserBy(newUser.getNombreUsuario());
+		try {
+			// Creamos el DTO para mandar como JSON dependiendo del tipo de usuario a crear.
+			switch(userType.toUpperCase()) {
+			case "ANALISTA":
+				newAnalyst.setUsuario(userInDb);
+				exitCode = analistaBeanRemote.create(newAnalyst);
+				break;
+			case "TUTOR":
+				newTeacher.setUsuario(userInDb);
+				tutorBeanRemote.create(newTeacher);
+				break;
+			case "ESTUDIANTE":
+				newStudent.setUsuario(userInDb);
+				estudianteBeanRemote.create(newStudent);
+				break;
+			default:
+				break;
 			}
-			int exitCode = userBeanRemote.create(newUser);
-			if(exitCode == 0) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Felicidades!", "El usuario ha sido correctamente creado. Espere la habilitación del analista para poder ingresar."));
-			} else {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Oh no!", "Ha ocurrido un error mientras se intentaba crear el usuario. Por favor, intente de nuevo."));
-			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(exitCode == 0) {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Felicidades!", "El usuario ha sido correctamente creado. Espere la habilitación del analista para poder ingresar."));
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("¡Oh no!", "Ha ocurrido un error mientras se intentaba crear el usuario. Por favor, intente de nuevo."));
 		}
 	}
 	
@@ -147,6 +148,7 @@ public class SignupView implements Serializable {
 	public void onGenreChanged() {
 		if((selectedGenre == null & selectedGenreName != null) || !selectedGenreName.startsWith(selectedGenre.toString())) {
 			selectedGenre = selectedGenreName.equals(Genres.Masculino.toString()) ? 'M' : selectedGenreName.equals(Genres.Femenino.toString()) ? 'F' : 'O';
+			newUser.setGenero(selectedGenreName.equals(Genres.Masculino.toString()) ? 'M' : selectedGenreName.equals(Genres.Femenino.toString()) ? 'F' : 'O');
 		}
     }
 	
@@ -222,28 +224,8 @@ public class SignupView implements Serializable {
 		this.selectedDepaName = selectedDepaName;
 	}
 
-	public String getSelectedCityName() {
-		return selectedCityName;
-	}
-
-	public void setSelectedCityName(String selectedCityName) {
-		this.selectedCityName = selectedCityName;
-	}
-
-	public String getSelectedItrName() {
-		return selectedItrName;
-	}
-
-	public void setSelectedItrName(String selectedItrName) {
-		this.selectedItrName = selectedItrName;
-	}
-
 	public Departamento getSelectedDepa() {
 		return selectedDepa;
-	}
-
-	public void setSelectedDepa(Departamento selectedDepa) {
-		this.selectedDepa = selectedDepa;
 	}
 
 	public Character getSelectedGenre() {
@@ -274,14 +256,6 @@ public class SignupView implements Serializable {
 		this.areas = areas;
 	}
 
-	public String getSelectedAreaName() {
-		return selectedAreaName;
-	}
-
-	public void setSelectedAreaName(String selectedAreaName) {
-		this.selectedAreaName = selectedAreaName;
-	}
-
 	public List<TiposTutor> getRoles() {
 		return roles;
 	}
@@ -290,11 +264,19 @@ public class SignupView implements Serializable {
 		this.roles = roles;
 	}
 
-	public String getSelectedRolName() {
-		return selectedRolName;
+	public Analista getNewAnalyst() {
+		return newAnalyst;
 	}
 
-	public void setSelectedRolName(String selectedRolName) {
-		this.selectedRolName = selectedRolName;
+	public void setNewAnalyst(Analista newAnalyst) {
+		this.newAnalyst = newAnalyst;
+	}
+
+	public Tutor getNewTeacher() {
+		return newTeacher;
+	}
+
+	public void setNewTeacher(Tutor newTeacher) {
+		this.newTeacher = newTeacher;
 	}
 }
